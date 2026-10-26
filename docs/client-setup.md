@@ -138,9 +138,10 @@ keeps raw evaluation material below a private temporary root, and emits only a
 label-and-count report. The runner is not shipped in the wheel and never
 changes an installed client's saved configuration.
 
-Run the automated gates first:
+After cloning, fetch the verified companion wheels before the automated gates:
 
 ```console
+python3 third_party/fetch-wheels.py
 ./tools/setup-browser-tests.sh
 uv run pytest -q tests/test_mcp.py tests/test_skill.py tests/test_skill_sync.py \
   tests/test_synthetic_workflow.py
@@ -182,7 +183,8 @@ and its client adapters.
 
 ## Prepare one installed wheel and two isolated runtimes
 
-Run these commands from the repository root. Keep this shell open: later
+Run these commands from the repository root after fetching the wheels with
+`python3 third_party/fetch-wheels.py`. Keep this shell open: later
 commands use the variables created here.
 
 ```sh

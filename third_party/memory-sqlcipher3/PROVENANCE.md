@@ -1,5 +1,12 @@
 # Provenance
 
+Both downstream companion wheels are versioned assets on the
+[vendored-wheels-1 Release](https://github.com/li-shangru/Memory/releases/tag/vendored-wheels-1),
+outside the Git tree and published branch/tag history. From the repository root, run
+`python3 third_party/fetch-wheels.py` before building or testing; it verifies
+both entries in `wheel-hash.txt` and populates the ignored `third_party/wheels/`
+cache. Source recipes, patches, this provenance, licenses, and manifests stay in Git.
+
 Artifact identity:
 
 - distribution: `memory-sqlcipher3`
@@ -35,7 +42,7 @@ Deterministic `memory1` outputs (two consecutive clean recipe runs):
 | `libsqlite3.a` | `a1b27ceed551e78ac47e442e8efd9208c42f2cc94fa2fa02a809cfe5069beb02` |
 | `sqlcipher3/_sqlite3.cpython-314-darwin.so` | `516c034b2768458ae97c910d2545e42131119b47f0ef80cd009d58b36c0cf53f` |
 
-Previous immutable artifact `0.6.2+sqlcipher4.17.0` remains in the wheelhouse.
+Previous immutable artifact `0.6.2+sqlcipher4.17.0` remains available on that Release.
 Its two-build evidence used macOS 26.6.1 build 25G76, Xcode 26.6 build 17F113,
 Apple clang 21.0.0 (`clang-2100.1.1.101`), CPython 3.14.7, uv 0.12.5, and the
 same pinned Python build tools and deployment target. Its unchanged hashes are:

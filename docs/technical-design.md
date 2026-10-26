@@ -595,8 +595,9 @@ the required FTS/RTREE/STAT4/URI/limit compile profile immediately after key
 and cipher configuration. Missing, stale, plain-SQLite, or under-featured
 engines fail closed before schema or Store content access. The extension is
 self-contained and `otool`-gated to macOS `libSystem`; the release artifact is
-the Memory wheel plus its committed companion because an unhosted relative
-dependency cannot be discovered from a lone Memory wheel.
+the Memory wheel plus its hash-pinned companion fetched from the versioned
+GitHub Release. A standalone Memory wheel still needs the companion supplied
+explicitly; its relative source mapping uses the ignored local wheel cache.
 
 Source bytes live directly in SQLCipher BLOBs. The limit is 64 MiB per file
 and 256 MiB or 64 files per inbox batch; oversize input stays in the inbox and

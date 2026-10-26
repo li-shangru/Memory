@@ -27,6 +27,7 @@ runtime/
 backups/
 objects/
 *.recovery-kit*
+third_party/wheels/
 
 # OS / editor
 .DS_Store

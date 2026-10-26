@@ -1,1 +1,2 @@
 3436966d149f0e498f69aa78612bc8be2b9c8340fa44c5fb3f4cc50c5ddf2106  third_party/wheels/memory_sqlcipher3-0.6.2+sqlcipher4.17.0.memory1-cp314-cp314-macosx_26_0_arm64.whl
+ad7e1fcd20de2d7cf94da8fb5a56962f77a941bd46326e9501daf6a0e6011f11  third_party/wheels/memory_sqlcipher3-0.6.2+sqlcipher4.17.0-cp314-cp314-macosx_26_0_arm64.whl

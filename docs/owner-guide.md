@@ -25,10 +25,11 @@ rehearsal.
 
 ## 1. Install or update the everyday command
 
-Install from the complete repository checkout, including `third_party/`:
+Clone the repository or unpack its source archive, then fetch the companion
+wheels and install from that checkout:
 
 ```console
-shasum -a 256 -c third_party/memory-sqlcipher3/wheel-hash.txt
+python3 third_party/fetch-wheels.py
 uv tool install --python 3.14 .
 ```
 
@@ -44,8 +45,10 @@ the public source checks. It is not configured by this repository.
 Always keep the explicit
 `--python 3.14` pin; never rely on whatever Python happens to be ambient.
 Memory requires the Python 3.14 line, macOS 26 or newer, and Apple arm64.
-The repository source mapping supplies the committed SQLCipher companion; do
-not copy or install a Memory wheel alone. The runtime attests
+The fetch command retrieves the versioned [Release assets](https://github.com/li-shangru/Memory/releases/tag/vendored-wheels-1)
+into the ignored `third_party/wheels/` cache and verifies their checked-in hashes.
+The repository source mapping uses that fetched SQLCipher companion; provide
+its path explicitly when installing a standalone Memory wheel. The runtime attests
 `memory-sqlcipher3` 0.6.2+sqlcipher4.17.0.memory1, SQLCipher 4.17.0, SQLite 3.53.3,
 OpenSSL, and its required compile profile before reading Store content. Memory
 uses MCP Python SDK 2 while continuing to serve installed clients that connect

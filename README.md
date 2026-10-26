@@ -70,20 +70,25 @@ See the [technical design](docs/technical-design.md) for the full contract.
 You need **macOS 26 or newer on Apple silicon**, **Python 3.14**,
 [uv](https://docs.astral.sh/uv/getting-started/installation/), and an MCP client
 for the agent workflow. Windows, Linux, and Intel Macs are not supported by
-the bundled dependencies.
+the companion dependencies.
 
-Clone or download this repository, open a terminal in its root, and install:
+Clone this repository, fetch the verified companion wheels, and install:
 
 ```sh
-shasum -a 256 -c third_party/memory-sqlcipher3/wheel-hash.txt
+git clone https://github.com/li-shangru/Memory.git
+cd Memory
+python3 third_party/fetch-wheels.py
 uv tool install --python 3.14 .
 memory --version
 ```
 
 If `memory` is not found, run `uv tool update-shell`, open a new terminal,
 and try again. Install from this checkout; `pip install memory` is not the
-installation method for this project. Keep the bundled SQLCipher wheel with
-the source. [Installation details and troubleshooting →](docs/owner-guide.md)
+installation method for this project. The fetch command downloads all three
+versioned assets from [vendored-wheels-1](https://github.com/li-shangru/Memory/releases/tag/vendored-wheels-1)
+and checks the SHA-256 manifests kept in Git. Downloads live in the ignored
+`third_party/wheels/` cache; wheel binaries are absent from published branch/tag history.
+[Installation details and troubleshooting →](docs/owner-guide.md)
 
 Create your Store and open the local UI:
 
@@ -160,7 +165,9 @@ transcripts out of issues. [Reporting guidance](docs/security.md#reporting-a-pro
 Version 1.13.0. Runtime: Python 3.14, MCP Python SDK 2, SQLCipher 4.17.0,
 SQLite 3.53.3, and OpenSSL 4.0.1. Development uses Playwright 1.62.0+memory.1.
 The repository includes source, synthetic tests, dependency build recipes,
-and pinned companion wheels. It starts with public source history; earlier
+licenses, and pinned wheel hashes. Companion binaries are versioned Release
+assets; [fetch them before building or testing](third_party/README.md).
+It starts with public source history; earlier
 private development records are not part of this distribution.
 
 </details>

@@ -51,7 +51,7 @@ even empty, would make every revision that predates it fail closed as
 Coupled artifacts that must move together, or fail loudly if they do not:
 
 - The SQLCipher companion revision couples its source patches, build recipe and
-  reproducibility hashes with the committed wheel, package/lock pin, database
+  reproducibility hashes with the versioned Release asset, package/lock pin, database
   attestation constant, smoke scripts, delivery transition policy and approved
   artifact digest. Existing wheels remain immutable. Native file identity must
   come from the owning VFS descriptor before key/SQL access; pathname checks are

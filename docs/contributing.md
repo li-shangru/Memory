@@ -7,10 +7,12 @@ issue before investing in a large implementation.
 
 ## Development setup
 
-Use macOS 26 or newer on Apple silicon, Python 3.14, and uv. The committed
-SQLCipher and Playwright wheels are platform-specific. From the repository root:
+Use macOS 26 or newer on Apple silicon, Python 3.14, and uv. The SQLCipher and
+Playwright Release assets are platform-specific. Clone the repository, then
+from its root fetch the wheels before installing dependencies:
 
 ```sh
+python3 third_party/fetch-wheels.py
 uv sync --locked
 ./tools/fast-check.sh
 ./tools/check.sh --source-only
@@ -23,7 +25,12 @@ Neither command requires a private installation profile. The full suite uses
 synthetic fixtures; some isolated integration checks create and clean up their
 own synthetic Keychain items.
 
-Run the smallest relevant regression while working. For package or UI delivery:
+The fetch command verifies every asset against the manifests in `third_party/`.
+It reuses valid cached wheels, repairs corrupt ones, and fails on download or
+hash errors without installing partial files. The wheelhouse is ignored by Git.
+See [companion wheel distribution](../third_party/README.md) for provenance and
+reproduction. Run the smallest relevant regression while working. After fetching
+and syncing, build and test packaging with:
 
 ```sh
 uv build --wheel
@@ -94,7 +101,9 @@ Install this project from the complete checkout using uv. A standalone Memory
 wheel requires the exact companion SQLCipher wheel supplied explicitly, as the
 smoke scripts do. There is no promise of a PyPI release under the generic
 `memory` name. For a portable source distribution, use the repository's full
-Git archive, including `third_party/`; the Python sdist is not that archive.
+Git archive, including `third_party/`, then run the fetch command from its root.
+Source archives contain recipes and manifests; companion wheel binaries are
+downloaded separately. The Python sdist is not that complete source archive.
 
 Original project contributions are covered by the [MIT license](../LICENSE).
 Retain existing third-party notices and document new dependency licenses.

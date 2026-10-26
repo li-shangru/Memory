@@ -3,14 +3,16 @@
 This workflow installs and verifies a selected everyday client environment. It
 is optional for public source contributions and first-time users; use
 `./tools/check.sh --source-only` to qualify source without an installation profile.
-For an authorized local delivery of a reviewed, committed candidate:
+After cloning, run `python3 third_party/fetch-wheels.py` to retrieve and verify
+the companion Release assets. For an authorized local delivery of a reviewed,
+committed candidate:
 
 ```console
 ./tools/deliver.sh run
 ```
 
 It runs the full source gate, freezes an exact wheel/source archive and the
-committed SQLCipher companion, rehearses both exact frozen artifacts with the
+hash-pinned SQLCipher companion fetched from the Release, rehearses both exact frozen artifacts with the
 wheel and UI smokes, installs it in the intended uv tool environment, synchronizes
 the two Memory Skills to each selected client, and verifies fresh MCP processes.
 It creates the local annotated version tag only after all steps pass. Nothing is

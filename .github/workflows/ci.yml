@@ -32,11 +32,12 @@ jobs:
           python-version: "3.14"
           enable-cache: true
           cache-dependency-glob: uv.lock
-      - name: Verify supported runner and native dependency
+      - name: Fetch and verify companion wheels
+        run: python3 third_party/fetch-wheels.py
+      - name: Verify supported runner
         run: |
           test "$(uname -m)" = arm64
           test "$(sw_vers -productVersion | cut -d. -f1)" -ge 26
-          shasum -a 256 -c third_party/memory-sqlcipher3/wheel-hash.txt
       - name: Install locked dependencies
         run: uv sync --locked
       - name: Run complete synthetic source gate

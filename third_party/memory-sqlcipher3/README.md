@@ -25,7 +25,13 @@ raises `OperationalError`. It does not authenticate database contents or assert
 that a pathname still refers to the same inode; the caller compares the returned
 identity against its independently authorized file identity.
 
-Run from a clean checkout on the exact environment in `PROVENANCE.md`:
+For normal setup, run `python3 third_party/fetch-wheels.py` from the repository
+root. It retrieves the current and previous immutable companions from the
+[versioned Release](https://github.com/li-shangru/Memory/releases/tag/vendored-wheels-1)
+and verifies both against `wheel-hash.txt`.
+
+To reproduce the current companion from source, use a clean checkout on the
+exact environment in `PROVENANCE.md`:
 
 ```sh
 ./third_party/memory-sqlcipher3/build-wheel.sh
@@ -39,8 +45,8 @@ restored-path replacement, pre-key read-only/immutable access, error behavior,
 busy-mutex refusal and preservation of existing SQLite reader locks.
 
 The release unit is a two-wheel wheelhouse: the built Memory wheel and the
-committed companion in `third_party/wheels`. A lone Memory wheel cannot locate
-an unhosted relative dependency. Source resolution is pinned by
+Release companion fetched into the ignored `third_party/wheels/` cache. A lone
+Memory wheel needs the companion supplied explicitly. Source resolution is pinned by
 `[tool.uv.sources]`; exact-wheel installation must provide the companion path
 or wheelhouse explicitly.
 

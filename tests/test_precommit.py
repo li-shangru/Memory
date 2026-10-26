@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import shutil
 import stat
 import subprocess
@@ -95,29 +94,43 @@ def test_oversized_file_blocks_commit(tmp_path: Path) -> None:
     assert "larger than 1 mb" in result.stderr.lower()
 
 
-def test_precommit_allowlists_only_the_exact_release_companion_artifacts() -> None:
-    """Keep the large-file escape hash-bound to the audited wheels."""
-    hook = PRECOMMIT.read_text(encoding="utf-8")
-    artifacts = {
-        (
-            "third_party/wheels/"
-            "memory_sqlcipher3-0.6.2+sqlcipher4.17.0-"
-            "cp314-cp314-macosx_26_0_arm64.whl"
-        ): "ad7e1fcd20de2d7cf94da8fb5a56962f77a941bd46326e9501daf6a0e6011f11",
-        (
-            "third_party/wheels/"
-            "playwright-1.62.0+memory.1-py3-none-macosx_26_0_arm64.whl"
-        ): "ab2da760f37867fa775bf565f2fa3d8c59f2d414bf4dc553879f9053c6c1824a",
-    }
-    artifacts[
-        "third_party/wheels/memory_sqlcipher3-0.6.2+sqlcipher4.17.0.memory1-cp314-cp314-macosx_26_0_arm64.whl"
-    ] = "3436966d149f0e498f69aa78612bc8be2b9c8340fa44c5fb3f4cc50c5ddf2106"
-    for path, expected_digest in artifacts.items():
-        assert path in hook
-        assert expected_digest in hook
-        assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == (
-            expected_digest
-        )
+@pytest.mark.parametrize("size", [32, 1024 * 1024 + 1])
+def test_downloaded_wheels_cannot_be_forced_back_into_git(
+    tmp_path: Path, size: int
+) -> None:
+    repo = fixture_repo(tmp_path)
+    wheel = repo / "third_party" / "wheels" / "synthetic.whl"
+    wheel.parent.mkdir(parents=True)
+    wheel.write_bytes(b"x" * size)
+    assert git(repo, "add", "-f", "third_party/wheels/synthetic.whl").returncode == 0
+
+    result = git(repo, "commit", "-m", "plant downloaded wheel")
+
+    assert result.returncode != 0
+    assert "forbidden path" in result.stderr.lower()
+
+
+@pytest.mark.parametrize(
+    "endpoint", ["tag/vendored-wheels-1", "download/vendored-wheels-1/"]
+)
+@pytest.mark.parametrize("suffix", ["", "UnexpectedOpaqueToken123ABC"])
+def test_wheel_release_url_entropy_exception_matches_only_the_exact_public_token(
+    tmp_path: Path, endpoint: str, suffix: str
+) -> None:
+    repo = fixture_repo(tmp_path)
+    (repo / "README.md").write_text(
+        f"https://github.com/li-shangru/Memory/releases/{endpoint}{suffix}\n",
+        encoding="utf-8",
+    )
+    assert git(repo, "add", "README.md").returncode == 0
+
+    result = git(repo, "commit", "-m", "document wheel release")
+
+    if suffix:
+        assert result.returncode != 0
+        assert "high-entropy token" in result.stderr.lower()
+    else:
+        assert result.returncode == 0, result.stderr
 
 
 def test_unformatted_python_blocks_commit(tmp_path: Path) -> None:

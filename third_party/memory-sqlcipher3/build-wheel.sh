@@ -272,7 +272,11 @@ else
     cp "$wheel" "$output"
 fi
 digest=$(shasum -a 256 "$output" | awk '{print $1}')
-printf '%s  third_party/wheels/%s\n' "$digest" "$output_name" > "$recipe_root/wheel-hash.txt"
+# Retain the hashes of previous immutable release assets.
+awk -v digest="$digest" -v path="third_party/wheels/$output_name" \
+    '$2 != path { print } END { print digest "  " path }' \
+    "$recipe_root/wheel-hash.txt" > "$recipe_root/wheel-hash.txt.tmp"
+mv "$recipe_root/wheel-hash.txt.tmp" "$recipe_root/wheel-hash.txt"
 openssl_archive_digest=$(shasum -a 256 "$openssl_prefix/lib/libcrypto.a" | awk '{print $1}')
 sqlcipher_archive_digest=$(shasum -a 256 "$sqlcipher_prefix/lib/libsqlite3.a" | awk '{print $1}')
 extension_digest=$(shasum -a 256 "$extension" | awk '{print $1}')

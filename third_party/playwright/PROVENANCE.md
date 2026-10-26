@@ -1,5 +1,12 @@
 # Provenance
 
+The downstream wheel is a versioned asset on the
+[vendored-wheels-1 Release](https://github.com/li-shangru/Memory/releases/tag/vendored-wheels-1).
+It is absent from the Git tree and published branch/tag history. From the repository root, run
+`python3 third_party/fetch-wheels.py` before building or testing; the command
+verifies `wheel-hash.txt` and populates the ignored `third_party/wheels/` cache.
+Recipes, this provenance, licenses, and hash manifests remain in Git.
+
 - downstream distribution: `playwright==1.62.0+memory.1`
 - downstream artifact: `playwright-1.62.0+memory.1-py3-none-macosx_26_0_arm64.whl`
 - upstream artifact: `playwright-1.62.0-py3-none-macosx_11_0_arm64.whl`

@@ -339,6 +339,7 @@ def test_active_tree_contains_only_the_provider_free_store_distribution() -> Non
         "test_ui_packaging.py",
         "test_ui_presentation.py",
         "test_ui_reviews.py",
+        "test_wheel_fetch.py",
     }
 
 
@@ -379,8 +380,8 @@ def test_sqlcipher_companion_is_pinned_self_contained_and_licensed() -> None:
     provenance = REPO_ROOT / "third_party" / "memory-sqlcipher3"
     assert wheel.is_file()
     digest = hashlib.sha256(wheel.read_bytes()).hexdigest()
-    assert (provenance / "wheel-hash.txt").read_text(encoding="utf-8") == (
-        f"{digest}  third_party/wheels/{wheel.name}\n"
+    assert f"{digest}  third_party/wheels/{wheel.name}" in (
+        (provenance / "wheel-hash.txt").read_text(encoding="utf-8").splitlines()
     )
     native_checksums = (
         (provenance / "native-hashes.txt").read_text(encoding="utf-8").splitlines()

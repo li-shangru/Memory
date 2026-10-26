@@ -6,8 +6,13 @@ official `playwright` name, import package, code, driver, and CLI; its local
 version changes only package metadata needed to allow `pyee>=14,<15` and to
 describe the bundled arm64 Node binary honestly.
 
-Run the recipe twice and compare `wheel-hash.txt` before replacing the committed
-artifact:
+For normal setup, run `python3 third_party/fetch-wheels.py` from the repository
+root. It downloads this companion from the versioned
+[Release](https://github.com/li-shangru/Memory/releases/tag/vendored-wheels-1)
+and verifies `wheel-hash.txt`; binaries are kept in an ignored local cache.
+
+To reproduce the artifact, run the recipe twice and compare `wheel-hash.txt`
+before publishing any new versioned Release asset:
 
 ```sh
 ./third_party/playwright/build-wheel.sh
