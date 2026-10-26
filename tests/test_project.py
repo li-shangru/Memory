@@ -230,7 +230,7 @@ def test_active_tree_contains_only_the_provider_free_store_distribution() -> Non
     ]
     assert project["dependency-groups"]["dev"] == [
         "httpx2>=2.16.0",
-        "hypothesis>=6.170.5",
+        "hypothesis>=6.170.8",
         "jsonschema>=4.26.0",
         "mypy>=2.4.0",
         "playwright==1.62.0+memory.1",
@@ -238,7 +238,7 @@ def test_active_tree_contains_only_the_provider_free_store_distribution() -> Non
         "pypdf>=6.21.2",
         "pytest-cov>=7.1.0",
         "pytest>=9.1.1",
-        "ruff>=0.17.1",
+        "ruff>=0.17.2",
     ]
     assert project["tool"]["uv"]["sources"] == {
         "memory-sqlcipher3": {
