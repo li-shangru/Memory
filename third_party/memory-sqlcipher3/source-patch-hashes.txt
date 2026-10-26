@@ -1,0 +1,2 @@
+cd47fc5ae39a069712bc96e752f4837f0ded69e2121cc21bc995ce87aa9ef75a  patches/sqlcipher-file-identity.patch
+25f7512ee351778a3c9309c29f2fa32a28d8a01bbe1b6c8f1c75cf692c70fd79  patches/sqlcipher3-file-identity.patch

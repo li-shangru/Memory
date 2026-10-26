@@ -1,0 +1,3 @@
+22671fb69c5cff130664d2ce594451411aa7ee86a90697b9b9c2c3f6861724ef  libcrypto.a (OpenSSL 4.0.1 source build)
+a1b27ceed551e78ac47e442e8efd9208c42f2cc94fa2fa02a809cfe5069beb02  libsqlite3.a (SQLCipher 4.17.0 with memory1 identity patch)
+516c034b2768458ae97c910d2545e42131119b47f0ef80cd009d58b36c0cf53f  sqlcipher3/_sqlite3.cpython-314-darwin.so

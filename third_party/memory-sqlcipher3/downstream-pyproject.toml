@@ -1,0 +1,38 @@
+[build-system]
+requires = [
+    "setuptools==84.0.0",
+    "wheel==0.48.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "memory-sqlcipher3"
+version = "0.6.2+sqlcipher4.17.0.memory1"
+description = "Memory's self-contained sqlcipher3 wrapper for SQLCipher 4.17.0"
+readme = "README.md"
+requires-python = ">=3.14,<3.15"
+license = "MIT"
+license-files = [
+    "LICENSE",
+    "LICENSE.OpenSSL.txt",
+    "LICENSE.SQLCipher-BSD.txt",
+    "LICENSE.SQLCipher-Community.md",
+    "LICENSE.SQLite-Public-Domain.md",
+]
+authors = [
+    { name = "Charles Leifer", email = "coleifer@gmail.com" },
+    { name = "laggykiller", email = "chaudominic2@gmail.com" },
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C",
+    "Topic :: Database",
+]
+
+[project.urls]
+Upstream = "https://github.com/coleifer/sqlcipher3"
+SQLCipher = "https://github.com/sqlcipher/sqlcipher"
+
+[tool.setuptools]
+package-dir = { "sqlcipher3" = "sqlcipher3" }

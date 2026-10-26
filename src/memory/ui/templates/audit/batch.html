@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Audit batch · Memory{% endblock %}
+{% block content %}
+{% set q = "?h=" ~ handle if handle else "" %}
+{% set summary = detail.summary %}
+<h1>Audit batch</h1>
+<p><a href="/audit{{ q }}">Back to the bound Store audit</a></p>
+<dl class="technical-details">
+  <div><dt>Batch identity</dt><dd class="mono wrap-anywhere" data-audit-batch-id="{{ summary.batch_id }}">{{ summary.batch_id }}</dd></div>
+  <div><dt>Sealed at</dt><dd>{{ summary.sealed_at | memory_time }}</dd></div>
+  <div><dt>Captured sources</dt><dd>{{ summary.source_count }}</dd></div>
+  <div><dt>Inbox issue rows</dt><dd data-audit-issue-row-count="{{ summary.issue_row_count }}">{{ summary.issue_row_count }}</dd></div>
+  <div><dt>Recorded issue occurrences</dt><dd data-audit-issue-occurrence-count="{{ summary.issue_occurrence_count }}">{{ summary.issue_occurrence_count }}</dd></div>
+  <div><dt>More entries deferred</dt><dd>{{ "yes" if summary.has_more else "no" }}</dd></div>
+</dl>
+
+<section aria-labelledby="audit-batch-sources-heading">
+  <h2 id="audit-batch-sources-heading">Every capture in this batch</h2>
+  <ol>
+  {% for source in detail.sources %}
+    <li data-audit-batch-source="{{ source.source_id }}">
+      <a class="wrap-anywhere" href="/sources/{{ source.source_id }}{{ q }}">{{ source.original_name }}</a>
+      · <span class="mono wrap-anywhere">{{ source.source_id }}</span>
+      · origin {{ source.origin.value }}
+      · {{ source.byte_length | filesize }}
+      · effective sensitivity {{ source.effective_sensitivity.value }}
+    </li>
+  {% else %}
+    <li>This sealed batch captured no source.</li>
+  {% endfor %}
+  </ol>
+</section>
+
+<section aria-labelledby="audit-batch-issues-heading">
+  <h2 id="audit-batch-issues-heading">Stored Inbox issue aggregates</h2>
+  <p>Each row is one stored aggregate for this batch and code. Its count is the number of recorded occurrences, so {{ summary.issue_row_count }} issue rows record {{ summary.issue_occurrence_count }} occurrences in total.</p>
+  <ol>
+  {% for issue in detail.issues %}
+    <li data-audit-issue="{{ issue.code }}"><span data-audit-issue-occurrences="{{ issue.occurrence_count }}">{{ issue.code }} · recorded occurrences {{ issue.occurrence_count }}</span></li>
+  {% else %}
+    <li>This batch recorded no Inbox issue, so its occurrence sum is zero.</li>
+  {% endfor %}
+  </ol>
+</section>
+
+{% if manifest %}
+<section aria-labelledby="audit-batch-decisions-heading">
+  <h2 id="audit-batch-decisions-heading">Ordered source decisions</h2>
+  <p>Review <a class="mono wrap-anywhere" href="/reviews/{{ manifest.revision.change_set_id }}{{ q }}">{{ manifest.revision.change_set_id }}</a> · current revision <a class="mono wrap-anywhere" href="/reviews/{{ manifest.revision.change_set_id }}/revisions/{{ manifest.revision.revision_id }}{{ q }}">{{ manifest.revision.revision_id }}</a> · accounted {{ manifest.revision.accounted_source_count }} of {{ manifest.revision.batch_source_count }}</p>
+  <ol>
+  {% for decision in decisions.items %}
+    <li data-audit-decision="{{ decision.source_id }}" data-coverage="{{ decision.coverage }}">
+      <a class="mono wrap-anywhere" href="/sources/{{ decision.source_id }}{{ q }}">{{ decision.source_id }}</a>
+      · {{ decision.coverage }}
+      {% if decision.reason %}· <span class="wrap-anywhere">{{ decision.reason }}</span>{% endif %}
+    </li>
+  {% else %}
+    <li>This revision records no source decision.</li>
+  {% endfor %}
+  </ol>
+  {% if next_decisions_href %}<a data-next-decisions href="{{ next_decisions_href }}">Next source decisions</a>{% endif %}
+</section>
+
+<section aria-labelledby="audit-batch-revisions-heading">
+  <h2 id="audit-batch-revisions-heading">Immutable review history</h2>
+  <ol>
+  {% for entry in revisions.items %}
+    <li data-audit-revision="{{ entry.revision_id }}" data-revision-lifecycle="{{ entry.lifecycle }}">
+      <a class="mono wrap-anywhere" href="/reviews/{{ entry.change_set_id }}/revisions/{{ entry.revision_id }}{{ q }}">{{ entry.revision_id }}</a>
+      · {{ entry.lifecycle.replace("_", " ") }}
+      · origin {{ entry.adapter_origin.value }}
+      · recorded {{ entry.recorded_at | memory_time }}
+      · items {{ entry.item_count }}
+    </li>
+  {% else %}
+    <li>This change set has no immutable revision.</li>
+  {% endfor %}
+  </ol>
+  {% if next_revisions_href %}<a data-next-batch-revisions href="{{ next_revisions_href }}">Next revisions</a>{% endif %}
+</section>
+{% else %}
+<p>No change set has been created for this sealed batch.</p>
+{% endif %}
+
+<section aria-labelledby="audit-batch-outcome-heading">
+  <h2 id="audit-batch-outcome-heading">Approval, application, and resulting memory</h2>
+  {% if applied %}
+  <ul>
+    <li><a class="wrap-anywhere" href="/audit/approvals/{{ applied.approval.approval_id }}{{ q }}">Approval <span class="mono">{{ applied.approval.approval_id }}</span></a> · adapter {{ applied.approval.adapter }} · approved {{ applied.approval.approved_at | memory_time }}</li>
+    <li><a class="wrap-anywhere" href="/audit/applications/{{ applied.application.application_id }}{{ q }}">Application <span class="mono">{{ applied.application.application_id }}</span></a> · applied {{ applied.application.applied_at | memory_time }}</li>
+    <li><a class="wrap-anywhere" href="/reviews/{{ applied.application.change_set_id }}/revisions/{{ applied.application.revision_id }}{{ q }}">Applied revision <span class="mono">{{ applied.application.revision_id }}</span></a></li>
+  </ul>
+  <ol>
+  {% for memory_id in applied.memory_revision_ids %}
+    <li data-audit-memory="{{ memory_id }}"><a class="mono wrap-anywhere" href="/memories/{{ memory_id }}{{ q }}">{{ memory_id }}</a></li>
+  {% else %}
+    <li>This applied review created no canonical memory revision; every source was accounted as no_memory or rejected.</li>
+  {% endfor %}
+  </ol>
+  {% else %}
+  <p>No approval or application exists for this batch yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

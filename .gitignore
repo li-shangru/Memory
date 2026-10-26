@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.python-version-local
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Never commit runtime or personal material. Runtime state lives OUTSIDE the
+# repo (~/Library/Application Support/Memory). These patterns are
+# a second fence.
+*.db
+*.db-*
+*.sqlite*
+*.key
+*.pem
+*.env
+.env*
+var/
+runtime/
+backups/
+objects/
+*.recovery-kit*
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Scratch
+scratch/
+.worktrees/
+.claude/worktrees/
+*.tmp

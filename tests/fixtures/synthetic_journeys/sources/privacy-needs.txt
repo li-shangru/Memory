@@ -1,0 +1,10 @@
+Synthetic software requirements
+Fixture ID: SYN-SRC-PRIVACY-NEEDS-004
+
+SYN-EVIDENCE-PRIVACY-OFFLINE-003
+Vale requires project notes to remain usable while network access is disabled.
+
+SYN-EVIDENCE-PRIVACY-DIAGNOSTICS-004
+Vale does not want note titles included in diagnostic uploads by default.
+
+Vale and these requirements are freshly invented.

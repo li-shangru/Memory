@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+{% from "_parts.html" import guard_link_row, kind_chip, sensitivity_dot, short_id, tech_row %}
+{% block title %}Memory Review · Memory{% endblock %}
+{% macro memory_rows(memory) %}
+<p class="memory-statement">{{ memory.statement }}</p>
+{% set validity = memory_validity(memory.valid_from, memory.valid_to, memory.tags, today=today) %}
+<p class="validity-summary" data-validity-status="{{ validity.status }}">{{ validity.summary }}</p>
+<p class="card-meta">
+  {{ kind_chip(memory.kind.value) }}
+  {{ sensitivity_dot(memory.sensitivity.value, labelled=false) }}
+  {% if memory.occurred_on %}<span>Occurred {{ memory.occurred_on }}</span>{% endif %}
+  <span>{{ validity.start_label }}</span><span>{{ validity.end_label }}</span>
+  {% for tag in memory.tags %}<span class="tag-chip">{{ tag }}</span>{% endfor %}
+</p>
+{% endmacro %}
+{% macro compared_field(label, predecessor, proposal, css_class="") %}
+{% set change = "added" if predecessor is none else "unchanged" if predecessor == proposal else "changed" %}
+<div data-review-field="{{ label | lower | replace(' ', '-') }}" data-field-change="{{ change }}">
+  <dt>{{ label }}</dt>
+  <dd{% if css_class %} class="{{ css_class }}"{% endif %}>
+  {% if predecessor is none %}<ins><span class="visually-hidden">Added value: </span>{{ proposal }}</ins>
+  {% elif predecessor == proposal %}{{ proposal }}
+  {% else %}<del><span class="visually-hidden">Previous value: </span>{{ predecessor }}</del> <span aria-hidden="true">→</span><span class="visually-hidden"> Proposed value: </span><ins>{{ proposal }}</ins>{% endif %}
+  </dd>
+</div>
+{% endmacro %}
+{% macro comparison_tags(tags, role) -%}
+{% for tag in tags %}<span class="tag-chip" data-comparison-tag="{{ role }}">{{ tag }}</span>{% if not loop.last %}, {% endif %}{% else %}None{% endfor %}
+{%- endmacro %}
+{% macro compared_tags(predecessor, proposal) %}
+{% set change = "added" if predecessor is none else "unchanged" if predecessor == proposal else "changed" %}
+<div data-review-field="tags" data-field-change="{{ change }}">
+  <dt>Tags</dt>
+  <dd class="wrap-anywhere">
+  {% if predecessor is none %}
+    <ins><span class="visually-hidden">Added tags: </span>{{ comparison_tags(proposal, "proposal") }}</ins>
+  {% elif predecessor == proposal %}
+    {{ comparison_tags(proposal, "unchanged") }}
+  {% else %}
+    <del><span class="visually-hidden">Previous tags: </span>{{ comparison_tags(predecessor, "predecessor") }}</del>
+    <span aria-hidden="true">→</span><span class="visually-hidden"> Proposed tags: </span>
+    <ins>{{ comparison_tags(proposal, "proposal") }}</ins>
+  {% endif %}
+  </dd>
+</div>
+{% endmacro %}
+{% macro evidence_rows(locators, q) %}
+<ul class="card-list">
+{% for locator in locators %}
+  <li class="evidence-card" data-evidence-locator>
+    {% if locator.excerpt %}<blockquote class="evidence-quote">{{ locator.excerpt }}</blockquote>{% endif %}
+    <p><a href="/sources/{{ locator.source_id }}{{ q }}">Open complete retained source</a></p>
+    <p class="card-meta">
+      <span>Evidence mode: {{ locator.mode }}</span>
+      {% if locator.char_start is not none %}<span>Characters {{ locator.char_start }}–{{ locator.char_end }}</span>{% endif %}
+      <span class="mono">Blob digest {{ locator.blob_digest }}</span>
+    </p>
+  </li>
+{% else %}
+  <li class="card">No evidence locator is recorded.</li>
+{% endfor %}
+</ul>
+{% endmacro %}
+{% block content %}
+{% set revision = manifest.revision %}
+{% set q = "?h=" ~ audit_handle if audit_handle else "" %}
+{% set amp = "&h=" ~ audit_handle if audit_handle else "" %}
+{% set base = "/reviews/" ~ change_set_id ~ "/revisions/" ~ revision.revision_id %}
+<h1>Memory Review</h1>
+{% if audit_handle %}<p><a href="/audit{{ q }}">Back to the bound Store audit</a></p>{% endif %}
+<p class="meta-row">
+  <span class="revision-state">{{ revision.lifecycle.replace("_", " ") }}</span>
+  <span>Validation {{ manifest.validation_state if revision.lifecycle == "current_draft" else "not applicable" }}</span>
+  <span>Origin {{ revision.adapter_origin.value }}</span>
+  <span>Sealed {{ manifest.batch_sealed_at | memory_time }}</span>
+  <span>Batch {{ short_id(manifest.batch_id, ("/audit/batches/" ~ manifest.batch_id ~ q) if audit_handle else ("/inbox/batches/" ~ manifest.batch_id)) }}</span>
+</p>
+<p class="result-note">Accounted {{ revision.accounted_source_count }} of {{ revision.batch_source_count }} · Unaccounted {{ revision.unaccounted_source_count }} · Items {{ revision.item_count }} · Blockers {{ manifest.blocker_count }}</p>
+{% if manifest.validation_state == "blocked" and revision.lifecycle == "current_draft" %}<p class="notice">This revision cannot be approved until every blocker is resolved.</p>{% endif %}
+<nav aria-label="Review sections">
+  <ul>
+    <li><a href="{{ base }}{{ q }}">Compact roster</a></li>
+    <li><a href="{{ base }}/items{{ q }}">Item comparisons</a></li>
+    <li><a href="{{ base }}/sources{{ q }}">Source accounting</a></li>
+    <li><a href="{{ base }}/blockers{{ q }}">Validation blockers</a></li>
+    <li><a href="/reviews/{{ change_set_id }}/revisions{{ q }}">Immutable revision history</a></li>
+  </ul>
+</nav>
+{# The exact revision this page speaks for. Kept beside every section, not
+   behind a disclosure: an owner reading any part of a review is reading one
+   named immutable revision, and the digest is what an approval later binds. #}
+<dl class="tech-rows">
+  {{ tech_row("Revision", revision.revision_id) }}
+  {{ tech_row("Predecessor revision", revision.predecessor_revision_id or "None", copy=false) }}
+  {{ tech_row("Canonical digest", revision.digest) }}
+  {{ tech_row("Batch", manifest.batch_id, ("/audit/batches/" ~ manifest.batch_id ~ q) if audit_handle else ("/inbox/batches/" ~ manifest.batch_id)) }}
+</dl>
+
+{% if section == "roster" %}
+{% if manifest.guard_links %}
+<section aria-labelledby="guard-links-heading">
+  <h2 id="guard-links-heading">Guard links</h2>
+  <p class="section-lede">Each link makes the first claim a caveat on the second once this revision is applied.</p>
+  <ul class="card-list">
+  {% for link in manifest.guard_links %}{{ guard_link_row(link, compact=true, review_base=base, audit_handle=audit_handle) }}{% endfor %}
+  </ul>
+  {% if not audit_handle %}<p><a href="{{ base }}/edits/remove_guard_link">Edit guard links</a></p>{% endif %}
+</section>
+{% endif %}
+{% if manifest.revoked_guard_links %}
+<section aria-labelledby="revoked-guard-links-heading">
+  <h2 id="revoked-guard-links-heading">Guard links this revision revokes</h2>
+  <p class="section-lede">Each link already stands in the Store. Applying this revision stops it governing: it stays in the history and the governance graph, and no longer rides along on retrieval.</p>
+  <ul class="card-list" data-revoked-guard-links>
+  {% for link in manifest.revoked_guard_links %}{{ guard_link_row(link, compact=true, review_base=base, audit_handle=audit_handle) }}{% endfor %}
+  </ul>
+  {% if not audit_handle %}<p><a href="{{ base }}/edits/revoke_guard_link">Revoke another guard link</a></p>{% endif %}
+</section>
+{% endif %}
+<section aria-labelledby="item-roster-heading">
+  <h2 id="item-roster-heading">Complete item roster</h2>
+  <ol class="card-list">
+  {% for item in manifest.item_roster %}
+    <li class="card" data-roster-item="{{ item.item_id }}" data-item-status="{{ item.status }}" data-change-kind="{{ item.change_kind }}">
+      <a href="{{ review_item_href(base, item.item_id, audit_handle) }}">Item {{ short_id(item.item_id) }}</a>
+      <p class="card-meta"><span class="state-tag">{{ item.status }}</span><span>{{ item.change_kind.replace("_", " ") }}</span></p>
+      <p class="roster-statement-preview">{{ item.statement_preview }}{% if item.statement_elided %}<span class="visually-hidden"> Preview ends here; open the comparison for the complete statement.</span>{% endif %}</p>
+    </li>
+  {% else %}
+    <li class="card">This revision proposes no item.</li>
+  {% endfor %}
+  </ol>
+</section>
+<section aria-labelledby="source-roster-heading">
+  <h2 id="source-roster-heading">Complete source roster</h2>
+  <ol class="card-list">
+  {% for source in manifest.source_roster %}
+    <li class="card" data-roster-source="{{ source.source_id }}" data-coverage="{{ source.coverage }}">
+      <a href="/sources/{{ source.source_id }}{{ q }}">Source {{ short_id(source.source_id) }}</a>
+      <p class="card-meta"><span class="state-tag">{{ source.coverage }}</span></p>
+    </li>
+  {% else %}
+    <li class="card">This batch retained no source.</li>
+  {% endfor %}
+  </ol>
+</section>
+{% if not audit_handle and manifest.item_roster %}
+{% set active_items = manifest.item_roster | selectattr("status", "equalto", "active") | list %}
+{% set rejected_items = manifest.item_roster | rejectattr("status", "equalto", "active") | list %}
+<section aria-labelledby="bulk-item-heading">
+  <h2 id="bulk-item-heading">Reject or restore several items at once</h2>
+  <p class="section-lede">One submission creates one immutable revision holding every item you selected — not one revision each. Up to {{ bulk_limit }} items at a time. Nothing changes until you submit, and either operation takes the other one back.</p>
+  {% if active_items %}
+  <form action="{{ base }}/edits/reject_item" method="post" data-authenticated-post data-review-edit data-bulk-edit="reject_item" aria-label="Reject several items">
+    <input type="hidden" name="expected_digest" value="{{ revision.digest }}">
+    <fieldset>
+      <legend>Active items to reject</legend>
+      {% for item in active_items %}
+      <label class="bulk-item"><input type="checkbox" name="item_id" value="{{ item.item_id }}" data-exact-reference="{{ item.item_id | tojson | forceescape }}"> {{ short_id(item.item_id) }} · {{ item.change_kind.replace("_", " ") }}</label>
+      {% endfor %}
+    </fieldset>
+    <button type="submit">Reject the selected items</button>
+  </form>
+  {% endif %}
+  {% if rejected_items %}
+  <form action="{{ base }}/edits/restore_item" method="post" data-authenticated-post data-review-edit data-bulk-edit="restore_item" aria-label="Restore several items">
+    <input type="hidden" name="expected_digest" value="{{ revision.digest }}">
+    <fieldset>
+      <legend>Rejected items to restore</legend>
+      {% for item in rejected_items %}
+      <label class="bulk-item"><input type="checkbox" name="item_id" value="{{ item.item_id }}" data-exact-reference="{{ item.item_id | tojson | forceescape }}"> {{ short_id(item.item_id) }} · {{ item.change_kind.replace("_", " ") }}</label>
+      {% endfor %}
+    </fieldset>
+    <button type="submit">Restore the selected items</button>
+  </form>
+  {% endif %}
+</section>
+{% endif %}
+{% if not audit_handle %}<section aria-labelledby="review-actions-heading">
+  <h2 id="review-actions-heading">Bounded owner edit operations</h2>
+  <ul>
+  {% for available in intents %}
+    <li><a href="{{ base }}/edits/{{ available }}">{{ available.replace("_", " ") }}</a></li>
+  {% endfor %}
+  </ul>
+  <p class="subdued">Leaving this page approves, rejects, and applies nothing.</p>
+</section>
+{% if manifest.validation_state == "valid" and revision.lifecycle == "current_draft" %}
+<section aria-labelledby="approval-entry-heading">
+  <h2 id="approval-entry-heading">Approve</h2>
+  <form method="post" action="/reviews/{{ change_set_id }}/approve" data-authenticated-post data-approval-entry>
+    <input type="hidden" name="revision_id" value="{{ revision.revision_id }}">
+    <input type="hidden" name="digest" value="{{ revision.digest }}">
+    <button type="submit">Review approval for this exact revision</button>
+  </form>
+  <p class="subdued">The next page shows the complete roster again and requires the macOS owner-presence check.</p>
+</section>
+{% endif %}{% endif %}
+
+{% elif section == "items" %}
+<section aria-labelledby="item-comparison-heading">
+  <h2 id="item-comparison-heading">Item comparisons</h2>
+  <ol class="card-list">
+  {% for item in items.items %}
+    <li class="card" data-review-item="{{ item.item_id }}" data-item-status="{{ item.status }}" data-change-kind="{{ item.change_kind }}">
+      <h3>Item {{ short_id(item.item_id) }} <span class="state-tag">{{ item.status }}</span> <span class="state-tag">{{ item.change_kind.replace("_", " ") }}</span></h3>
+      {% if item.predecessor %}
+      <section class="review-changes" aria-label="Changes from predecessor">
+        <h4>Changes from predecessor</h4>
+        {% if item.predecessor.revision.statement != item.proposal.statement %}
+        <p class="statement-diff" data-statement-change="changed"><span class="visually-hidden">Statement wording changes: </span>
+        {% for part in compare_statements(item.predecessor.revision.statement, item.proposal.statement) %}
+          {% if part.kind == "removed" %}<del><span class="visually-hidden">Removed wording: </span>{{ part.text }}</del>{% elif part.kind == "added" %}<ins><span class="visually-hidden">Added wording: </span>{{ part.text }}</ins>{% else %}<span>{{ part.text }}</span>{% endif %}
+        {% endfor %}
+        </p>
+        {% else %}<p data-statement-change="unchanged">Statement wording is unchanged.</p>{% endif %}
+        <dl class="comparison-fields">
+          {{ compared_field("Occurred on", item.predecessor.revision.occurred_on or "Not recorded", item.proposal.occurred_on or "Not recorded") }}
+          {{ compared_field("Valid from", item.predecessor.revision.valid_from or "Not recorded", item.proposal.valid_from or "Not recorded") }}
+          {{ compared_field("Valid to or revisit horizon", item.predecessor.revision.valid_to or "Not recorded", item.proposal.valid_to or "Not recorded") }}
+          {{ compared_tags(item.predecessor.revision.tags, item.proposal.tags) }}
+          {{ compared_field("Stored sensitivity", item.predecessor.revision.stored_sensitivity.value, item.proposal.sensitivity.value) }}
+        </dl>
+      </section>
+      {% endif %}
+      {% if guard_changes[item.item_id] %}
+      {% set item_guard_changes = guard_changes[item.item_id] %}
+      <section class="review-guard-changes" aria-label="Guard relationship changes">
+        <h4>Guard relationship changes</h4>
+        <ul class="card-list">
+        {% for change in item_guard_changes[:max_guard_changes_per_item] %}
+          <li data-guard-change="{{ change.action }}">
+          {% if change.action == "revoked" %}<del>Revoke this relationship</del>
+          {% elif change.action == "proposed" %}<ins>Propose this relationship</ins>
+          {% elif change.action == "rejected_proposal" %}Rejected relationship proposal
+          {% else %}Rejected relationship revocation{% endif %}:
+          this item {% if change.direction == "guards" %}guards{% else %}is governed by{% endif %}
+          “{{ change.other_statement }}”{% if change.other_elided %}<span class="visually-hidden">; statement preview ends here</span>{% endif %}
+          </li>
+        {% endfor %}
+        </ul>
+        {% if item_guard_changes | length > max_guard_changes_per_item %}
+        <p class="subdued">Showing {{ max_guard_changes_per_item }} of {{ item_guard_changes | length }} relevant relationship changes. The <a href="{{ base }}{{ q }}">compact roster</a> retains the complete guard-link roster for this revision.</p>
+        {% endif %}
+      </section>
+      {% endif %}
+      <div class="review-comparison">
+      <div data-proposal>
+        <h4>Proposal</h4>
+        {{ memory_rows(item.proposal) }}
+        <dl class="tech-rows">
+          <div><dt>Target lineage</dt><dd class="wrap-anywhere mono">{{ item.proposal.target_lineage_id or "New lineage" }}</dd></div>
+          <div data-expected-head="{{ item.proposal.expected_head_id or '' }}"><dt>Target predecessor</dt><dd class="wrap-anywhere mono">{{ item.proposal.expected_head_id or "None" }}</dd></div>
+          {% if item.predecessor %}<div data-predecessor-current-head="{{ item.predecessor.current_head_id }}"><dt>Current predecessor head</dt><dd class="wrap-anywhere"><a class="mono" href="/memories/{{ item.predecessor.current_head_id }}{{ q }}">{{ item.predecessor.current_head_id }}</a>{% if item.predecessor.current_head_id != item.proposal.expected_head_id %} · the expected head is no longer current{% endif %}</dd></div>{% endif %}
+        </dl>
+        {{ evidence_rows(item.proposal_evidence, q) }}
+      </div>
+      <div data-predecessor>
+        <h4>Predecessor</h4>
+        {% if item.predecessor %}
+        <p class="memory-statement">{{ item.predecessor.revision.statement }}</p>
+        {% set predecessor_validity = memory_validity(item.predecessor.revision.valid_from, item.predecessor.revision.valid_to, item.predecessor.revision.tags, today=today) %}
+        <p class="validity-summary" data-validity-status="{{ predecessor_validity.status }}">{{ predecessor_validity.summary }}</p>
+        <p class="card-meta">
+          {{ kind_chip(item.predecessor.revision.kind.value) }}
+          {{ sensitivity_dot(item.predecessor.revision.effective_sensitivity.value) }}
+          {% if item.predecessor.revision.occurred_on %}<span>Occurred {{ item.predecessor.revision.occurred_on }}</span>{% endif %}
+          <span>{{ predecessor_validity.start_label }}</span><span>{{ predecessor_validity.end_label }}</span>
+          {% for tag in item.predecessor.revision.tags %}<span class="tag-chip">{{ tag }}</span>{% endfor %}
+          <span>Stored sensitivity {{ item.predecessor.revision.stored_sensitivity.value }}</span>
+        </p>
+        <p><a class="wrap-anywhere" href="/memories/{{ item.predecessor.revision.memory_id }}{{ q }}">Open predecessor revision {{ item.predecessor.revision.memory_id }}</a></p>
+        {{ evidence_rows(item.predecessor_evidence, q) }}
+        {% else %}
+        <p>New memory: this proposal has no predecessor revision.</p>
+        {% endif %}
+      </div>
+      </div>
+      {% if not audit_handle %}<p>
+        <a href="{{ review_item_edit_href(base, 'replace_item', item.item_id) }}">Edit this item</a>
+        {% if item.status == "active" %}· <a href="{{ review_item_edit_href(base, 'reject_item', item.item_id) }}">Reject this item</a>
+        {% else %}· <a href="{{ review_item_edit_href(base, 'restore_item', item.item_id) }}">Restore this item</a>{% endif %}
+      </p>{% endif %}
+    </li>
+  {% else %}
+    <li class="card">This revision proposes no item.</li>
+  {% endfor %}
+  </ol>
+  {% if items.next_cursor %}<a data-next-items href="{{ base }}/items?cursor={{ items.next_cursor }}&amp;limit={{ limit }}{{ amp }}">Next item comparisons</a>{% endif %}
+</section>
+
+{% elif section == "sources" %}
+<section aria-labelledby="source-accounting-heading">
+  <h2 id="source-accounting-heading">Source accounting</h2>
+  <ol class="card-list">
+  {% for decision in sources.items %}
+    <li class="card" data-source-decision="{{ decision.source_id }}" data-coverage="{{ decision.coverage }}">
+      <a href="/sources/{{ decision.source_id }}{{ q }}">Source {{ short_id(decision.source_id) }}</a>
+      <p class="card-meta">
+        <span class="state-tag">{{ decision.coverage }}</span>
+        <span class="mono">Blob digest {{ decision.blob_digest }}</span>
+      </p>
+      {% if decision.reason %}<p class="wrap-anywhere">Reason: {{ decision.reason }}</p>{% endif %}
+      {% if not audit_handle %}{% if decision.coverage == "unaccounted" %}<p><a href="{{ base }}/edits/set_source_no_memory?source_id={{ decision.source_id }}">Record no-memory decision</a> · <a href="{{ base }}/edits/add_item">Add an item with evidence</a></p>
+      {% elif decision.coverage == "no_memory" %}<p><a href="{{ base }}/edits/clear_source_no_memory?source_id={{ decision.source_id }}">Clear this decision</a></p>{% endif %}{% endif %}
+    </li>
+  {% else %}
+    <li class="card">This batch retained no source.</li>
+  {% endfor %}
+  </ol>
+  {% if sources.next_cursor %}<a data-next-sources href="{{ base }}/sources?cursor={{ sources.next_cursor }}{{ amp }}">Next source decisions</a>{% endif %}
+</section>
+
+{% elif section == "revisions" %}
+<section aria-labelledby="revision-history-heading">
+  <h2 id="revision-history-heading">Immutable revision history</h2>
+  <ol class="card-list">
+  {% for entry in revisions.items %}
+    <li class="card" data-revision-row data-audit-revision="{{ entry.revision_id }}" data-adapter-origin="{{ entry.adapter_origin.value }}" data-revision-lifecycle="{{ entry.lifecycle }}">
+      <a href="/reviews/{{ change_set_id }}/revisions/{{ entry.revision_id }}{{ q }}">Revision {{ short_id(entry.revision_id) }}</a>
+      <p class="card-meta">
+        <span class="state-tag">{{ entry.lifecycle.replace("_", " ") }}</span>
+        <span>origin {{ entry.adapter_origin.value }}</span>
+        <span>recorded {{ entry.recorded_at | memory_time }}</span>
+        <span>items {{ entry.item_count }}</span>
+        <span>accounted {{ entry.accounted_source_count }} of {{ entry.batch_source_count }}</span>
+      </p>
+      <p class="card-meta">
+        <span class="mono">predecessor {{ entry.predecessor_revision_id or "None" }}</span>
+        <span class="mono">digest {{ entry.digest }}</span>
+      </p>
+    </li>
+  {% else %}
+    <li class="card">This change set has no immutable revision.</li>
+  {% endfor %}
+  </ol>
+  {% if revisions.next_cursor %}<a data-next-revisions href="/reviews/{{ change_set_id }}/revisions?cursor={{ revisions.next_cursor }}{{ amp }}">Next revisions</a>{% endif %}
+</section>
+
+{% else %}
+<section aria-labelledby="blocker-heading">
+  <h2 id="blocker-heading">Validation blockers</h2>
+  <ol class="card-list">
+  {% for blocker in blockers.items %}
+    <li class="card" data-blocker-row data-blocker-code="{{ blocker.code }}">
+      <p><strong>{{ blocker.code.replace("_", " ") }}</strong></p>
+      <p class="card-meta">
+        {% if blocker.item_id %}<span class="mono">Item {{ blocker.item_id }}</span>{% endif %}
+        {% if blocker.source_id %}<span class="mono">Source {{ blocker.source_id }}</span>{% endif %}
+        {% if blocker.expected_head_id %}<span class="mono">Expected head {{ blocker.expected_head_id }}</span>{% endif %}
+        {% if blocker.current_head_id %}<span class="mono">Current head {{ blocker.current_head_id }}</span>{% endif %}
+      </p>
+    </li>
+  {% else %}
+    <li class="card">This revision has no validation blocker.</li>
+  {% endfor %}
+  </ol>
+  {% if blockers.next_cursor %}<a data-next-blockers href="{{ base }}/blockers?cursor={{ blockers.next_cursor }}{{ amp }}">Next validation blockers</a>{% endif %}
+</section>
+{% endif %}
+{% endblock %}

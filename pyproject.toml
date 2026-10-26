@@ -1,0 +1,101 @@
+[project]
+name = "memory"
+version = "1.13.0"
+description = "A local encrypted memory substrate for one owner."
+authors = [{ name = "Shangru Li" }]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    # Security floors also constrain dependencies used by the MCP SDK.
+    "httpx2>=2.16.0",
+    "jinja2>=3.1.6",
+    "keyring>=25.7.0",
+    "mcp>=2.3.0,<3",
+    "opentelemetry-api>=1.45.1",
+    "pillow>=13.0.0",
+    "pydantic>=2.14.1",
+    "pypdfium2>=5.14.0",
+    "pyjwt[crypto]>=2.15.1",
+    "pyobjc-framework-Cocoa>=12.2.2",
+    "pyobjc-framework-LocalAuthentication>=12.2.2",
+    "python-multipart>=0.0.32",
+    "memory-sqlcipher3==0.6.2+sqlcipher4.17.0.memory1",
+    "starlette>=1.9.0",
+    "uvicorn>=0.54.0",
+]
+
+[project.scripts]
+memory = "memory.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.32.4"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.16.0",
+    "hypothesis>=6.170.5",
+    "jsonschema>=4.26.0",
+    "mypy>=2.4.0",
+    "playwright==1.62.0+memory.1",
+    "pyee==14.0.0",
+    "pypdf>=6.21.2",
+    "pytest-cov>=7.1.0",
+    "pytest>=9.1.1",
+    "ruff>=0.17.1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/memory"]
+
+[tool.hatch.build.targets.sdist]
+only-include = ["src/memory"]
+
+[tool.hatch.build]
+artifacts = [
+    "src/memory/skill/**/*",
+    "src/memory/ui/static/**/*",
+    "src/memory/ui/templates/**/*",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "browser: real-browser owner journey, needs the pinned Chromium",
+    "slow: synthetic performance smoke",
+]
+
+[tool.uv]
+prerelease = "disallow"
+resolution = "highest"
+
+[tool.uv.sources]
+memory-sqlcipher3 = { path = "third_party/wheels/memory_sqlcipher3-0.6.2+sqlcipher4.17.0.memory1-cp314-cp314-macosx_26_0_arm64.whl" }
+playwright = { path = "third_party/wheels/playwright-1.62.0+memory.1-py3-none-macosx_26_0_arm64.whl" }
+
+[tool.ruff]
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["B", "C4", "E4", "E7", "E9", "F", "I", "RUF", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# Synthetic fixtures are deliberately English and Chinese, and Chinese
+# punctuation is not a homoglyph mistake there. Scoped to the tests on
+# purpose: owner-visible copy under `src/` stays subject to the check.
+"tests/**" = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.flake8-bugbear]
+# Frozen dataclasses. A shared default instance cannot be mutated by a caller,
+# so it carries none of the shared-mutable-default hazard B008 exists for.
+extend-immutable-calls = [
+    "memory.inbox.ScanPolicy",
+    "memory.model.MemoryFilters",
+    "memory.model.SourceFilters",
+]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true

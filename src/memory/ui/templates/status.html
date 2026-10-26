@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "_parts.html" import tech_details %}
+{% block title %}Store status · Memory{% endblock %}
+{% block content %}
+<section aria-labelledby="status-heading">
+  <p class="eyebrow">Local owner surface</p>
+  <h1 id="status-heading">Store status</h1>
+  <p class="page-lede">Every number the header abbreviates, presented in full.</p>
+  <dl class="status-grid">
+    <div><dt>Runtime mode</dt><dd>{{ status.runtime_mode.value }}</dd></div>
+    <div><dt>Availability</dt><dd>{{ status.availability.replace("_", " ") }}</dd></div>
+    <div><dt>Pending reviews</dt><dd>{{ status.pending_review_count }}</dd></div>
+    <div><dt>Staged Inbox entries</dt><dd>{{ status.inbox.staged_visible_entry_count }}</dd></div>
+    <div><dt>Sources</dt><dd>{{ status.store.source_count }}</dd></div>
+    <div><dt>Current memories</dt><dd>{{ status.store.memory_count }}</dd></div>
+    <div><dt>Searchable sources</dt><dd>{{ status.store.searchable_count }}</dd></div>
+    <div><dt>Unsearchable binary sources</dt><dd>{{ status.store.unsearchable_count }}</dd></div>
+  </dl>
+  {{ tech_details((
+    ("Store ID", status.store.store_id),
+    ("MCP contract digest", status.store.mcp_contract_digest),
+    ("Skill digest", status.store.skill_digest),
+  )) }}
+</section>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% from "graph/_scene.html" import scene as graph_scene, legend as graph_legend %}
+{% block title %}Graph · Memory{% endblock %}
+{% block head_scripts %}<script src="/static/graph.js" defer></script>{% endblock %}
+{% block content %}
+<h1>Graph</h1>
+<p class="page-lede">Where every claim came from, grouped by the areas you tag. Your own areas sit at the centre, the sources in each area ring them, and every memory is placed against the source that evidences it.</p>
+<nav class="lens-switch" aria-label="Graph lens">
+  <a href="/graph{% if filter_handle %}/filtered/{{ filter_handle }}{% endif %}" aria-current="page">Provenance</a>
+  <a href="/graph/governance{% if filter_handle %}/filtered/{{ filter_handle }}{% endif %}">Governance</a>
+  <a href="/graph/governance/candidates">Candidates</a>
+</nav>
+<form method="post" action="/graph/{{ lens }}/filter" aria-label="Graph filters" data-authenticated-post>
+  <details class="filters"{% if active_filters %} open{% endif %}>
+    <summary>Filters</summary>
+    <fieldset>
+      <legend>Kind</legend>
+      {% for value in ["fact", "event", "preference", "relation", "insight"] %}
+        <label><input type="checkbox" name="kind" value="{{ value }}"{% if value in filters.kinds %} checked{% endif %}> {{ value }}</label>
+      {% endfor %}
+    </fieldset>
+    <fieldset>
+      <legend>Effective sensitivity</legend>
+      {% for value in ["normal", "sensitive", "restricted"] %}
+        <label><input type="checkbox" name="sensitivity" value="{{ value }}"{% if value in filters.sensitivities %} checked{% endif %}> {{ value }}</label>
+      {% endfor %}
+    </fieldset>
+    <label for="graph-tag">All-of tag</label>
+    {% for tag in filters.tags_all %}
+    <input {% if loop.first %}id="graph-tag"{% endif %} name="tag" value="{{ tag }}" aria-label="All-of tag {{ loop.index }}">
+    {% endfor %}
+    <input {% if not filters.tags_all %}id="graph-tag"{% endif %} name="tag" aria-label="Additional all-of tag">
+    <label for="graph-occurred-from">Occurred from</label>
+    <input id="graph-occurred-from" name="occurred_from" value="{{ filters.occurred_from or '' }}" placeholder="YYYY, YYYY-MM, or YYYY-MM-DD">
+    <label for="graph-occurred-to">Occurred to</label>
+    <input id="graph-occurred-to" name="occurred_to" value="{{ filters.occurred_to or '' }}" placeholder="YYYY, YYYY-MM, or YYYY-MM-DD">
+    <button type="submit">Apply filters</button>
+  </details>
+</form>
+
+{% if active_filters %}
+<section aria-labelledby="graph-active-filters-heading">
+  <h2 id="graph-active-filters-heading">Active filters</h2>
+  <p class="section-lede">A filter asks about memories. Sources and batches stay only where they still explain one, so a source that produced nothing is hidden here — not missing from the Store.</p>
+  <div class="active-filters">
+  {% for active in active_filters %}
+    <form method="post" action="/graph/{{ lens }}/filter" data-remove-filter data-authenticated-post>
+      {% for name, value in active.remaining %}<input type="hidden" name="{{ name }}" value="{{ value }}">{% endfor %}
+      <button class="filter-pill" type="submit">Remove {{ active.name }}: {{ active.value }}</button>
+    </form>
+  {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{{ graph_legend() }}
+{{ graph_scene(scene, "Provenance graph", ceiling) }}
+<p class="graph-alternative"><a href="/memory">Browse the same memory as a list</a></p>
+{% endblock %}

@@ -1,0 +1,41 @@
+--- a/src/sqlite.h.in
++++ b/src/sqlite.h.in
+@@ -1285,6 +1285,16 @@
+ #define SQLITE_FCNTL_BLOCK_ON_CONNECT       44
+ #define SQLITE_FCNTL_FILESTAT               45
+ 
++/* Memory downstream extension: this opcode is private to this companion.
++** pArg points to sqlite3_memory_file_identity. The owning Unix VFS returns
++** the actual open file descriptor's identity without reopening a pathname.
++*/
++#define SQLITE_FCNTL_MEMORY_FILE_IDENTITY 0x4d454d01
++typedef struct sqlite3_memory_file_identity {
++  sqlite3_uint64 device;
++  sqlite3_uint64 inode;
++} sqlite3_memory_file_identity;
++
+ /* deprecated names */
+ #define SQLITE_GET_LOCKPROXYFILE      SQLITE_FCNTL_GET_LOCKPROXYFILE
+ #define SQLITE_SET_LOCKPROXYFILE      SQLITE_FCNTL_SET_LOCKPROXYFILE
+--- a/src/os_unix.c
++++ b/src/os_unix.c
+@@ -4198,6 +4198,19 @@
+         unixGetTempname(pFile->pVfs->mxPathname, zTFile);
+         *(char**)pArg = zTFile;
+       }
++      return SQLITE_OK;
++    }
++    case SQLITE_FCNTL_MEMORY_FILE_IDENTITY: {
++      struct stat buf;
++      sqlite3_memory_file_identity *pIdentity =
++          (sqlite3_memory_file_identity*)pArg;
++      if( osFstat(pFile->h, &buf) ){
++        storeLastErrno(pFile, errno);
++        return SQLITE_IOERR_FSTAT;
++      }
++      if( !S_ISREG(buf.st_mode) ) return SQLITE_NOTFOUND;
++      pIdentity->device = (sqlite3_uint64)buf.st_dev;
++      pIdentity->inode = (sqlite3_uint64)buf.st_ino;
+       return SQLITE_OK;
+     }
+     case SQLITE_FCNTL_HAS_MOVED: {

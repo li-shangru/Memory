@@ -1,0 +1,3 @@
+tests/fixtures/synthetic_journeys/sources/*.pdf binary
+# Unified diff context lines encode blank source lines with one space.
+third_party/memory-sqlcipher3/patches/*.patch whitespace=-blank-at-eol

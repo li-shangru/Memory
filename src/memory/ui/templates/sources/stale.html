@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Source continuation changed · Memory{% endblock %}
+{% block content %}
+<h1>Source continuation changed</h1>
+<p>Previously displayed chunks remain valid. Retry this chunk to continue from a fresh Store read.</p>
+<p><a data-retry-content href="{{ retry }}">Retry source chunk</a></p>
+{% endblock %}

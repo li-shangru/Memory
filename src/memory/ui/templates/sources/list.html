@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% from "_parts.html" import sensitivity_dot %}
+{% block title %}Sources · Memory{% endblock %}
+{% block content %}
+<h1>Sources</h1>
+<p class="page-lede">Every retained capture, exactly as it was captured. <a href="/audit">Open the complete in-app Store audit</a>.</p>
+<form method="post" action="/sources/search" aria-label="Source search" data-authenticated-post>
+  <div class="search-bar">
+    <span class="field">
+      <label for="source-query">Search retained sources</label>
+      <input id="source-query" name="query" type="search" required maxlength="16384">
+    </span>
+    <button type="submit">Search</button>
+  </div>
+</form>
+
+{% if search %}
+<section aria-labelledby="source-results-heading">
+  <h2 id="source-results-heading">Search results</h2>
+  <p class="result-note">Searchable captures: {{ search.coverage.indexed_expected_captures }} of {{ search.coverage.expected_searchable_captures }}.</p>
+  <p class="result-note">Unsearchable captures: {{ search.coverage.inherently_unsearchable_captures }}.</p>
+  <ol class="card-list">
+  {% for hit in search.items %}
+    <li class="card" data-source-row data-sensitivity="{{ hit.source.effective_sensitivity.value }}">
+      <a class="source-name" href="/sources/{{ hit.source.source_id }}">{{ hit.source.original_name }}</a>
+      <p class="card-meta">
+        {{ sensitivity_dot(hit.source.effective_sensitivity.value) }}
+        <span>{{ hit.source.media_type }}</span>
+        <span>{{ hit.source.byte_length | filesize }}</span>
+        <span>Captured {{ hit.source.captured_at | memory_time }}</span>
+      </p>
+      <p class="wrap-anywhere">{{ hit.exact_excerpt }}</p>
+    </li>
+  {% else %}
+    <li class="card">No indexed source matches.</li>
+  {% endfor %}
+  </ol>
+  {% if search.has_more and search.next_cursor %}
+    <a href="/sources/search/{{ handle }}?cursor={{ search.next_cursor }}&amp;limit={{ limit }}">Next source results</a>
+  {% endif %}
+</section>
+{% else %}
+<section aria-labelledby="source-list-heading">
+  <h2 id="source-list-heading">Complete retained-source index</h2>
+  <ol class="card-list">
+  {% for source in page.items %}
+    <li class="card" data-source-row data-sensitivity="{{ source.effective_sensitivity.value }}">
+      <a class="source-name" href="/sources/{{ source.source_id }}">{{ source.original_name }}</a>
+      <p class="card-meta">
+        {{ sensitivity_dot(source.effective_sensitivity.value) }}
+        <span>{{ source.media_type }}</span>
+        <span>{{ source.byte_length | filesize }}</span>
+        <span>Captured {{ source.captured_at | memory_time }}</span>
+        <span class="tag-chip">{{ "searchable" if source.indexed_for_search else "unsearchable" }}</span>
+      </p>
+    </li>
+  {% else %}
+    <li class="card">No retained sources.</li>
+  {% endfor %}
+  </ol>
+  {% if page.has_more and page.next_cursor %}
+    <a href="/sources?cursor={{ page.next_cursor }}">Next sources</a>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}
