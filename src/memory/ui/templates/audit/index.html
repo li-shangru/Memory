@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}Store audit · Memory{% endblock %}
+{% block content %}
+{% set q = "?h=" ~ handle if handle else "" %}
+<h1>Store audit</h1>
+<p>Audit is in-app navigation only: it produces no archive, no file, and no copy of any Store record.</p>
+<p class="notice">Integrity verification unavailable: the separately scoped live verifier does not exist yet, and ordinary bounded reads are never an integrity pass.</p>
+
+<section aria-labelledby="audit-snapshot-heading">
+  <h2 id="audit-snapshot-heading">Full-coverage snapshot</h2>
+  {% if stale %}
+    <p class="notice" data-audit-stale>The Store changed while this audit was open. Counts and pages from the previous generation are no longer reconcilable, so nothing from that traversal is shown. Restart the audit to continue.</p>
+  {% elif not index %}
+    <p>The permanent audit page reads nothing until you begin one full-coverage snapshot. Every list and detail below then binds to that exact generation.</p>
+  {% endif %}
+  <form method="post" action="/audit" aria-label="Store audit snapshot" data-authenticated-post>
+    <input type="hidden" name="csrf" value="{{ csrf_token }}">
+    <button type="submit" data-audit-begin>{% if index or stale %}Restart Store audit{% else %}Begin Store audit{% endif %}</button>
+  </form>
+  <details>
+    <summary>Technical details</summary>
+    <dl class="technical-details">
+      <div><dt>Product</dt><dd>{{ status.store.product }}</dd></div>
+      <div><dt>Schema version</dt><dd>{{ status.store.schema_version }}</dd></div>
+      <div><dt>Store ID</dt><dd class="mono wrap-anywhere">{{ status.store.store_id }}</dd></div>
+      <div><dt>Runtime mode</dt><dd>{{ status.runtime_mode.value }}</dd></div>
+      {% if index %}<div><dt>Audit generation</dt><dd data-audit-generation="{{ index.snapshot.generation }}">{{ index.snapshot.generation }}</dd></div>{% endif %}
+    </dl>
+  </details>
+</section>
+
+{% if index %}
+{% set counts = index.snapshot.counts %}
+<section aria-labelledby="audit-counts-heading">
+  <h2 id="audit-counts-heading">Reconciled counts in this generation</h2>
+  <dl class="status-grid">
+    <div><dt>Inbox batches</dt><dd data-audit-count-batches="{{ counts.batch_count }}">{{ counts.batch_count }}</dd></div>
+    <div><dt>Inbox issue rows</dt><dd data-audit-count-issue-rows="{{ counts.batch_issue_row_count }}">{{ counts.batch_issue_row_count }}</dd></div>
+    <div><dt>Recorded issue occurrences</dt><dd data-audit-count-issue-occurrences="{{ counts.batch_issue_occurrence_count }}">{{ counts.batch_issue_occurrence_count }}</dd></div>
+    <div><dt>Captured sources</dt><dd data-audit-count-sources="{{ counts.source_count }}">{{ counts.source_count }}</dd></div>
+    <div><dt>Change sets</dt><dd data-audit-count-change-sets="{{ counts.change_set_count }}">{{ counts.change_set_count }}</dd></div>
+    <div><dt>Immutable revisions</dt><dd data-audit-count-change-set-revisions="{{ counts.change_set_revision_count }}">{{ counts.change_set_revision_count }}</dd></div>
+    <div><dt>Approvals</dt><dd data-audit-count-approvals="{{ counts.approval_count }}">{{ counts.approval_count }}</dd></div>
+    <div><dt>Applications</dt><dd data-audit-count-applications="{{ counts.application_count }}">{{ counts.application_count }}</dd></div>
+    <div><dt>Memory lineages</dt><dd data-audit-count-lineages="{{ counts.lineage_count }}">{{ counts.lineage_count }}</dd></div>
+    <div><dt>Memory revisions</dt><dd data-audit-count-memory-revisions="{{ counts.memory_revision_count }}">{{ counts.memory_revision_count }}</dd></div>
+  </dl>
+  <p>One Inbox issue row is the stored aggregate for one batch and code; its count is the number of recorded occurrences. An empty sum is zero.</p>
+  <p>This snapshot covers the complete Store. Audit filtering is deliberately out of scope, so no record is hidden and no summary replaces inspectable detail.</p>
+</section>
+
+<section aria-labelledby="audit-projection-heading">
+  <h2 id="audit-projection-heading">Disposable search projections</h2>
+  <p>Projection rows are rebuildable and never authoritative. A gap degrades search only; it is not a missing record and never means retained content is unavailable.</p>
+  {% set sources_coverage = index.snapshot.projection_coverage.sources %}
+  <h3>Source coverage</h3>
+  <dl class="status-grid">
+    <div><dt>Total captures</dt><dd data-source-projection-total-captures="{{ sources_coverage.total_captures }}">{{ sources_coverage.total_captures }}</dd></div>
+    <div><dt>Expected-searchable captures</dt><dd data-source-projection-expected-searchable="{{ sources_coverage.expected_searchable_captures }}">{{ sources_coverage.expected_searchable_captures }}</dd></div>
+    <div><dt>Indexed expected captures</dt><dd data-source-projection-indexed-expected="{{ sources_coverage.indexed_expected_captures }}">{{ sources_coverage.indexed_expected_captures }}</dd></div>
+    <div><dt>Missing expected rows</dt><dd data-source-projection-missing-expected="{{ sources_coverage.missing_expected_rows }}">{{ sources_coverage.missing_expected_rows }}</dd></div>
+    <div><dt>Inherently unsearchable captures</dt><dd data-source-projection-inherently-unsearchable="{{ sources_coverage.inherently_unsearchable_captures }}">{{ sources_coverage.inherently_unsearchable_captures }}</dd></div>
+    <div><dt>Unexpected or duplicate rows</dt><dd data-source-projection-unexpected-or-duplicate="{{ sources_coverage.unexpected_or_duplicate_rows }}">{{ sources_coverage.unexpected_or_duplicate_rows }}</dd></div>
+  </dl>
+  {% set memories_coverage = index.snapshot.projection_coverage.memories %}
+  <h3>Memory coverage</h3>
+  <dl class="status-grid">
+    <div><dt>Current heads</dt><dd data-memory-projection-current-heads="{{ memories_coverage.current_heads }}">{{ memories_coverage.current_heads }}</dd></div>
+    <div><dt>Indexed current heads</dt><dd data-memory-projection-indexed-current-heads="{{ memories_coverage.indexed_current_heads }}">{{ memories_coverage.indexed_current_heads }}</dd></div>
+    <div><dt>Missing current-head rows</dt><dd data-memory-projection-missing-current-heads="{{ memories_coverage.missing_current_head_rows }}">{{ memories_coverage.missing_current_head_rows }}</dd></div>
+    <div><dt>Unexpected or duplicate non-current rows</dt><dd data-memory-projection-unexpected-or-duplicate="{{ memories_coverage.unexpected_or_duplicate_noncurrent_rows }}">{{ memories_coverage.unexpected_or_duplicate_noncurrent_rows }}</dd></div>
+    <div><dt>Historical revisions not expected in projection</dt><dd data-memory-projection-historical-revisions="{{ memories_coverage.historical_revisions_not_expected }}">{{ memories_coverage.historical_revisions_not_expected }}</dd></div>
+  </dl>
+</section>
+
+<section aria-labelledby="audit-batches-heading">
+  <h2 id="audit-batches-heading">Inbox batches</h2>
+  <ol>
+  {% for batch in batches.items %}
+    <li data-audit-batch="{{ batch.batch_id }}">
+      <a class="mono wrap-anywhere" href="/audit/batches/{{ batch.batch_id }}{{ q }}">{{ batch.batch_id }}</a>
+      · sealed {{ batch.sealed_at | memory_time }}
+      · sources {{ batch.source_count }}
+      · issue rows {{ batch.issue_row_count }}
+      · recorded occurrences {{ batch.issue_occurrence_count }}
+      {% if batch.change_set_id %}· <a class="wrap-anywhere" href="/reviews/{{ batch.change_set_id }}{{ q }}">review</a>{% endif %}
+      {% if batch.application_id %}· <a class="wrap-anywhere" href="/audit/applications/{{ batch.application_id }}{{ q }}">application</a>{% endif %}
+    </li>
+  {% else %}
+    <li>This Store retains no sealed batch.</li>
+  {% endfor %}
+  </ol>
+  {% if next_batches_href %}<a data-next-batches href="{{ next_batches_href }}">Next batches</a>{% endif %}
+</section>
+
+<section aria-labelledby="audit-sources-heading">
+  <h2 id="audit-sources-heading">Captured sources</h2>
+  <ol>
+  {% for source in sources.items %}
+    <li data-audit-source="{{ source.source_id }}">
+      <a class="mono wrap-anywhere" href="/sources/{{ source.source_id }}{{ q }}">{{ source.source_id }}</a>
+      · <span class="wrap-anywhere">{{ source.original_name }}</span>
+      · origin {{ source.origin.value }}
+      · <a class="wrap-anywhere" href="/audit/batches/{{ source.batch_id }}{{ q }}">batch</a>
+      · effective sensitivity {{ source.effective_sensitivity.value }}
+      · indexed for search {{ "yes" if source.indexed_for_search else "no" }}
+    </li>
+  {% else %}
+    <li>This Store retains no capture.</li>
+  {% endfor %}
+  </ol>
+  {% if next_sources_href %}<a data-next-sources href="{{ next_sources_href }}">Next sources</a>{% endif %}
+</section>
+
+<section aria-labelledby="audit-change-sets-heading">
+  <h2 id="audit-change-sets-heading">Change sets</h2>
+  <ol>
+  {% for review in change_sets.items %}
+    <li data-audit-change-set="{{ review.change_set_id }}" data-change-set-state="{{ review.state }}">
+      <a class="mono wrap-anywhere" href="/reviews/{{ review.change_set_id }}{{ q }}">{{ review.change_set_id }}</a>
+      · state {{ review.state }}
+      · current revision lifecycle {{ review.current_lifecycle.replace("_", " ") }}
+      · revisions {{ review.revision_count }}
+      · items {{ review.item_count }}
+      · <a class="wrap-anywhere" href="/audit/batches/{{ review.batch_id }}{{ q }}">batch</a>
+      {% if review.application_id %}· <a class="wrap-anywhere" href="/audit/applications/{{ review.application_id }}{{ q }}">application</a>{% endif %}
+    </li>
+  {% else %}
+    <li>This Store retains no change set.</li>
+  {% endfor %}
+  </ol>
+  {% if next_change_sets_href %}<a data-next-change-sets href="{{ next_change_sets_href }}">Next change sets</a>{% endif %}
+</section>
+
+<section aria-labelledby="audit-approvals-heading">
+  <h2 id="audit-approvals-heading">Approvals</h2>
+  <ol>
+  {% for approval in approvals.items %}
+    <li data-audit-approval="{{ approval.approval_id }}">
+      <a class="mono wrap-anywhere" href="/audit/approvals/{{ approval.approval_id }}{{ q }}">{{ approval.approval_id }}</a>
+      · adapter {{ approval.adapter }}
+      · approved {{ approval.approved_at | memory_time }}
+      · <a class="wrap-anywhere" href="/reviews/{{ approval.change_set_id }}/revisions/{{ approval.revision_id }}{{ q }}">bound revision</a>
+    </li>
+  {% else %}
+    <li>This Store retains no approval.</li>
+  {% endfor %}
+  </ol>
+  {% if next_approvals_href %}<a data-next-approvals href="{{ next_approvals_href }}">Next approvals</a>{% endif %}
+</section>
+
+<section aria-labelledby="audit-applications-heading">
+  <h2 id="audit-applications-heading">Applications</h2>
+  <ol>
+  {% for application in applications.items %}
+    <li data-audit-application="{{ application.application_id }}">
+      <a class="mono wrap-anywhere" href="/audit/applications/{{ application.application_id }}{{ q }}">{{ application.application_id }}</a>
+      · applied {{ application.applied_at | memory_time }}
+      · resulting memory revisions {{ application.resulting_memory_count }}
+      · <a class="wrap-anywhere" href="/reviews/{{ application.change_set_id }}/revisions/{{ application.revision_id }}{{ q }}">applied revision</a>
+    </li>
+  {% else %}
+    <li>This Store retains no application.</li>
+  {% endfor %}
+  </ol>
+  {% if next_applications_href %}<a data-next-applications href="{{ next_applications_href }}">Next applications</a>{% endif %}
+</section>
+
+<section aria-labelledby="audit-lineages-heading">
+  <h2 id="audit-lineages-heading">Memory lineages</h2>
+  <ol>
+  {% for lineage in lineages.items %}
+    <li data-audit-lineage="{{ lineage.lineage_id }}">
+      <span class="mono wrap-anywhere">{{ lineage.lineage_id }}</span>
+      · <a class="wrap-anywhere" href="/memories/{{ lineage.current_head_id }}{{ q }}">current head</a>
+      · revisions {{ lineage.revision_count }}
+      · latest recorded {{ lineage.latest_recorded_at | memory_time }}
+    </li>
+  {% else %}
+    <li>This Store retains no canonical memory lineage.</li>
+  {% endfor %}
+  </ol>
+  {% if next_lineages_href %}<a data-next-lineages href="{{ next_lineages_href }}">Next lineages</a>{% endif %}
+</section>
+{% endif %}
+{% endblock %}

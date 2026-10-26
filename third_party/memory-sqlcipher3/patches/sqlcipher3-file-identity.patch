@@ -1,0 +1,51 @@
+--- a/src/connection.c
++++ b/src/connection.c
+@@ -2081,6 +2081,39 @@
+ }
+ #endif
+ 
++/* Memory downstream extension. Keep the GIL while using self->db so another
++ * Python thread cannot close this connection during the bounded fstat call.
++ * Acquire its recursive mutex without waiting while holding the GIL; another
++ * thread may be inside a SQLite callback that needs the GIL to finish.
++ */
++static PyObject* pysqlite_connection_file_identity(pysqlite_Connection* self,
++                                                     PyObject* unused)
++{
++    sqlite3_memory_file_identity identity;
++    sqlite3_mutex *mutex;
++    int rc;
++
++    if (!pysqlite_check_thread(self) || !pysqlite_check_connection(self)) {
++        return NULL;
++    }
++    mutex = sqlite3_db_mutex(self->db);
++    if (sqlite3_mutex_try(mutex) != SQLITE_OK) {
++        PyErr_SetString(pysqlite_OperationalError,
++                        "Main database file identity is busy.");
++        return NULL;
++    }
++    rc = sqlite3_file_control(self->db, "main",
++                             SQLITE_FCNTL_MEMORY_FILE_IDENTITY, &identity);
++    sqlite3_mutex_leave(mutex);
++    if (rc != SQLITE_OK) {
++        PyErr_SetString(pysqlite_OperationalError,
++                        "Main database file identity is unavailable.");
++        return NULL;
++    }
++    return Py_BuildValue("(KK)", (unsigned long long)identity.device,
++                         (unsigned long long)identity.inode);
++}
++
+ static const char connection_doc[] =
+ PyDoc_STR("SQLite database connection object.");
+ 
+@@ -2092,6 +2125,8 @@
+ };
+ 
+ static PyMethodDef connection_methods[] = {
++    {"file_identity", (PyCFunction)pysqlite_connection_file_identity, METH_NOARGS,
++        PyDoc_STR("Return the open main database (device, inode). Non-standard.")},
+     {"cursor", (PyCFunction)(void(*)(void))pysqlite_connection_cursor, METH_VARARGS|METH_KEYWORDS,
+         PyDoc_STR("Return a cursor for the connection.")},
+     {"open_blob", (PyCFunction)pysqlite_connection_blob, METH_VARARGS|METH_KEYWORDS,

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_parts.html" import short_id %}
+{% block title %}Pending reviews · Memory{% endblock %}
+{% block content %}
+<h1>Pending reviews</h1>
+<p class="page-lede">A Memory Review changes canonical memory only after one exact owner approval.</p>
+
+<section aria-labelledby="draft-reviews-heading">
+  <h2 id="draft-reviews-heading">Draft Memory Reviews</h2>
+  <ol class="card-list">
+  {% for review in drafts.items %}
+    <li class="card" data-review-row data-review-state="draft" data-change-set="{{ review.change_set_id }}">
+      <a class="memory-card-statement" href="/reviews/{{ review.change_set_id }}">Review of the batch sealed {{ review.batch_sealed_at | memory_time }}</a>
+      <p class="card-meta">
+        <span>{{ review.item_count }} {{ "item" if review.item_count == 1 else "items" }}</span>
+        <span>Accounted {{ review.accounted_source_count }} of {{ review.batch_source_count }}</span>
+        {% if review.unaccounted_source_count %}<span class="state-tag">{{ review.unaccounted_source_count }} unaccounted</span>{% endif %}
+        <span>{{ review.revision_count }} {{ "revision" if review.revision_count == 1 else "revisions" }}</span>
+        <span>Origin {{ review.current_adapter_origin.value }}</span>
+        <span>Batch <a href="/inbox/batches/{{ review.batch_id }}">{{ short_id(review.batch_id) }}</a></span>
+      </p>
+    </li>
+  {% else %}
+    <li class="card">No draft Memory Review is pending.</li>
+  {% endfor %}
+  </ol>
+  {% if drafts.next_cursor %}<a data-next-drafts href="/reviews?draft_cursor={{ drafts.next_cursor }}">Next draft reviews</a>{% endif %}
+</section>
+
+<section aria-labelledby="applied-reviews-heading">
+  <h2 id="applied-reviews-heading">Applied Memory Reviews</h2>
+  <ol class="card-list">
+  {% for review in applied.items %}
+    <li class="card" data-review-row data-review-state="applied" data-change-set="{{ review.change_set_id }}">
+      <a class="memory-card-statement" href="/reviews/{{ review.change_set_id }}">Review of the batch sealed {{ review.batch_sealed_at | memory_time }}</a>
+      <p class="card-meta">
+        <span class="state-tag">applied</span>
+        <span>{{ review.item_count }} {{ "item" if review.item_count == 1 else "items" }}</span>
+        <span>Origin {{ review.current_adapter_origin.value }}</span>
+        <span>Batch <a href="/inbox/batches/{{ review.batch_id }}">{{ short_id(review.batch_id) }}</a></span>
+        {% if review.application_id %}<span><a href="/audit/applications/{{ review.application_id }}">Application {{ short_id(review.application_id) }}</a></span>{% endif %}
+      </p>
+    </li>
+  {% else %}
+    <li class="card">No Memory Review has been applied.</li>
+  {% endfor %}
+  </ol>
+  {% if applied.next_cursor %}<a data-next-applied href="/reviews?applied_cursor={{ applied.next_cursor }}">Next applied reviews</a>{% endif %}
+</section>
+{% endblock %}

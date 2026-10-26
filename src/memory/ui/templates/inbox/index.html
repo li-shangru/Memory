@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% from "_parts.html" import short_id %}
+{% block title %}Inbox · Memory{% endblock %}
+{% block content %}
+<h1>Inbox</h1>
+<p class="page-lede">Stage complete files here. Staging does not capture, scan, or create Memory.</p>
+<p class="notice"><strong>Staged; ask a connected agent to process the Inbox.</strong> The connected agent calls the generic <code class="mono">inbox.scan</code> tool.</p>
+
+{% if captured %}
+<section class="notice" aria-labelledby="captured-heading">
+  <h2 id="captured-heading">Captured; awaiting Memory Review</h2>
+  <p><a href="/inbox/batches/{{ captured.summary.batch_id }}">Open correction batch {{ short_id(captured.summary.batch_id) }}</a></p>
+  {% for source in captured.sources %}<p><a href="/sources/{{ source.source_id }}">Open captured correction source</a></p>{% endfor %}
+</section>
+{% endif %}
+
+<section aria-labelledby="stage-heading">
+  <h2 id="stage-heading">Stage a file</h2>
+  <form class="upload-drop-zone" action="/inbox/upload" method="post" enctype="multipart/form-data" data-authenticated-upload data-drop-zone>
+    <input type="hidden" name="csrf" value="{{ csrf_token }}">
+    <label for="inbox-file">Choose or drop a complete file</label>
+    <input id="inbox-file" name="file" type="file" required>
+    <button type="submit">Stage file</button>
+  </form>
+  <form action="/inbox/reveal" method="post" data-authenticated-post>
+    <input type="hidden" name="csrf" value="{{ csrf_token }}">
+    <button type="submit">Reveal in Finder</button>
+  </form>
+</section>
+
+<section aria-labelledby="staged-heading">
+  <h2 id="staged-heading">Staged Inbox entries</h2>
+  <ol class="card-list">
+  {% for entry in staged.items %}
+    <li class="card" data-staged-row><span class="source-name wrap-anywhere">{{ entry.display_name }}</span><span class="card-meta"><span>{{ entry.byte_length | filesize }}</span><span>Staged {{ (entry.staged_at_ns // 1000000000) | memory_time }}</span></span></li>
+  {% else %}<li class="card">No complete regular files are staged.</li>{% endfor %}
+  </ol>
+  {% if next_staged_href %}<a data-next-staged href="{{ next_staged_href }}">Next staged entries</a>{% endif %}
+</section>
+
+<section aria-labelledby="corrections-heading">
+  <h2 id="corrections-heading">Captured correction batches</h2>
+  <ol class="card-list">
+  {% for batch in corrections.items %}
+    <li class="card" data-correction-batch>
+      <a href="/inbox/batches/{{ batch.batch_id }}">Correction batch sealed {{ batch.sealed_at | memory_time }}</a>
+      <p class="card-meta"><span>{{ batch.source_count }} {{ "source" if batch.source_count == 1 else "sources" }}</span><span>{{ short_id(batch.batch_id) }}</span></p>
+    </li>
+  {% else %}<li class="card">No captured correction batch is recorded.</li>{% endfor %}
+  </ol>
+  {% if next_corrections_href %}<a data-next-corrections href="{{ next_corrections_href }}">Next correction batches</a>{% endif %}
+</section>
+
+{% if recovery_issues.items %}
+<section aria-labelledby="recovery-heading">
+  <h2 id="recovery-heading">Capture recovery needs attention</h2>
+  <ol class="card-list">{% for issue in recovery_issues.items %}<li class="card" data-recovery-issue><strong>{{ issue.code }}</strong><span class="card-meta"><span>Detected {{ (issue.detected_at_ns // 1000000000) | memory_time }}</span><span class="mono">{{ issue.issue_id }}</span></span></li>{% endfor %}</ol>
+  {% if next_recovery_href %}<a data-next-recovery href="{{ next_recovery_href }}">Next recovery issues</a>{% endif %}
+</section>
+{% endif %}
+{% endblock %}

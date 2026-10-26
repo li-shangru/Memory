@@ -1,0 +1,830 @@
+{
+  "format": "memory.synthetic-discovery-fixtures.v1",
+  "authored_on": "2026-09-05",
+  "cases": [
+    {
+      "label": "SYN-V111-EN-PARTIAL-REPETITION",
+      "language": "en",
+      "conditions": [
+        "partial_repetition"
+      ],
+      "query": "signal kiln launch readiness",
+      "sources": [
+        {
+          "label": "distractor",
+          "phase": 0,
+          "prefix": "Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. ",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        },
+        {
+          "label": "record",
+          "phase": 0,
+          "prefix": "Readiness for the kiln called Signal requires an independent seal check.",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        }
+      ],
+      "memories": [
+        {
+          "label": "practice",
+          "phase": 0,
+          "source": "distractor",
+          "statement": "Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. ",
+          "excerpt": "Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. Signal is repeated here solely to test the lettering press. ",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        },
+        {
+          "label": "condition",
+          "phase": 0,
+          "source": "record",
+          "statement": "Readiness for the kiln called Signal requires an independent seal check.",
+          "excerpt": "Readiness for the kiln called Signal requires an independent seal check.",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        }
+      ],
+      "guards": [],
+      "required_guards": [],
+      "required_current_memories": [
+        "condition"
+      ],
+      "requirements": [
+        {
+          "source": "record",
+          "excerpt": "Readiness for the kiln called Signal requires an independent seal check."
+        }
+      ],
+      "additional_captures": [],
+      "expected_answerability": "answerable"
+    },
+    {
+      "label": "SYN-V111-ZH-PARTIAL-REPETITION",
+      "language": "zh",
+      "conditions": [
+        "partial_repetition"
+      ],
+      "query": "苔光 窑炉 启动 验收",
+      "sources": [
+        {
+          "label": "distractor",
+          "phase": 0,
+          "prefix": "苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        },
+        {
+          "label": "record",
+          "phase": 0,
+          "prefix": "苔光窑炉的验收条件是先完成独立的密封检查。",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        }
+      ],
+      "memories": [
+        {
+          "label": "practice",
+          "phase": 0,
+          "source": "distractor",
+          "statement": "苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。",
+          "excerpt": "苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。苔光二字在这里重复，只用于测试字模。",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        },
+        {
+          "label": "condition",
+          "phase": 0,
+          "source": "record",
+          "statement": "苔光窑炉的验收条件是先完成独立的密封检查。",
+          "excerpt": "苔光窑炉的验收条件是先完成独立的密封检查。",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        }
+      ],
+      "guards": [],
+      "required_guards": [],
+      "required_current_memories": [
+        "condition"
+      ],
+      "requirements": [
+        {
+          "source": "record",
+          "excerpt": "苔光窑炉的验收条件是先完成独立的密封检查。"
+        }
+      ],
+      "additional_captures": [],
+      "expected_answerability": "answerable"
+    },
+    {
+      "label": "SYN-V111-EN-EXACT-REPETITION-LATE-CAVEAT",
+      "language": "en",
+      "conditions": [
+        "exact_repetition_late_caveat"
+      ],
+      "query": "opal archive",
+      "sources": [
+        {
+          "label": "distractor",
+          "phase": 0,
+          "prefix": "opal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\nopal archive: these words only test the label printer.\n",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        },
+        {
+          "label": "record",
+          "phase": 0,
+          "prefix": "The opal archive may open for the demonstration.\n",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": "Synthetic cabinet records describe empty shelves and numbered drawers.\n",
+          "target_bytes": 49152,
+          "tail": "Final condition: public entry remains suspended until the ventilation review is signed.\n"
+        }
+      ],
+      "memories": [
+        {
+          "label": "proposal",
+          "phase": 0,
+          "source": "record",
+          "statement": "The opal archive may open for the demonstration.",
+          "excerpt": "The opal archive may open for the demonstration.",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        }
+      ],
+      "guards": [],
+      "required_guards": [],
+      "required_current_memories": [],
+      "requirements": [
+        {
+          "source": "record",
+          "excerpt": "The opal archive may open for the demonstration."
+        },
+        {
+          "source": "record",
+          "excerpt": "Final condition: public entry remains suspended until the ventilation review is signed."
+        }
+      ],
+      "additional_captures": [],
+      "expected_answerability": "answerable"
+    },
+    {
+      "label": "SYN-V111-ZH-EXACT-REPETITION-LATE-CAVEAT",
+      "language": "zh",
+      "conditions": [
+        "exact_repetition_late_caveat"
+      ],
+      "query": "露石档案馆",
+      "sources": [
+        {
+          "label": "distractor",
+          "phase": 0,
+          "prefix": "露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n露石档案馆这几个字只用于测试标签打印机。\n",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        },
+        {
+          "label": "record",
+          "phase": 0,
+          "prefix": "露石档案馆可以准备演示开放。\n",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": "合成的柜体记录介绍空书架和已编号的抽屉。\n",
+          "target_bytes": 49152,
+          "tail": "最终条件：通风复核签署之前，仍然暂停公众入内。\n"
+        }
+      ],
+      "memories": [
+        {
+          "label": "proposal",
+          "phase": 0,
+          "source": "record",
+          "statement": "露石档案馆可以准备演示开放。",
+          "excerpt": "露石档案馆可以准备演示开放。",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        }
+      ],
+      "guards": [],
+      "required_guards": [],
+      "required_current_memories": [],
+      "requirements": [
+        {
+          "source": "record",
+          "excerpt": "露石档案馆可以准备演示开放。"
+        },
+        {
+          "source": "record",
+          "excerpt": "最终条件：通风复核签署之前，仍然暂停公众入内。"
+        }
+      ],
+      "additional_captures": [],
+      "expected_answerability": "answerable"
+    },
+    {
+      "label": "SYN-V111-EN-PARAPHRASE",
+      "language": "en",
+      "conditions": [
+        "paraphrase"
+      ],
+      "query": "protect fragile display pieces during transport",
+      "sources": [
+        {
+          "label": "routine",
+          "phase": 0,
+          "prefix": "At the invented Juniper exhibit, brass parts are wrapped in felt before the trolley crosses the tiled corridor.",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        },
+        {
+          "label": "inventory",
+          "phase": 0,
+          "prefix": "The synthetic storeroom contains blue clay and unpainted bowls.",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        }
+      ],
+      "memories": [
+        {
+          "label": "routine",
+          "phase": 0,
+          "source": "routine",
+          "statement": "At the invented Juniper exhibit, brass parts are wrapped in felt before the trolley crosses the tiled corridor.",
+          "excerpt": "At the invented Juniper exhibit, brass parts are wrapped in felt before the trolley crosses the tiled corridor.",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        }
+      ],
+      "guards": [],
+      "required_guards": [],
+      "required_current_memories": [
+        "routine"
+      ],
+      "requirements": [
+        {
+          "source": "routine",
+          "excerpt": "At the invented Juniper exhibit, brass parts are wrapped in felt before the trolley crosses the tiled corridor."
+        }
+      ],
+      "additional_captures": [],
+      "expected_answerability": "answerable"
+    },
+    {
+      "label": "SYN-V111-ZH-PARAPHRASE",
+      "language": "zh",
+      "conditions": [
+        "paraphrase"
+      ],
+      "query": "如何防止运输损坏",
+      "sources": [
+        {
+          "label": "routine",
+          "phase": 0,
+          "prefix": "虚构松灯展馆把铜制零件裹进毛毡，再用小推车穿过铺砖走廊。",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        },
+        {
+          "label": "inventory",
+          "phase": 0,
+          "prefix": "合成库房里摆着蓝色陶土和尚未上釉的碗。",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        }
+      ],
+      "memories": [
+        {
+          "label": "routine",
+          "phase": 0,
+          "source": "routine",
+          "statement": "虚构松灯展馆把铜制零件裹进毛毡，再用小推车穿过铺砖走廊。",
+          "excerpt": "虚构松灯展馆把铜制零件裹进毛毡，再用小推车穿过铺砖走廊。",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        }
+      ],
+      "guards": [],
+      "required_guards": [],
+      "required_current_memories": [
+        "routine"
+      ],
+      "requirements": [
+        {
+          "source": "routine",
+          "excerpt": "虚构松灯展馆把铜制零件裹进毛毡，再用小推车穿过铺砖走廊。"
+        }
+      ],
+      "additional_captures": [],
+      "expected_answerability": "answerable"
+    },
+    {
+      "label": "SYN-V111-EN-GUARD",
+      "language": "en",
+      "conditions": [
+        "guard"
+      ],
+      "query": "amber canal demonstration",
+      "sources": [
+        {
+          "label": "claim",
+          "phase": 0,
+          "prefix": "The amber canal demonstration is available for a short trial.",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        },
+        {
+          "label": "boundary",
+          "phase": 0,
+          "prefix": "The trial excludes visitors and ends immediately if the water level rises.",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        }
+      ],
+      "memories": [
+        {
+          "label": "claim",
+          "phase": 0,
+          "source": "claim",
+          "statement": "The amber canal demonstration is available for a short trial.",
+          "excerpt": "The amber canal demonstration is available for a short trial.",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        },
+        {
+          "label": "boundary",
+          "phase": 0,
+          "source": "boundary",
+          "statement": "The trial excludes visitors and ends immediately if the water level rises.",
+          "excerpt": "The trial excludes visitors and ends immediately if the water level rises.",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        }
+      ],
+      "guards": [
+        {
+          "guard": "boundary",
+          "governed": "claim"
+        }
+      ],
+      "required_guards": [
+        "boundary"
+      ],
+      "required_current_memories": [
+        "claim",
+        "boundary"
+      ],
+      "requirements": [
+        {
+          "source": "claim",
+          "excerpt": "The amber canal demonstration is available for a short trial."
+        },
+        {
+          "source": "boundary",
+          "excerpt": "The trial excludes visitors and ends immediately if the water level rises."
+        }
+      ],
+      "additional_captures": [
+        {
+          "label": "restricted_duplicate",
+          "copy_of": "claim",
+          "text": null,
+          "suffix": "txt",
+          "sensitivity": "restricted"
+        }
+      ],
+      "expected_answerability": "answerable"
+    },
+    {
+      "label": "SYN-V111-ZH-GUARD",
+      "language": "zh",
+      "conditions": [
+        "guard"
+      ],
+      "query": "琥珀水道演示",
+      "sources": [
+        {
+          "label": "claim",
+          "phase": 0,
+          "prefix": "琥珀水道演示可以安排一次短暂试行。",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        },
+        {
+          "label": "boundary",
+          "phase": 0,
+          "prefix": "这次试行不接待访客；水位一旦上升就立即结束。",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        }
+      ],
+      "memories": [
+        {
+          "label": "claim",
+          "phase": 0,
+          "source": "claim",
+          "statement": "琥珀水道演示可以安排一次短暂试行。",
+          "excerpt": "琥珀水道演示可以安排一次短暂试行。",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        },
+        {
+          "label": "boundary",
+          "phase": 0,
+          "source": "boundary",
+          "statement": "这次试行不接待访客；水位一旦上升就立即结束。",
+          "excerpt": "这次试行不接待访客；水位一旦上升就立即结束。",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        }
+      ],
+      "guards": [
+        {
+          "guard": "boundary",
+          "governed": "claim"
+        }
+      ],
+      "required_guards": [
+        "boundary"
+      ],
+      "required_current_memories": [
+        "claim",
+        "boundary"
+      ],
+      "requirements": [
+        {
+          "source": "claim",
+          "excerpt": "琥珀水道演示可以安排一次短暂试行。"
+        },
+        {
+          "source": "boundary",
+          "excerpt": "这次试行不接待访客；水位一旦上升就立即结束。"
+        }
+      ],
+      "additional_captures": [
+        {
+          "label": "restricted_duplicate",
+          "copy_of": "claim",
+          "text": null,
+          "suffix": "txt",
+          "sensitivity": "restricted"
+        }
+      ],
+      "expected_answerability": "answerable"
+    },
+    {
+      "label": "SYN-V111-EN-CORRECTION",
+      "language": "en",
+      "conditions": [
+        "correction"
+      ],
+      "query": "cobalt room booking",
+      "sources": [
+        {
+          "label": "prior",
+          "phase": 0,
+          "prefix": "The cobalt room booking allows weekly evening practice.\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\ncobalt room booking\n",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        },
+        {
+          "label": "correction",
+          "phase": 1,
+          "prefix": "Correction: the cobalt room booking is cancelled; no sessions remain approved.",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        }
+      ],
+      "memories": [
+        {
+          "label": "prior",
+          "phase": 0,
+          "source": "prior",
+          "statement": "The cobalt room booking allows weekly evening practice.",
+          "excerpt": "The cobalt room booking allows weekly evening practice.",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        },
+        {
+          "label": "latest",
+          "phase": 1,
+          "source": "correction",
+          "statement": "Correction: the cobalt room booking is cancelled; no sessions remain approved.",
+          "excerpt": "Correction: the cobalt room booking is cancelled; no sessions remain approved.",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": "prior"
+        }
+      ],
+      "guards": [],
+      "required_guards": [],
+      "required_current_memories": [
+        "latest"
+      ],
+      "requirements": [
+        {
+          "source": "correction",
+          "excerpt": "Correction: the cobalt room booking is cancelled; no sessions remain approved."
+        }
+      ],
+      "additional_captures": [],
+      "expected_answerability": "answerable"
+    },
+    {
+      "label": "SYN-V111-ZH-CORRECTION",
+      "language": "zh",
+      "conditions": [
+        "correction"
+      ],
+      "query": "钴蓝工坊预约",
+      "sources": [
+        {
+          "label": "prior",
+          "phase": 0,
+          "prefix": "钴蓝工坊预约允许每周安排晚间练习。\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n钴蓝工坊预约\n",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        },
+        {
+          "label": "correction",
+          "phase": 1,
+          "prefix": "更正：钴蓝工坊预约已经取消，不再保留任何获准的练习时段。",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        }
+      ],
+      "memories": [
+        {
+          "label": "prior",
+          "phase": 0,
+          "source": "prior",
+          "statement": "钴蓝工坊预约允许每周安排晚间练习。",
+          "excerpt": "钴蓝工坊预约允许每周安排晚间练习。",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        },
+        {
+          "label": "latest",
+          "phase": 1,
+          "source": "correction",
+          "statement": "更正：钴蓝工坊预约已经取消，不再保留任何获准的练习时段。",
+          "excerpt": "更正：钴蓝工坊预约已经取消，不再保留任何获准的练习时段。",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": "prior"
+        }
+      ],
+      "guards": [],
+      "required_guards": [],
+      "required_current_memories": [
+        "latest"
+      ],
+      "requirements": [
+        {
+          "source": "correction",
+          "excerpt": "更正：钴蓝工坊预约已经取消，不再保留任何获准的练习时段。"
+        }
+      ],
+      "additional_captures": [],
+      "expected_answerability": "answerable"
+    },
+    {
+      "label": "SYN-V111-EN-UNANSWERABLE-BINARY",
+      "language": "en",
+      "conditions": [
+        "unanswerable_binary"
+      ],
+      "query": "ceramic workshop opening time",
+      "sources": [
+        {
+          "label": "background",
+          "phase": 0,
+          "prefix": "The ceramic workshop address was retained. No opening-hour record has been supplied.",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        }
+      ],
+      "memories": [
+        {
+          "label": "background",
+          "phase": 0,
+          "source": "background",
+          "statement": "The ceramic workshop address was retained. No opening-hour record has been supplied.",
+          "excerpt": "The ceramic workshop address was retained. No opening-hour record has been supplied.",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        }
+      ],
+      "guards": [],
+      "required_guards": [],
+      "required_current_memories": [],
+      "requirements": [
+        {
+          "source": "background",
+          "excerpt": "The ceramic workshop address was retained. No opening-hour record has been supplied."
+        }
+      ],
+      "additional_captures": [
+        {
+          "label": "binary",
+          "copy_of": null,
+          "text": "SYNTHETIC OPAQUE CONTAINER\n012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789",
+          "suffix": "bin",
+          "sensitivity": "sensitive"
+        }
+      ],
+      "expected_answerability": "unanswerable"
+    },
+    {
+      "label": "SYN-V111-ZH-UNANSWERABLE-BINARY",
+      "language": "zh",
+      "conditions": [
+        "unanswerable_binary"
+      ],
+      "query": "陶瓷工坊几点开门",
+      "sources": [
+        {
+          "label": "background",
+          "phase": 0,
+          "prefix": "只保留了陶瓷工坊的地址，没有提供开放时间记录。",
+          "repeat": "",
+          "repeat_count": 0,
+          "filler": " ",
+          "target_bytes": null,
+          "tail": ""
+        }
+      ],
+      "memories": [
+        {
+          "label": "background",
+          "phase": 0,
+          "source": "background",
+          "statement": "只保留了陶瓷工坊的地址，没有提供开放时间记录。",
+          "excerpt": "只保留了陶瓷工坊的地址，没有提供开放时间记录。",
+          "tags": [
+            "synthetic",
+            "practice"
+          ],
+          "corrects": null
+        }
+      ],
+      "guards": [],
+      "required_guards": [],
+      "required_current_memories": [],
+      "requirements": [
+        {
+          "source": "background",
+          "excerpt": "只保留了陶瓷工坊的地址，没有提供开放时间记录。"
+        }
+      ],
+      "additional_captures": [
+        {
+          "label": "binary",
+          "copy_of": null,
+          "text": "SYNTHETIC OPAQUE CONTAINER\n012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789",
+          "suffix": "bin",
+          "sensitivity": "sensitive"
+        }
+      ],
+      "expected_answerability": "unanswerable"
+    }
+  ],
+  "shapes": [
+    {
+      "label": "compact",
+      "minimum_source_bytes": 0,
+      "noise_source_count": 0,
+      "noise_source_bytes": 256,
+      "neutral_filler": {
+        "en": "A synthetic tessellation study lists hexagons, rhombi, and perpendicular marks.\n",
+        "zh": "这份合成几何练习只列出六边形、菱形和垂线。\n"
+      }
+    },
+    {
+      "label": "short_noise",
+      "minimum_source_bytes": 0,
+      "noise_source_count": 16,
+      "noise_source_bytes": 256,
+      "neutral_filler": {
+        "en": "A synthetic tessellation study lists hexagons, rhombi, and perpendicular marks.\n",
+        "zh": "这份合成几何练习只列出六边形、菱形和垂线。\n"
+      }
+    },
+    {
+      "label": "long_sources",
+      "minimum_source_bytes": 196608,
+      "noise_source_count": 0,
+      "noise_source_bytes": 256,
+      "neutral_filler": {
+        "en": "A synthetic tessellation study lists hexagons, rhombi, and perpendicular marks.\n",
+        "zh": "这份合成几何练习只列出六边形、菱形和垂线。\n"
+      }
+    }
+  ]
+}

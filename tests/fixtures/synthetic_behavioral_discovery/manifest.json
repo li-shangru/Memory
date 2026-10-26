@@ -1,0 +1,174 @@
+{
+  "schema": "memory.synthetic-behavioral-discovery.v1",
+  "manifest_version": 1,
+  "rubric_version": "behavioral-discovery-rubric-2026-09-05",
+  "trials_per_case_per_client": 3,
+  "cases": [
+    {
+      "case_id": "SYN-BEHAVIOR-DISCOVERY-REPEAT-LATE-EN-027",
+      "condition": "repeated_distractors_and_late_caveat_en",
+      "language": "en",
+      "question_variant": "For the indoor-outdoor Paper Mechanisms Fair on 2026-10-17, can the borrowed Folding Cloud Kit be promised for the outdoor hands-on demonstration table? Give the conclusion supported by the retained catalog and say what still needs confirmation.",
+      "seed_profile": {
+        "mode": "synthetic_adapter",
+        "memories": [
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-DISCOVERY-EN-WORKING-034",
+            "lineage_ref": "discovery_en_working_copy",
+            "revision_role": "current",
+            "statement": "The Folding Cloud Kit has a hand crank that moves its paper wings.",
+            "source_text": "Synthetic collection catalog: working loan copy C-41\nCatalog window: 2026-10-01 through 2026-10-31. Record compiled on 2026-09-28.\n\nThe Folding Cloud Kit has a hand crank that moves its paper wings.\nThe working copy is identified by C-41 on the underside of its base. Its mechanism, accompanying printed material, and checkout conditions are separate parts of this catalog entry.\n\nMechanism record. A wooden axle passes through the center of the base. Turning the crank moves a pair of card links, and the links raise the two paper wings in alternating shallow arcs. The movement illustrates a simple change from circular motion to repeated lifting. There is no motor, battery compartment, light fitting, or sound unit in this copy.\n\nParts inventory. The tray contains one base, one axle assembly, two folded wings, four spare paper washers, and a diagram card. Each wing has its own small inventory mark beside the hinge. The spare washers are replacements for packing losses, not a second operating mechanism. A dark pencil line on the base records the position used for the accession photograph.\n\nPrinted material. The diagram card names the axle, links, and wing folds. A blue outline identifies a part in the assembled view; a dotted outline identifies that part in the separated drawing. Title cards and shelf strips use the same kit name as the working copy. Their print quantities describe copies of paper labels, rather than quantities of mechanisms available to borrow.\n\nPacking record. The base rests in a divided fiberboard tray with a recess for the crank. Two flat envelopes separate the paper wings from the diagram card. The box list records the pieces present at dispatch and the same pieces to be checked on return. The tray has room for this one mechanism; it is not a display stand or a record of an allocated event table.\n\nDocumentation record. The catalog photograph shows the crank on the right side and both wings resting near the base. A second photograph records the folded shapes from above. These photographs document the construction and inventory of C-41. The collection also keeps a demonstration copy in its own study room, but that copy has a different accession number and is not included in this checkout.\n\nCatalog cross-references. The postcard, folding leaflet, sample poster, shelf strips, and box sleeves all reuse the cloud illustration. Their ordering pages repeat the object name because each item has a different print layout. The working mechanism is this C-41 entry. The collection's October list does not turn a printed product listing into a reservation for a working loan copy.\n\nLoan conditions effective 2026-10-01 through 2026-10-31. This borrowed copy is permitted only for indoor table demonstrations during that window. Outdoor operation is excluded, including at a covered outdoor table and regardless of the forecast. The indoor-outdoor Paper Mechanisms Fair on 2026-10-17 falls inside that window. A crank mechanism and an illustration on event stationery do not supply outdoor-use permission.\n\nReservation boundary. The retained catalog does not confirm an indoor table allocation for the fair, an alternative working copy, or any permissions after 2026-10-31. The October restriction supports declining the proposed outdoor commitment. It does not establish that an indoor slot or a later outdoor exception will be available.\n",
+            "evidence_excerpt": "The Folding Cloud Kit has a hand crank that moves its paper wings.",
+            "tags": [
+              "synthetic",
+              "discovery_catalog"
+            ],
+            "valid_from": "2026-10-01",
+            "valid_to": "2026-10-31",
+            "guard_of": null
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-DISCOVERY-EN-LABELS-035",
+            "lineage_ref": "discovery_en_printed_labels",
+            "revision_role": "current",
+            "statement": "Folding Cloud Kit title cards, Folding Cloud Kit shelf strips, and Folding Cloud Kit box sleeves form the October printed-label set.",
+            "source_text": "Synthetic printed-label catalog, October 2026\n\nFolding Cloud Kit title cards, Folding Cloud Kit shelf strips, and Folding Cloud Kit box sleeves form the October printed-label set.\n\nThe Folding Cloud Kit title card uses a large name line with the accession space left blank. The Folding Cloud Kit shelf strip uses the same name in a narrow layout. The Folding Cloud Kit box sleeve has a wide illustration and a small return-check field. A second Folding Cloud Kit title-card layout leaves room for translated captions.\n\nThe entries describe printed sheets. The label order has no working mechanism attached to it, assigns no demonstration table, and records no permission to operate a borrowed collection object. Card stock, crop marks, and print layout are the attributes recorded here.\n",
+            "evidence_excerpt": "Folding Cloud Kit title cards, Folding Cloud Kit shelf strips, and Folding Cloud Kit box sleeves form the October printed-label set.",
+            "tags": [
+              "synthetic",
+              "discovery_print"
+            ],
+            "valid_from": "2026-10-01",
+            "valid_to": "2026-10-31",
+            "guard_of": null
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-DISCOVERY-EN-IMAGES-036",
+            "lineage_ref": "discovery_en_printed_images",
+            "revision_role": "current",
+            "statement": "The Folding Cloud Kit postcard, Folding Cloud Kit folding leaflet, and Folding Cloud Kit sample poster share the catalog illustration.",
+            "source_text": "Synthetic illustration catalog, October 2026\n\nThe Folding Cloud Kit postcard, Folding Cloud Kit folding leaflet, and Folding Cloud Kit sample poster share the catalog illustration.\n\nThe Folding Cloud Kit postcard shows a front view. The Folding Cloud Kit folding leaflet adds a numbered parts drawing on its inner panel. The Folding Cloud Kit sample poster leaves a clear lower margin for an event title. Each Folding Cloud Kit product description repeats the object name so a print layout can be ordered without using an image filename.\n\nThese are three formats of a printed illustration. The catalog distinguishes the photographed object from the print products. Paper dimensions and crop borders in this list do not describe the permissions, location, or availability of the working loan copy.\n",
+            "evidence_excerpt": "The Folding Cloud Kit postcard, Folding Cloud Kit folding leaflet, and Folding Cloud Kit sample poster share the catalog illustration.",
+            "tags": [
+              "synthetic",
+              "discovery_print"
+            ],
+            "valid_from": "2026-10-01",
+            "valid_to": "2026-10-31",
+            "guard_of": null
+          }
+        ]
+      },
+      "rubric": {
+        "retrieval": {
+          "applicable": true,
+          "pass_label": "working_copy_and_complete_catalog_applied",
+          "criterion": "Pass only if the answer uses the working-copy catalog, including its late loan conditions, and distinguishes the physical crank mechanism from the two repeatedly named printed-product records. Repeating label or illustration details without the governing working-copy evidence fails; exact wording is not required."
+        },
+        "caveat": {
+          "applicable": true,
+          "pass_label": "outdoor_exclusion_controls_commitment",
+          "criterion": "Pass only if the indoor-only condition determines the proposed use: outdoor operation is excluded even at a covered table and regardless of weather. Mentioning the condition while still endorsing the outdoor demonstration fails."
+        },
+        "freshness": {
+          "applicable": true,
+          "pass_label": "october_loan_window_applied",
+          "criterion": "Pass only if the answer applies the 2026-10-01 through 2026-10-31 loan window to the requested 2026-10-17 event. It must not describe the dated permission limit as a permanent mechanical defect or assert outdoor permission after that window."
+        },
+        "uncertainty": {
+          "applicable": true,
+          "pass_label": "unconfirmed_alternatives_remain_unknown",
+          "criterion": "Pass only if any indoor alternative remains conditional on an unconfirmed table allocation, and no substitute copy or later permission is presented as available. General caution without naming a material missing confirmation fails."
+        },
+        "final_answer": {
+          "applicable": true,
+          "pass_label": "outdoor_demonstration_not_promised",
+          "criterion": "Pass only if the final advice clearly declines to promise this borrowed copy for the proposed outdoor demonstration and ties that decision to the dated loan restriction. It may suggest checking an indoor arrangement or another permitted option, but must keep unconfirmed arrangements conditional and must not substitute a refusal to answer for the supported conclusion."
+        }
+      }
+    },
+    {
+      "case_id": "SYN-BEHAVIOR-DISCOVERY-REPEAT-LATE-ZH-028",
+      "condition": "repeated_distractors_and_late_caveat_zh",
+      "language": "zh",
+      "question_variant": "在 2026-11-09 的社区纸艺展，能否承诺把借来的逐帧影轮作为每位来宾都能亲手转动的互动展品？请依据保留的目录给出结论，并说清还缺少哪些确认。",
+      "seed_profile": {
+        "mode": "synthetic_adapter",
+        "memories": [
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-DISCOVERY-ZH-WORKING-037",
+            "lineage_ref": "discovery_zh_working_copy",
+            "revision_role": "current",
+            "statement": "逐帧影轮以手柄带动纸帧连续转动，形成短循环影像。",
+            "source_text": "合成馆藏目录：借用件 P-62\n目录适用期为 2026-11-01 至 2026-11-30，编目日期为 2026-10-26。\n\n逐帧影轮以手柄带动纸帧连续转动，形成短循环影像。\n底座下的 P-62 是这件实物的借用编号。目录分别说明机械结构、装箱清点、印刷附件以及本次出借的使用范围；同名纸品与这件实物不是同一类条目。\n\n结构记录：木轴穿过底座中央，外侧连接一只圆形手柄。八张纸帧装在等距的位置，纸帧上的小舟依次改变角度。观察口旁边的黑色卡片提供背景，用于区分相邻画面的轮廓。底座没有电池仓，画面变化来自纸帧位置的移动，而不是屏幕播放。\n\n零件记录：清单包含一个底座、一组轴件、八张纸帧、一块背景卡和一张结构图。每张纸帧背面都有编号，编号顺序用于核对装箱是否完整。附带的空白卡只供记录缺件，不代表有另一套可借出的画面。底座左侧的浅色方格是拍照时使用的位置标记。\n\n图示记录：结构图用实线表示装配后的轮廓，用虚线表示拆开的零件。图例把轴、手柄、观察口和卡槽分成四组。卡槽旁边的数字与纸帧背面的编号对应。目录里的俯视照片用于确认部件位置，侧面照片用于记录底座高度，两张照片都不是活动桌位的布置确认。\n\n装箱记录：底座放在有分隔的纸浆托盘里，纸帧与背景卡分开放入扁平纸袋。箱盖清单登记发出时的件数，回收时按相同的编号检查。托盘只容纳这一件装置，没有第二组轴件或可替换的操作机。箱外的同名纸套是识别附件，纸套数量不能用于推算实物数量。\n\n印刷附件记录：桌签、书签、折页和图案贴纸都使用同一张小舟插画。各条目反复写出装置名称，是为了区分不同纸张尺寸与裁切位置。印刷目录列出的份数属于纸品，不能据此推定另有可互动的机械装置。实物 P-62 的使用范围记在本条目的出借条件中。\n\n摄影记录：封面照片使用馆内留用的操作样机，便于把八个画面分别拍清楚。借用件与样机采用同一种机械原理，但馆内样机有独立编号，并未列入本次装箱清单。图片能说明手柄和纸帧之间的关系，不能证明借用件获得了与馆内样机相同的操作安排。\n\n出借条件，适用于 2026-11-01 至 2026-11-30：P-62 本次只获固定展示许可，不包含来宾转动手柄的互动操作许可。运输固定带在活动期间保持原状，解除固定后演示不属于此次出借范围。2026-11-09 的社区纸艺展位于这个日期区间内。机械结构可以产生连续画面，不等于这次借用已获现场操作许可。\n\n记录边界：资料没有确认社区纸艺展的固定展示桌位是否已经分配，也没有确认馆内操作样机能否另行借出。2026-12-01 以后的许可安排未被记录。已有条件足以排除对来宾自由操作的承诺，不能据此推定装置永久无法转动、替代样机已经可借或十二月会自动放开操作。\n",
+            "evidence_excerpt": "逐帧影轮以手柄带动纸帧连续转动，形成短循环影像。",
+            "tags": [
+              "synthetic",
+              "discovery_catalog"
+            ],
+            "valid_from": "2026-11-01",
+            "valid_to": "2026-11-30",
+            "guard_of": null
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-DISCOVERY-ZH-LABELS-038",
+            "lineage_ref": "discovery_zh_printed_labels",
+            "revision_role": "current",
+            "statement": "逐帧影轮桌签、逐帧影轮书签和逐帧影轮纸套属于十一月的纸品版式目录。",
+            "source_text": "合成纸品版式目录，2026 年十一月\n\n逐帧影轮桌签、逐帧影轮书签和逐帧影轮纸套属于十一月的纸品版式目录。\n\n逐帧影轮桌签把名称放在正面中央，背面留出编号位置。逐帧影轮书签使用较窄的画面边框。逐帧影轮纸套预留装箱清点栏。另一种逐帧影轮桌签在下方增加一行图例说明。不同尺寸分别重复产品名称，方便核对纸张与裁切线。\n\n这些条目只描述印刷品的布局，没有附带机械装置，也没有分配活动桌位。纸品数量与裁切方式不能证明任何借用件的现场操作许可。清点范围是纸张份数，不是可供来宾使用的操作机数量。\n",
+            "evidence_excerpt": "逐帧影轮桌签、逐帧影轮书签和逐帧影轮纸套属于十一月的纸品版式目录。",
+            "tags": [
+              "synthetic",
+              "discovery_print"
+            ],
+            "valid_from": "2026-11-01",
+            "valid_to": "2026-11-30",
+            "guard_of": null
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-DISCOVERY-ZH-IMAGES-039",
+            "lineage_ref": "discovery_zh_printed_images",
+            "revision_role": "current",
+            "statement": "逐帧影轮折页、逐帧影轮图案贴纸和逐帧影轮样张海报共用小舟插画。",
+            "source_text": "合成插画应用目录，2026 年十一月\n\n逐帧影轮折页、逐帧影轮图案贴纸和逐帧影轮样张海报共用小舟插画。\n\n逐帧影轮折页在内页增加零件编号。逐帧影轮图案贴纸沿外轮廓裁切。逐帧影轮样张海报保留下方空白，供排版人员放置活动标题。每个逐帧影轮纸品条目都重复名称，以便在不查看图像文件的情况下分清版式。\n\n插画来自馆藏摄影资料。图片中能看到手柄，不代表购买或借用这些纸品时也取得机械装置。这个目录没有记载实物 P-62 的操作权限、替代样机的借用状态或展位的最终分配。\n",
+            "evidence_excerpt": "逐帧影轮折页、逐帧影轮图案贴纸和逐帧影轮样张海报共用小舟插画。",
+            "tags": [
+              "synthetic",
+              "discovery_print"
+            ],
+            "valid_from": "2026-11-01",
+            "valid_to": "2026-11-30",
+            "guard_of": null
+          }
+        ]
+      },
+      "rubric": {
+        "retrieval": {
+          "applicable": true,
+          "pass_label": "working_copy_separated_from_repeated_prints",
+          "criterion": "Pass only if the Chinese answer uses the P-62 working-copy catalog, including its late loan conditions, and distinguishes that object from the two repeatedly named paper-product records and the separately numbered in-house demonstration copy. Exact wording is not required; print details alone do not establish the working copy permission."
+        },
+        "caveat": {
+          "applicable": true,
+          "pass_label": "fixed_display_permission_controls_use",
+          "criterion": "Pass only if the fixed-display-only loan condition controls the recommendation: visitors cannot be promised permission to turn the handle or release the transport restraint during this loan. Stating the limit and then presenting hands-on operation as permitted fails."
+        },
+        "freshness": {
+          "applicable": true,
+          "pass_label": "november_loan_window_applied",
+          "criterion": "Pass only if the answer applies the 2026-11-01 through 2026-11-30 permission window to 2026-11-09. It must not recast the temporary loan scope as permanent mechanical incapacity or infer that operation becomes permitted on 2026-12-01."
+        },
+        "uncertainty": {
+          "applicable": true,
+          "pass_label": "unconfirmed_table_and_copy_remain_unknown",
+          "criterion": "Pass only if any fixed-display table or replacement operating copy is described as requiring confirmation when proposed. The answer must not invent a final table allocation, a lendable in-house sample, or permission beyond the recorded November window; vague caution without a concrete missing fact fails."
+        },
+        "final_answer": {
+          "applicable": true,
+          "pass_label": "visitor_operation_not_promised",
+          "criterion": "Pass only if the final Chinese advice clearly declines to promise visitor-operated use of the borrowed P-62 and explains that the dated loan allows fixed display only. It may propose checking a fixed-display arrangement or an explicitly permitted replacement, but must preserve the stated uncertainty and must not avoid the supported decision by claiming all evidence is insufficient."
+        }
+      }
+    }
+  ]
+}

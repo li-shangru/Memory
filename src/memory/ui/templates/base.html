@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if csrf_token %}<meta name="memory-csrf" content="{{ csrf_token }}">{% endif %}
+  <title>{% block title %}Memory{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/ui.js" defer></script>
+  {%- block head_scripts %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <p class="brand">Memory</p>
+      {% if status %}<p class="schema">{{ status.store.product }} · schema {{ status.store.schema_version }}</p>{% endif %}
+    </div>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="/reviews">Pending Reviews</a></li>
+        <li class="inbox-navigation"><a href="/inbox">Inbox</a><span class="badge" data-ui="inbox-count" aria-label="{{ status.inbox.staged_visible_entry_count if status else 0 }} staged Inbox entries">{{ status.inbox.staged_visible_entry_count if status else 0 }}</span></li>
+        <li><a href="/memory">Memory</a></li>
+        <li><a href="/graph">Graph</a></li>
+        <li><a href="/sources">Sources &amp; Audit</a></li>
+      </ul>
+    </nav>
+    {% if status %}
+      <section class="status-summary" aria-label="Store status">
+        <span><span class="count" data-ui="memory-count">{{ status.store.memory_count }}</span> <span class="count-label">memories</span></span>
+        <span><span class="count" data-ui="source-count">{{ status.store.source_count }}</span> <span class="count-label">sources</span></span>
+        <span><span class="count" data-ui="pending-review-count">{{ status.pending_review_count }}</span> <span class="count-label">pending reviews</span></span>
+        <span><span class="count" data-ui="staged-entry-count">{{ status.inbox.staged_visible_entry_count }}</span> <span class="count-label">staged Inbox entries</span></span>
+        {# Kept in the DOM behavioural contract only. Every header repeats these
+           on every page, so announcing them again in each screen-reader pass is
+           chrome, not information: the status page presents all four visibly. #}
+        <span class="visually-hidden" aria-hidden="true">Runtime mode <span data-ui="runtime-mode">{{ status.runtime_mode.value }}</span></span>
+        <span class="visually-hidden" aria-hidden="true">Store availability <span data-ui="availability">{{ status.availability.replace("_", " ") }}</span></span>
+        <span class="visually-hidden" aria-hidden="true">Searchable sources <span data-ui="searchable-count">{{ status.store.searchable_count }}</span></span>
+        <span class="visually-hidden" aria-hidden="true">Unsearchable binary sources <span data-ui="unsearchable-count">{{ status.store.unsearchable_count }}</span></span>
+        <a href="/status">Store status and technical details</a>
+      </section>
+    {% endif %}
+  </header>
+  {% if status %}
+    {% if status.store.reindex_required %}
+      <aside class="reindex-banner" aria-label="Search index upgrade">
+        <strong>Search index upgrade required</strong>
+        <span>Run <span class="mono">memory reindex</span> to rebuild the search projections.</span>
+      </aside>
+    {% endif %}
+    <aside class="runtime-line" aria-label="Runtime status">
+      <span><strong>Local Store</strong></span>
+      <span class="wrap-anywhere">Store: {{ status.runtime_display_path }}</span>
+      <span class="wrap-anywhere">Inbox: {{ status.inbox.inbox_display_path }}</span>
+    </aside>
+  {% endif %}
+  <main id="main-content" tabindex="-1">
+    {% block content %}{% endblock %}
+  </main>
+  <div class="copy-announce visually-hidden" role="status" aria-live="polite"></div>
+</body>
+</html>

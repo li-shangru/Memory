@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% from "_parts.html" import guard_link_row, tech_row %}
+{% block title %}Owner review edit · Memory{% endblock %}
+{% macro target_table(rows, attribute, value="") %}
+<dl class="tech-rows" {{ attribute }}{% if value %}="{{ value }}"{% endif %}>
+{% for label, value in rows %}
+  <div><dt>{{ label }}</dt><dd class="wrap-anywhere">{{ value }}</dd></div>
+{% endfor %}
+</dl>
+{% endmacro %}
+{% macro item_options(selected, roster, include_blank=false) %}
+{% if include_blank %}<option value=""></option>{% endif %}
+{% if selected and selected not in roster | map(attribute="item_id") | list %}
+<option value="{{ selected }}" data-exact-reference="{{ selected | tojson | forceescape }}" selected>{{ selected }} · unavailable in this revision</option>
+{% endif %}
+{% for item in roster %}<option value="{{ item.item_id }}" data-exact-reference="{{ item.item_id | tojson | forceescape }}"{% if item.item_id == selected %} selected{% endif %}>{{ item.item_id }} · {{ item.status }}</option>{% endfor %}
+{% endmacro %}
+{% block content %}
+{% set revision = manifest.revision %}
+{% set base = "/reviews/" ~ change_set_id ~ "/revisions/" ~ revision.revision_id %}
+{% if mode == "form" %}
+<h1>Owner review edit</h1>
+<p class="meta-row"><span class="revision-state">{{ intent.replace("_", " ") }}</span></p>
+<dl class="tech-rows">
+  {{ tech_row("Revision", revision.revision_id) }}
+  {{ tech_row("Canonical digest", revision.digest) }}
+</dl>
+{% if target_rows %}
+<section aria-labelledby="edit-target-heading">
+  <h2 id="edit-target-heading">Current target state</h2>
+  {{ target_table(target_rows, "data-edit-target") }}
+</section>
+{% endif %}
+{% if refusal %}
+<section class="notice" data-review-refusal aria-labelledby="review-refusal-heading">
+  <h2 id="review-refusal-heading">This edit was not applied</h2>
+  <p class="wrap-anywhere">{{ refusal }}</p>
+  <p class="subdued">Nothing changed: the review still stands on the revision above. What you entered is kept exactly as you typed it.</p>
+  {% if submitted_rows %}{{ target_table(submitted_rows, "data-review-submitted") }}{% endif %}
+</section>
+{% endif %}
+{% if intent == "remove_guard_link" %}
+<section aria-labelledby="remove-guard-link-heading">
+  <h2 id="remove-guard-link-heading">Guard links in this revision</h2>
+  <p class="section-lede">Removing a link creates the next immutable revision. It never deletes either claim.</p>
+  <ul class="card-list">
+  {% for link in manifest.guard_links %}
+    {% call guard_link_row(link) %}
+    <form action="{{ action }}" method="post" data-authenticated-post data-review-edit data-ordered-fields aria-label="Remove guard link {{ link.ordinal }}">
+      <input type="hidden" name="expected_digest" value="{{ revision.digest }}">
+      <input type="hidden" name="{{ 'guard_item_id' if link.guard_kind == 'item' else 'guard_lineage_id' }}" value="{{ link.guard_ref }}" data-exact-reference="{{ link.guard_ref | tojson | forceescape }}">
+      <input type="hidden" name="{{ 'governed_item_id' if link.governed_kind == 'item' else 'governed_lineage_id' }}" value="{{ link.governed_ref }}" data-exact-reference="{{ link.governed_ref | tojson | forceescape }}">
+      <button type="submit">Remove link</button>
+    </form>
+    {% endcall %}
+  {% else %}
+    <li class="card">This revision proposes no guard link.</li>
+  {% endfor %}
+  </ul>
+  <p><a href="{{ base }}/edits/add_guard_link">Add a guard link instead</a></p>
+  <p><a href="{{ base }}/edits/revoke_guard_link">Revoke a link the Store already holds</a></p>
+</section>
+{% elif intent in ("add_guard_link", "revoke_guard_link") %}
+{% set revoking = intent == "revoke_guard_link" %}
+{% set standing = manifest.revoked_guard_links if revoking else manifest.guard_links %}
+{% if standing %}
+<section aria-labelledby="existing-guard-link-heading">
+  <h2 id="existing-guard-link-heading">{% if revoking %}Guard links this revision already revokes{% else %}Guard links already in this revision{% endif %}</h2>
+  <ul class="card-list">
+  {% for link in standing %}{{ guard_link_row(link) }}{% endfor %}
+  </ul>
+</section>
+{% endif %}
+<section aria-labelledby="add-guard-link-heading">
+  <h2 id="add-guard-link-heading">{% if revoking %}Revoke a retained guard link{% else %}Add guard link{% endif %}</h2>
+  <p class="section-lede">{% if revoking %}A guard attached to the wrong claim rides along on every retrieval of that claim until it is revoked. Revoking stops it governing; it never deletes either memory, and the link stays in the history and the governance graph.{% else %}Agents normally author guard links while drafting. This is the owner's direct control for the cases they did not.{% endif %}</p>
+  <details class="add-guard-link" open>
+    <summary>Name both endpoints</summary>
+    <form action="{{ action }}" method="post" data-authenticated-post data-review-edit data-ordered-fields data-unsaved-warning aria-label="{% if revoking %}Revoke guard link{% else %}Add guard link{% endif %}">
+      <p class="notice" data-unsaved-notice>Unsaved edits stay on this page until you create the next immutable revision. Leaving now changes nothing.</p>
+      <input type="hidden" name="expected_digest" value="{{ revision.digest }}">
+      <p class="subdued">Each side names exactly one endpoint: choose a draft item for a claim proposed in this revision, or fill the lineage box for a memory the Store already holds. Naming both on one side, or neither, creates nothing.{% if revoking %} Both sides must resolve to lineages the Store already holds, and the link between them must still be standing.{% endif %}</p>
+      <label for="edit-guard-item">Guard draft item</label>
+      <select id="edit-guard-item" name="guard_item_id" class="wrap-anywhere">{{ item_options(submitted.get('guard_item_id'), manifest.item_roster, true) }}</select>
+      <label for="edit-guard-lineage">Guard lineage</label>
+      <input id="edit-guard-lineage" name="guard_lineage_id" class="wrap-anywhere" maxlength="256" value="{{ submitted.get('guard_lineage_id', '') }}">
+      <label for="edit-governed-item">Governed draft item</label>
+      <select id="edit-governed-item" name="governed_item_id" class="wrap-anywhere">{{ item_options(submitted.get('governed_item_id'), manifest.item_roster, true) }}</select>
+      <label for="edit-governed-lineage">Governed lineage</label>
+      <input id="edit-governed-lineage" name="governed_lineage_id" class="wrap-anywhere" maxlength="256" value="{{ submitted.get('governed_lineage_id', '') }}">
+      <button type="submit">Create the next immutable revision</button>
+    </form>
+  </details>
+  {% if revoking %}<p><a href="{{ base }}/edits/add_guard_link">Add a guard link instead</a></p>{% elif manifest.guard_links %}<p><a href="{{ base }}/edits/remove_guard_link">Remove a guard link instead</a></p>{% endif %}
+</section>
+{% elif intent == "replace_item" and not manifest.item_roster %}
+<p class="notice">This revision has no draft item to edit.</p>
+<p><a href="{{ base }}/edits/add_item">Add a draft item</a></p>
+{% else %}
+{% if intent == "replace_item" %}
+<form action="{{ action }}" method="get" data-review-item-selector aria-label="Choose draft item">
+  <label for="edit-item-id">Draft item</label>
+  <select id="edit-item-id" name="item_id" required>
+    {{ item_options(item_id, manifest.item_roster) }}
+  </select>
+  <button type="submit">Open selected item</button>
+</form>
+{% endif %}
+<form action="{{ action }}" method="post" data-authenticated-post data-review-edit data-ordered-fields data-unsaved-warning aria-label="Owner review edit">
+  <p class="notice" data-unsaved-notice>Unsaved edits stay on this page until you create the next immutable revision. Leaving now changes nothing.</p>
+  <input type="hidden" name="expected_digest" value="{{ revision.digest }}">
+  {% if intent in ("reject_item", "restore_item") %}
+    <label for="edit-item-id">Draft item</label>
+    <select id="edit-item-id" name="item_id" required>
+      {{ item_options(item_id, manifest.item_roster) }}
+    </select>
+  {% elif intent == "clear_source_no_memory" %}
+    <label for="edit-source-id">Batch source</label>
+    <select id="edit-source-id" name="source_id" required>
+      {% for source in manifest.source_roster %}<option value="{{ source.source_id }}"{% if source.source_id == source_id %} selected{% endif %}>{{ source.source_id }} · {{ source.coverage }}</option>{% endfor %}
+    </select>
+  {% elif intent == "set_source_no_memory" %}
+    <label for="edit-source-id">Batch source</label>
+    <select id="edit-source-id" name="source_id" required>
+      {% for source in manifest.source_roster %}<option value="{{ source.source_id }}"{% if source.source_id == source_id %} selected{% endif %}>{{ source.source_id }} · {{ source.coverage }}</option>{% endfor %}
+    </select>
+    <label for="edit-reason">Reviewed no-memory reason</label>
+    <textarea id="edit-reason" name="reason" required maxlength="4096">{{ submitted.get("reason", "") }}</textarea>
+  {% else %}
+    {% if intent == "replace_item" %}
+    <input type="hidden" name="item_id" value="{{ item_id or '' }}" data-exact-reference="{{ (item_id or '') | tojson | forceescape }}">
+    {% endif %}
+    <label for="edit-kind">Kind</label>
+    <select id="edit-kind" name="kind" required>
+      {% for value in ["fact", "event", "preference", "relation", "insight"] %}<option value="{{ value }}"{% if value == submitted.get("kind") %} selected{% endif %}>{{ value }}</option>{% endfor %}
+    </select>
+    <label for="edit-statement">Statement</label>
+    <textarea id="edit-statement" name="statement" required maxlength="16384" data-exact-value="{{ submitted.get('statement', '') | tojson | forceescape }}">{{ submitted.get("statement", "") }}</textarea>
+    <label for="edit-occurred-on">Occurred on</label>
+    <input id="edit-occurred-on" name="occurred_on" placeholder="YYYY, YYYY-MM, or YYYY-MM-DD" value="{{ submitted.get('occurred_on', '') }}">
+    <label for="edit-valid-from">Valid from</label>
+    <input id="edit-valid-from" name="valid_from" placeholder="YYYY, YYYY-MM, or YYYY-MM-DD" value="{{ submitted.get('valid_from', '') }}">
+    <label for="edit-valid-to">Valid to</label>
+    <input id="edit-valid-to" name="valid_to" placeholder="YYYY, YYYY-MM, or YYYY-MM-DD" value="{{ submitted.get('valid_to', '') }}">
+    <label for="edit-sensitivity">Sensitivity</label>
+    <select id="edit-sensitivity" name="sensitivity" required>
+      {% for value in ["normal", "sensitive", "restricted"] %}<option value="{{ value }}"{% if value == submitted.get("sensitivity") %} selected{% endif %}>{{ value }}</option>{% endfor %}
+    </select>
+    <label for="edit-target-lineage">Correction target lineage</label>
+    <input id="edit-target-lineage" name="target_lineage_id" class="wrap-anywhere" value="{{ submitted.get('target_lineage_id', '') }}">
+    <label for="edit-expected-head">Expected current head</label>
+    <input id="edit-expected-head" name="expected_head_id" class="wrap-anywhere" value="{{ submitted.get('expected_head_id', '') }}">
+    {# One refused submission comes back already renumbered by the ordered-fields
+       handler, so slot N holds exactly what slot N submitted. #}
+    <fieldset>
+      <legend>Ordered tags</legend>
+      {% for index in range(max_tags) %}<label>Tag {{ index }}<textarea name="tag.{{ index }}" maxlength="256" class="review-tag" rows="2" data-exact-value="{{ submitted.get('tag.' ~ index, '') | tojson | forceescape }}">{{ submitted.get('tag.' ~ index, '') }}</textarea></label>{% endfor %}
+    </fieldset>
+    <fieldset>
+      <legend>Ordered evidence</legend>
+      <p class="subdued">Use an exact excerpt for text, or select whole-source evidence for a binary source and leave its excerpt empty.</p>
+      {% for index in range(max_evidence) %}
+      {% set chosen_source = submitted.get("evidence." ~ index ~ ".source_id") %}
+      <label>Evidence {{ index }} source
+        <select name="evidence.{{ index }}.source_id">
+          <option value=""></option>
+          {% for source in manifest.source_roster %}<option value="{{ source.source_id }}"{% if source.source_id == chosen_source %} selected{% endif %}>{{ source.source_id }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Evidence {{ index }} exact excerpt<textarea name="evidence.{{ index }}.excerpt" maxlength="4096" data-exact-value="{{ submitted.get('evidence.' ~ index ~ '.excerpt', '') | tojson | forceescape }}">{{ submitted.get('evidence.' ~ index ~ '.excerpt', '') }}</textarea></label>
+      <label><input type="checkbox" name="evidence.{{ index }}.source_level" value="true"{% if submitted.get('evidence.' ~ index ~ '.source_level') == 'true' %} checked{% endif %}>Evidence {{ index }} uses the whole binary source</label>
+      {% endfor %}
+    </fieldset>
+  {% endif %}
+  <button type="submit">Create the next immutable revision</button>
+</form>
+{% endif %}
+<p><a href="{{ base }}">Return to the complete review without editing</a></p>
+
+{% elif mode == "retry" %}
+<h1>Retry the owner edit</h1>
+<p class="notice">The Store writer was busy. Your exact normalized edit is retained only in this process for ten minutes.</p>
+<dl class="tech-rows">
+  <div><dt>Operation</dt><dd>{{ pending.operation.replace("_", " ") }}</dd></div>
+  <div><dt>Displayed revision</dt><dd class="wrap-anywhere mono">{{ pending.expected_revision_id }}</dd></div>
+  <div><dt>Displayed digest</dt><dd class="wrap-anywhere mono">{{ pending.expected_digest }}</dd></div>
+</dl>
+{{ target_table(pending.normalized_fields, "data-pending-proposed-change", pending.operation) }}
+<form action="{{ retry_action }}" method="post" data-authenticated-post aria-label="Retry the owner edit">
+  <input type="hidden" name="csrf" value="{{ csrf_token }}">
+  <button type="submit">Retry the owner edit</button>
+</form>
+<p><a href="/reviews/{{ change_set_id }}">Return to the complete review</a></p>
+
+{% else %}
+<h1>Owner edit conflict</h1>
+<p class="notice">This edit applied nothing. The review moved to a newer immutable revision.</p>
+<dl class="tech-rows">
+  <div><dt>Operation</dt><dd>{{ pending.operation.replace("_", " ") }}</dd></div>
+  <div><dt>Displayed revision</dt><dd class="wrap-anywhere mono">{{ pending.expected_revision_id }}</dd></div>
+  <div><dt>Displayed digest</dt><dd class="wrap-anywhere mono">{{ pending.expected_digest }}</dd></div>
+  <div><dt>Current revision</dt><dd class="wrap-anywhere mono">{{ conflict.current_revision_id }}</dd></div>
+  <div><dt>Current digest</dt><dd class="wrap-anywhere mono">{{ conflict.current_digest }}</dd></div>
+</dl>
+<section aria-labelledby="conflict-old-heading">
+  <h2 id="conflict-old-heading">Target state in the displayed revision</h2>
+  {{ target_table(old_rows, "data-conflict-old-target") }}
+</section>
+<section aria-labelledby="conflict-current-heading">
+  <h2 id="conflict-current-heading">Target state in the current revision</h2>
+  {{ target_table(current_rows, "data-conflict-current-target") }}
+</section>
+<section aria-labelledby="conflict-change-heading">
+  <h2 id="conflict-change-heading">Proposed normalized change</h2>
+  {{ target_table(pending.normalized_fields, "data-conflict-proposed-change", pending.operation) }}
+</section>
+<form action="{{ retry_action }}/current" method="post" data-authenticated-post aria-label="Retry against current revision">
+  <input type="hidden" name="csrf" value="{{ csrf_token }}">
+  <button type="submit">Retry against current revision</button>
+</form>
+<p>Nothing is rebased automatically. Revise or re-enter the edit if it is no longer compatible.</p>
+<p><a href="/reviews/{{ change_set_id }}">Return to the complete review</a></p>
+{% endif %}
+{% endblock %}

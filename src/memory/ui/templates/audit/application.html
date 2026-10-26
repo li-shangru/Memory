@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Application detail · Memory{% endblock %}
+{% block content %}
+{% set q = "?h=" ~ handle if handle else "" %}
+{% set application = detail.application %}
+{% set approval = detail.approval %}
+<h1>Application detail</h1>
+<p>This page is read-only. It records what one exact owner-approved revision wrote and grants nothing.</p>
+<dl class="technical-details">
+  <div><dt>Application</dt><dd class="mono wrap-anywhere" data-audit-application-id="{{ application.application_id }}">{{ application.application_id }}</dd></div>
+  <div><dt>Applied at</dt><dd data-audit-applied-at="{{ application.applied_at }}">{{ application.applied_at | memory_time }}</dd></div>
+  <div><dt>Approval</dt><dd class="mono wrap-anywhere" data-audit-approval-id="{{ approval.approval_id }}"><a class="wrap-anywhere" href="/audit/approvals/{{ approval.approval_id }}{{ q }}">{{ approval.approval_id }}</a></dd></div>
+  <div><dt>Approval adapter</dt><dd data-audit-adapter="{{ approval.adapter }}">{{ approval.adapter }}</dd></div>
+  <div><dt>Approved at</dt><dd data-audit-approved-at="{{ approval.approved_at }}">{{ approval.approved_at | memory_time }}</dd></div>
+  <div><dt>Bound change set</dt><dd class="mono wrap-anywhere" data-audit-change-set="{{ application.change_set_id }}"><a class="wrap-anywhere" href="/reviews/{{ application.change_set_id }}{{ q }}">{{ application.change_set_id }}</a></dd></div>
+  <div><dt>Applied revision</dt><dd class="mono wrap-anywhere" data-audit-revision="{{ application.revision_id }}"><a class="wrap-anywhere" href="/reviews/{{ application.change_set_id }}/revisions/{{ application.revision_id }}{{ q }}">{{ application.revision_id }}</a></dd></div>
+  <div><dt>Bound revision digest</dt><dd class="mono wrap-anywhere" data-audit-digest="{{ approval.digest }}">{{ approval.digest }}</dd></div>
+  <div><dt>Resulting memory revisions</dt><dd data-audit-memory-count="{{ application.resulting_memory_count }}">{{ application.resulting_memory_count }}</dd></div>
+</dl>
+
+<section aria-labelledby="audit-application-memories-heading">
+  <h2 id="audit-application-memories-heading">Resulting canonical memory revisions</h2>
+  <ol>
+  {% for memory_id in detail.memory_revision_ids %}
+    <li data-audit-memory="{{ memory_id }}"><a class="mono wrap-anywhere" href="/memories/{{ memory_id }}{{ q }}">{{ memory_id }}</a></li>
+  {% else %}
+    <li>This application wrote no canonical memory revision; the approved revision accounted every source without one.</li>
+  {% endfor %}
+  </ol>
+</section>
+{% endblock %}

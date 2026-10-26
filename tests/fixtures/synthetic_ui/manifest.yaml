@@ -1,0 +1,282 @@
+{
+  "schema": "memory.synthetic-ui-acceptance.v1",
+  "manifest_version": 1,
+  "cases": [
+    {
+      "case_id": "SYN-UI-UPLOAD-001",
+      "kind": "ordinary_upload",
+      "agent_scan": {
+        "authorship": "owner",
+        "sensitivity": "restricted",
+        "source_origin": "inbox"
+      },
+      "artifact": {
+        "filename": "syn-ui-upload-001.txt",
+        "media_type": "text/plain",
+        "utf8_content": "Synthetic upload fixture for local owner UI acceptance.\n",
+        "byte_length": 56,
+        "sha256": "9bb81753577b8258dcb028f408982796df9ae08657eee8290c4af83374b6e61c"
+      },
+      "expected_before_scan": {
+        "staged_entries": 1,
+        "new_batches": 0,
+        "new_sources": 0,
+        "new_memories": 0
+      },
+      "expected_after_one_agent_scan": {
+        "captured_batches": 1,
+        "captured_sources": 1,
+        "new_memories": 0
+      }
+    },
+    {
+      "case_id": "SYN-UI-REVIEW-002",
+      "kind": "review_repair",
+      "agent_scan": {
+        "authorship": "owner",
+        "sensitivity": "normal",
+        "source_origin": "inbox"
+      },
+      "sources": [
+        {
+          "alias": "folder_source",
+          "filename": "syn-ui-review-folder.txt",
+          "media_type": "text/plain",
+          "utf8_content": "For the synthetic 2026-12-04 rehearsal, Mira should use the blue folder.",
+          "byte_length": 72,
+          "sha256": "3213ebe7c93f97b55135c51b08298a5880679c581de1c0e4702f7696f2b0d992"
+        },
+        {
+          "alias": "checklist_source",
+          "filename": "syn-ui-review-checklist.txt",
+          "media_type": "text/plain",
+          "utf8_content": "For the same synthetic rehearsal, Mira should also bring the printed checklist.",
+          "byte_length": 79,
+          "sha256": "ad8af584bd7bcf55fd22b9a9f776599b8fffb74575f138a911a24b9488716d4a"
+        }
+      ],
+      "initial_review": {
+        "source_decisions": [
+          {"source_alias": "folder_source", "state": "used"},
+          {
+            "source_alias": "checklist_source",
+            "state": "no_memory",
+            "reason": "Synthetic preparer omission."
+          }
+        ],
+        "items": [
+          {
+            "item_alias": "initial_wrong_item",
+            "client_item_id": "SYN-UI-ITEM-WRONG-001",
+            "status": "active",
+            "change_kind": "new_memory",
+            "target_lineage_ref": null,
+            "expected_head_ref": null,
+            "kind": "fact",
+            "statement": "For the synthetic 2026-12-04 rehearsal, Mira should use the amber folder.",
+            "occurred_on": null,
+            "valid_from": "2026-12-04",
+            "valid_to": null,
+            "tags": ["synthetic", "rehearsal", "folder"],
+            "sensitivity": "normal",
+            "evidence": [
+              {
+                "source_alias": "folder_source",
+                "excerpt": "For the synthetic 2026-12-04 rehearsal, Mira should use the blue folder.",
+                "require_source_digest_match": true
+              }
+            ]
+          }
+        ]
+      },
+      "repair_operations": [
+        {
+          "operation": "replace_item",
+          "item_ref": "initial_wrong_item",
+          "expected_revision_ref": "initial_review_revision"
+        },
+        {
+          "operation": "clear_source_no_memory",
+          "source_alias": "checklist_source",
+          "expected_revision_ref": "revision_after_operation_1"
+        },
+        {
+          "operation": "add_item",
+          "item_alias": "added_checklist_item",
+          "expected_revision_ref": "revision_after_operation_2"
+        }
+      ],
+      "expected_owner_repair": {
+        "final_revision_ref": "revision_after_operation_3",
+        "adapter_origin_for_each_operation": "owner_ui",
+        "lifecycle_before_approval": "current_draft",
+        "lifecycle_after_approval": "applied",
+        "source_decisions": [
+          {"source_alias": "folder_source", "state": "used", "reason": null},
+          {"source_alias": "checklist_source", "state": "used", "reason": null}
+        ],
+        "items": [
+          {
+            "item_ref": "initial_wrong_item",
+            "status": "active",
+            "change_kind": "new_memory",
+            "target_lineage_ref": null,
+            "expected_head_ref": null,
+            "kind": "fact",
+            "statement": "For the synthetic 2026-12-04 rehearsal, Mira should use the blue folder.",
+            "occurred_on": null,
+            "valid_from": "2026-12-04",
+            "valid_to": null,
+            "tags": ["synthetic", "rehearsal", "folder"],
+            "sensitivity": "normal",
+            "evidence": [
+              {
+                "source_alias": "folder_source",
+                "excerpt": "For the synthetic 2026-12-04 rehearsal, Mira should use the blue folder.",
+                "require_source_digest_match": true
+              }
+            ]
+          },
+          {
+            "item_alias": "added_checklist_item",
+            "require_store_generated_item_id": true,
+            "status": "active",
+            "change_kind": "new_memory",
+            "target_lineage_ref": null,
+            "expected_head_ref": null,
+            "kind": "fact",
+            "statement": "For the synthetic 2026-12-04 rehearsal, Mira should bring the printed checklist.",
+            "occurred_on": null,
+            "valid_from": "2026-12-04",
+            "valid_to": null,
+            "tags": ["synthetic", "rehearsal", "checklist"],
+            "sensitivity": "normal",
+            "evidence": [
+              {
+                "source_alias": "checklist_source",
+                "excerpt": "For the same synthetic rehearsal, Mira should also bring the printed checklist.",
+                "require_source_digest_match": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "SYN-UI-LINEAGE-003",
+      "kind": "two_revision_lineage",
+      "historical": {
+        "agent_scan": {
+          "authorship": "owner",
+          "sensitivity": "restricted",
+          "source_origin": "inbox"
+        },
+        "source": {
+          "filename": "syn-ui-lineage-red.txt",
+          "media_type": "text/plain",
+          "utf8_content": "For the synthetic 2026-11-18 follow-up, Rowan should bring the red notebook.",
+          "byte_length": 76,
+          "sha256": "ef2db0ca7796bf45a89e30ce1c1e2f04a138c54a375891627313d8f4bcc7c10e"
+        },
+        "memory": {
+          "status_after_current_apply": "historical",
+          "change_kind": "new_memory",
+          "target_lineage_ref": null,
+          "expected_head_ref": null,
+          "predecessor_ref": null,
+          "kind": "fact",
+          "statement": "For the synthetic 2026-11-18 follow-up, Rowan should bring the red notebook.",
+          "occurred_on": null,
+          "valid_from": "2026-11-18",
+          "valid_to": null,
+          "tags": ["synthetic", "follow-up", "red-notebook"],
+          "sensitivity": "restricted",
+          "evidence": [
+            {
+              "source_ref": "historical.source",
+              "excerpt": "For the synthetic 2026-11-18 follow-up, Rowan should bring the red notebook.",
+              "require_source_digest_match": true
+            }
+          ]
+        }
+      },
+      "current": {
+        "agent_scan": {
+          "authorship": "owner",
+          "sensitivity": "restricted",
+          "source_origin": "inbox"
+        },
+        "source": {
+          "filename": "syn-ui-lineage-green.txt",
+          "media_type": "text/plain",
+          "utf8_content": "The synthetic follow-up plan changed: Rowan should bring the green notebook on 2026-11-18.",
+          "byte_length": 90,
+          "sha256": "0085106e184b59eaed59b69eaa34e14589c432cdb3dbd80dabc04fefff61a49b"
+        },
+        "memory": {
+          "status_after_apply": "current",
+          "change_kind": "correction",
+          "target_lineage_ref": "historical.memory.lineage_id",
+          "expected_head_ref": "historical.memory.revision_id",
+          "predecessor_ref": "historical.memory.revision_id",
+          "require_same_lineage": true,
+          "kind": "fact",
+          "statement": "For the synthetic 2026-11-18 follow-up, Rowan should bring the green notebook.",
+          "occurred_on": null,
+          "valid_from": "2026-11-18",
+          "valid_to": null,
+          "tags": ["synthetic", "follow-up", "green-notebook"],
+          "sensitivity": "restricted",
+          "evidence": [
+            {
+              "source_ref": "current.source",
+              "excerpt": "The synthetic follow-up plan changed: Rowan should bring the green notebook on 2026-11-18.",
+              "require_source_digest_match": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "SYN-UI-CORRECTION-004",
+      "kind": "owner_correction",
+      "target_case_id": "SYN-UI-LINEAGE-003",
+      "selected_revision": "historical",
+      "correction_text": "The current memory is wrong. For the synthetic 2026-11-18 follow-up, Rowan should bring the blue notebook, not the green notebook.",
+      "expected_successor": {
+        "review_cardinality": {
+          "active_items": 1,
+          "rejected_items": 0,
+          "used_source_decisions": 1,
+          "no_memory_source_decisions": 0,
+          "applications": 1,
+          "applied_memories": 1,
+          "require_no_extra_items_or_memories": true
+        },
+        "item_alias": "correction_successor_item",
+        "require_client_supplied_item_id": true,
+        "status": "active",
+        "change_kind": "correction",
+        "target_lineage_ref": "SYN-UI-LINEAGE-003.current.memory.lineage_id",
+        "expected_head_ref": "SYN-UI-LINEAGE-003.current.memory.revision_id",
+        "predecessor_ref": "SYN-UI-LINEAGE-003.current.memory.revision_id",
+        "require_same_lineage": true,
+        "kind": "fact",
+        "statement": "For the synthetic 2026-11-18 follow-up, Rowan should bring the blue notebook.",
+        "occurred_on": null,
+        "valid_from": "2026-11-18",
+        "valid_to": null,
+        "tags": ["synthetic", "follow-up", "blue-notebook"],
+        "sensitivity": "restricted",
+        "evidence": {
+          "count": 1,
+          "source_origin": "owner_correction",
+          "source_authorship": "owner",
+          "source_sensitivity": "restricted",
+          "excerpt_from": "correction_text",
+          "require_source_digest_match": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% from "_parts.html" import copy_button %}
+{% block title %}Review approval · Memory{% endblock %}
+{% block content %}
+{% set revision = manifest.revision %}
+{% set base = "/reviews/" ~ change_set_id ~ "/revisions/" ~ revision.revision_id %}
+<h1>Review approval</h1>
+<p class="notice">Approving requires a successful macOS owner-presence check for this exact revision. Leaving or refreshing this page approves, rejects, and applies nothing.</p>
+{# Never abbreviated and never disclosed behind a summary: approval means this
+   exact revision, and the revision identifier and digest shown here are the
+   contract. Typography is all this section is allowed to change. #}
+<dl class="tech-rows approval-contract">
+  <div><dt>Revision</dt><dd class="wrap-anywhere"><span class="mono" data-approval-revision="{{ revision.revision_id }}">{{ revision.revision_id }}</span> {{ copy_button(revision.revision_id, "Revision") }}</dd></div>
+  <div><dt>Canonical digest</dt><dd class="wrap-anywhere"><span class="mono" data-approval-digest="{{ revision.digest }}">{{ revision.digest }}</span> {{ copy_button(revision.digest, "Canonical digest") }}</dd></div>
+  <div><dt>Revision lifecycle</dt><dd>{{ revision.lifecycle.replace("_", " ") }}</dd></div>
+  <div><dt>Validation</dt><dd>{{ manifest.validation_state }}</dd></div>
+  <div><dt>Adapter origin</dt><dd>{{ revision.adapter_origin.value }}</dd></div>
+  <div><dt>Batch</dt><dd><a class="wrap-anywhere mono" href="/inbox/batches/{{ manifest.batch_id }}">{{ manifest.batch_id }}</a></dd></div>
+  <div><dt>Batch sealed at</dt><dd>{{ manifest.batch_sealed_at | memory_time }}</dd></div>
+</dl>
+<p data-approval-counts>Approving applies {{ active_count }} active {{ "item" if active_count == 1 else "items" }}, keeps {{ rejected_count }} rejected {{ "item" if rejected_count == 1 else "items" }} unapplied, and accepts {{ no_memory_count }} recorded no-memory {{ "decision" if no_memory_count == 1 else "decisions" }} across {{ revision.batch_source_count }} batch {{ "source" if revision.batch_source_count == 1 else "sources" }}.</p>
+<nav aria-label="Bounded review sections">
+  <ul>
+    <li><a href="{{ base }}">Compact roster</a></li>
+    <li><a href="{{ base }}/items">Item comparisons</a></li>
+    <li><a href="{{ base }}/sources">Source accounting</a></li>
+    <li><a href="{{ base }}/blockers">Validation blockers</a></li>
+    <li><a href="/reviews/{{ change_set_id }}/revisions">Immutable revision history</a></li>
+  </ul>
+</nav>
+<section aria-labelledby="approval-canonical-review-heading">
+  <h2 id="approval-canonical-review-heading">Exact canonical review</h2>
+  <p class="section-lede">This complete digest-bearing review is the exact revision this approval can apply.</p>
+  <pre class="review-canonical-payload wrap-anywhere" data-approval-canonical-review>{{ canonical_review }}</pre>
+</section>
+{# Both rosters render every identifier in full. Progressive disclosure is a
+   browsing courtesy; on this page the enumeration is what the owner approves,
+   so nothing here is shortened, collapsed, or summarized. #}
+<section aria-labelledby="approval-item-roster-heading">
+  <h2 id="approval-item-roster-heading">Complete item roster</h2>
+  <ol class="card-list">
+  {% for item in manifest.item_roster %}
+    <li class="card" data-roster-item="{{ item.item_id }}" data-item-status="{{ item.status }}" data-change-kind="{{ item.change_kind }}">
+      <a class="mono wrap-anywhere" href="{{ review_item_href(base, item.item_id, none) }}">{{ item.item_id }}</a>
+      <p class="card-meta"><span class="state-tag">{{ item.status }}</span><span>{{ item.change_kind.replace("_", " ") }}</span></p>
+    </li>
+  {% else %}
+    <li class="card">This revision proposes no item.</li>
+  {% endfor %}
+  </ol>
+</section>
+<section aria-labelledby="approval-source-roster-heading">
+  <h2 id="approval-source-roster-heading">Complete source roster</h2>
+  <ol class="card-list">
+  {% for source in manifest.source_roster %}
+    <li class="card" data-roster-source="{{ source.source_id }}" data-coverage="{{ source.coverage }}">
+      <a class="mono wrap-anywhere" href="{{ base }}/sources">{{ source.source_id }}</a>
+      <p class="card-meta"><span class="state-tag">{{ source.coverage }}</span></p>
+    </li>
+  {% else %}
+    <li class="card">This batch retained no source.</li>
+  {% endfor %}
+  </ol>
+</section>
+<section aria-labelledby="approval-action-heading">
+  <h2 id="approval-action-heading">Approve and apply</h2>
+  <form method="post" action="{{ submit_action }}" data-authenticated-post data-review-approval>
+    <input type="hidden" name="revision_id" value="{{ revision.revision_id }}">
+    <input type="hidden" name="digest" value="{{ revision.digest }}">
+    <button type="submit">Approve and apply this exact revision</button>
+  </form>
+  <p><a href="/reviews/{{ change_set_id }}">Leave unapproved</a></p>
+</section>
+{% endblock %}

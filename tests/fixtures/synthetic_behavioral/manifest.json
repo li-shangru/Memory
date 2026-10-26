@@ -1,0 +1,423 @@
+{
+  "schema": "memory.synthetic-behavioral-acceptance.v1",
+  "manifest_version": 1,
+  "rubric_version": "behavioral-rubric-2026-09-03",
+  "cases": [
+    {
+      "case_id": "SYN-BEHAVIOR-PARAPHRASE-021",
+      "condition": "non_obvious_paraphrase",
+      "language": "en",
+      "question_variant": "The garden timer is temperamental. Is a full replacement during 2026-09-05 and 2026-09-06 the sensible fix for Neris?",
+      "seed_profile": {
+        "mode": "synthetic_adapter",
+        "memories": [
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-PARAPHRASE-STYLE-021",
+            "lineage_ref": "paraphrase-style",
+            "revision_role": "current",
+            "statement": "Neris prefers staged, reversible changes to garden automation.",
+            "source_text": "For garden automation, Neris tests one reversible stage before widening a change.",
+            "evidence_excerpt": "tests one reversible stage",
+            "tags": [
+              "standing",
+              "synthetic"
+            ],
+            "valid_from": null,
+            "valid_to": null,
+            "guard_of": null
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-PARAPHRASE-HARDWARE-022",
+            "lineage_ref": "paraphrase-hardware",
+            "revision_role": "current",
+            "statement": "Neris's irrigation controller permits one valve module to be replaced without replacing the controller.",
+            "source_text": "The controller accepts individual replacement valve modules while the main unit remains installed.",
+            "evidence_excerpt": "individual replacement valve modules",
+            "tags": [
+              "synthetic"
+            ],
+            "valid_from": null,
+            "valid_to": null,
+            "guard_of": null
+          }
+        ]
+      },
+      "rubric": {
+        "retrieval": {
+          "applicable": true,
+          "pass_label": "paraphrased_evidence_applied",
+          "criterion": "Pass only if the answer finds and applies both the reversible-stage preference and the replaceable valve-module evidence; mentioning generic caution without those facts fails."
+        },
+        "caveat": {
+          "applicable": true,
+          "pass_label": "staged_preference_governs",
+          "criterion": "Pass only if the staged, reversible preference governs the recommendation; do not let the proposed full replacement override that retained preference."
+        },
+        "freshness": {
+          "applicable": false,
+          "pass_label": "not_applicable",
+          "criterion": "No date-sensitive retained evidence competes in this case; mark this dimension not applicable and do not invent a temporal conflict."
+        },
+        "uncertainty": {
+          "applicable": true,
+          "pass_label": "failure_scope_bounded",
+          "criterion": "Pass only if the answer confines the reported problem to the temperamental timer and does not claim that the controller or every valve has failed."
+        },
+        "final_answer": {
+          "applicable": true,
+          "pass_label": "reversible_stage_recommended",
+          "criterion": "Pass only if the final advice recommends testing or replacing one reversible stage or module before widening the change, based on the retained evidence."
+        }
+      }
+    },
+    {
+      "case_id": "SYN-BEHAVIOR-BILINGUAL-ZH-022",
+      "condition": "bilingual_retrieval",
+      "language": "zh",
+      "question_variant": "季澄想在 2026-09-07 至 2026-09-11 安排一次安静的休息，哪个时段和活动更符合已经记录的情况？",
+      "seed_profile": {
+        "mode": "synthetic_adapter",
+        "memories": [
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-BILINGUAL-SCHEDULE-023",
+            "lineage_ref": "bilingual-schedule",
+            "revision_role": "current",
+            "statement": "Jicheng is unavailable during the afternoons of 2026-09-07 through 2026-09-11.",
+            "source_text": "Jicheng's afternoons from 2026-09-07 through 2026-09-11 are reserved for laboratory sessions.",
+            "evidence_excerpt": "afternoons from 2026-09-07 through 2026-09-11 are reserved",
+            "tags": [
+              "synthetic"
+            ],
+            "valid_from": "2026-09-07",
+            "valid_to": "2026-09-11",
+            "guard_of": null
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-BILINGUAL-PREFERENCE-024",
+            "lineage_ref": "bilingual-preference",
+            "revision_role": "current",
+            "statement": "Jicheng prefers quiet indoor miniature painting for restorative breaks.",
+            "source_text": "For a restorative break, Jicheng prefers quiet indoor miniature painting.",
+            "evidence_excerpt": "quiet indoor miniature painting",
+            "tags": [
+              "standing",
+              "synthetic"
+            ],
+            "valid_from": null,
+            "valid_to": null,
+            "guard_of": null
+          }
+        ]
+      },
+      "rubric": {
+        "retrieval": {
+          "applicable": true,
+          "pass_label": "english_evidence_retrieved_for_chinese_question",
+          "criterion": "Pass only if the Chinese answer retrieves and applies both English retained sources: the dated afternoon reservation and the quiet miniature-painting preference."
+        },
+        "caveat": {
+          "applicable": true,
+          "pass_label": "afternoon_exclusion_applied",
+          "criterion": "Pass only if the answer excludes weekday afternoons from the proposed break; do not recommend a time that conflicts with the laboratory reservation."
+        },
+        "freshness": {
+          "applicable": true,
+          "pass_label": "dated_window_applied",
+          "criterion": "Pass only if the answer applies the exact 2026-09-07 through 2026-09-11 window and does not generalize that schedule beyond those dates."
+        },
+        "uncertainty": {
+          "applicable": true,
+          "pass_label": "missing_open_hours_named",
+          "criterion": "Pass only if the answer states that venue opening hours are not retained when they matter; do not present an unevidenced venue time as confirmed."
+        },
+        "final_answer": {
+          "applicable": true,
+          "pass_label": "chinese_answer_combines_schedule_and_preference",
+          "criterion": "Pass only if the final Chinese advice combines a non-afternoon time with quiet indoor miniature painting and attributes both choices to retained evidence."
+        }
+      }
+    },
+    {
+      "case_id": "SYN-BEHAVIOR-GUARD-ZH-023",
+      "condition": "governing_caveat",
+      "language": "zh",
+      "question_variant": "空气看起来很清澈，澄禾在 2026-09-04 早晨直接去山脊看日出合适吗？",
+      "seed_profile": {
+        "mode": "synthetic_adapter",
+        "memories": [
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-GUARD-PLAN-025",
+            "lineage_ref": "guard-plan",
+            "revision_role": "current",
+            "statement": "Chenghe enjoys early ridge walks for sunrise views.",
+            "source_text": "Chenghe enjoys early ridge walks to watch sunrise.",
+            "evidence_excerpt": "early ridge walks",
+            "tags": [
+              "standing",
+              "synthetic"
+            ],
+            "valid_from": null,
+            "valid_to": null,
+            "guard_of": null
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-GUARD-AIR-026",
+            "lineage_ref": "guard-air",
+            "revision_role": "current",
+            "statement": "Chenghe avoids ridge exercise whenever the official air-quality advisory is active.",
+            "source_text": "An active official air-quality advisory rules out ridge exercise for Chenghe, even when visibility looks clear.",
+            "evidence_excerpt": "rules out ridge exercise",
+            "tags": [
+              "standing",
+              "synthetic"
+            ],
+            "valid_from": null,
+            "valid_to": null,
+            "guard_of": "guard-plan"
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-GUARD-ALERT-027",
+            "lineage_ref": "guard-alert",
+            "revision_role": "current",
+            "statement": "The synthetic regional air-quality advisory remains active through the morning of 2026-09-04.",
+            "source_text": "The synthetic regional advisory is active until 12:00 on 2026-09-04.",
+            "evidence_excerpt": "active until 12:00",
+            "tags": [
+              "synthetic"
+            ],
+            "valid_from": "2026-09-03",
+            "valid_to": "2026-09-04",
+            "guard_of": null
+          }
+        ]
+      },
+      "rubric": {
+        "retrieval": {
+          "applicable": true,
+          "pass_label": "plan_and_alert_retrieved",
+          "criterion": "Pass only if the answer retrieves and applies the sunrise-walk preference, its air-quality guard, and the advisory active on the requested morning."
+        },
+        "caveat": {
+          "applicable": true,
+          "pass_label": "air_quality_guard_leads",
+          "criterion": "Pass only if the active air-quality guard leads the decision despite clear-looking air; do not treat visibility as evidence that the guard is satisfied."
+        },
+        "freshness": {
+          "applicable": true,
+          "pass_label": "active_advisory_window_applied",
+          "criterion": "Pass only if the answer applies the advisory through 12:00 on 2026-09-04 to the requested morning and does not extend it beyond its retained window."
+        },
+        "uncertainty": {
+          "applicable": false,
+          "pass_label": "not_applicable",
+          "criterion": "The governing advisory and requested time are explicit in the retained evidence; mark this dimension not applicable and do not invent missing conditions."
+        },
+        "final_answer": {
+          "applicable": true,
+          "pass_label": "ridge_walk_deferred",
+          "criterion": "Pass only if the final Chinese advice defers the ridge walk while the advisory is active and ties that conclusion to the governing retained guard."
+        }
+      }
+    },
+    {
+      "case_id": "SYN-BEHAVIOR-PRIORITY-024",
+      "condition": "explicit_priority",
+      "language": "en",
+      "question_variant": "During September 2026, should Oren choose the prestigious fixed-year workshop or try the portable neighborhood studio?",
+      "seed_profile": {
+        "mode": "synthetic_adapter",
+        "memories": [
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-PRIORITY-028",
+            "lineage_ref": "priority-order",
+            "revision_role": "current",
+            "statement": "Oren explicitly prioritizes everyday creative delight over prestige.",
+            "source_text": "Oren's stated ordering is everyday creative delight first and prestige second.",
+            "evidence_excerpt": "delight first and prestige second",
+            "tags": [
+              "standing",
+              "synthetic"
+            ],
+            "valid_from": null,
+            "valid_to": null,
+            "guard_of": null
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-PRIORITY-OPTION-029",
+            "lineage_ref": "priority-option",
+            "revision_role": "current",
+            "statement": "The neighborhood studio is a one-season trial with portable tools; the prestigious workshop requires a fixed one-year commitment.",
+            "source_text": "The neighborhood studio can be tried for one season and uses portable tools. The prestigious workshop requires a fixed one-year commitment.",
+            "evidence_excerpt": "one season and uses portable tools",
+            "tags": [
+              "synthetic"
+            ],
+            "valid_from": null,
+            "valid_to": null,
+            "guard_of": null
+          }
+        ]
+      },
+      "rubric": {
+        "retrieval": {
+          "applicable": true,
+          "pass_label": "priority_and_option_evidence_applied",
+          "criterion": "Pass only if the answer retrieves and applies both Oren's explicit priority ordering and the different reversibility and commitment of the two options."
+        },
+        "caveat": {
+          "applicable": true,
+          "pass_label": "explicit_ordering_named",
+          "criterion": "Pass only if everyday creative delight is explicitly treated as higher priority than prestige; do not silently substitute prestige as the deciding value."
+        },
+        "freshness": {
+          "applicable": false,
+          "pass_label": "not_applicable",
+          "criterion": "No changing date-bound retained claim decides this case; mark this dimension not applicable and do not invent a September availability claim."
+        },
+        "uncertainty": {
+          "applicable": true,
+          "pass_label": "trial_limits_not_overclaimed",
+          "criterion": "Pass only if the one-season studio is described as a trial rather than a guaranteed outcome; do not claim the trial proves long-term satisfaction."
+        },
+        "final_answer": {
+          "applicable": true,
+          "pass_label": "portable_trial_recommended_from_priority",
+          "criterion": "Pass only if the final advice recommends the portable neighborhood-studio trial because it fits the retained priority and limits commitment."
+        }
+      }
+    },
+    {
+      "case_id": "SYN-BEHAVIOR-CORRECTION-ZH-025",
+      "condition": "conflicting_stale_predecessor_and_approved_correction",
+      "language": "zh",
+      "question_variant": "黎舟在 2026-09-08 星期二还能去共同木工房吗？请说明哪些记录是当前依据。",
+      "seed_profile": {
+        "mode": "synthetic_adapter",
+        "memories": [
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-CORRECTION-OLD-030",
+            "lineage_ref": "workshop-hours",
+            "revision_role": "predecessor",
+            "statement": "The shared workshop is open to Lizhou on Tuesdays.",
+            "source_text": "The shared workshop is open to Lizhou every Tuesday.",
+            "evidence_excerpt": "open to Lizhou every Tuesday",
+            "tags": [
+              "synthetic"
+            ],
+            "valid_from": "2026-01-01",
+            "valid_to": "2026-08-31",
+            "guard_of": null
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-CORRECTION-CURRENT-031",
+            "lineage_ref": "workshop-hours",
+            "revision_role": "approved_correction",
+            "statement": "Beginning 2026-09-01, the shared workshop is closed to Lizhou on Tuesdays.",
+            "source_text": "Correction approved for the synthetic profile: from 2026-09-01, Lizhou cannot use the shared workshop on Tuesdays.",
+            "evidence_excerpt": "from 2026-09-01",
+            "tags": [
+              "synthetic"
+            ],
+            "valid_from": "2026-09-01",
+            "valid_to": null,
+            "guard_of": null
+          }
+        ]
+      },
+      "rubric": {
+        "retrieval": {
+          "applicable": true,
+          "pass_label": "both_revisions_examined",
+          "criterion": "Pass only if the answer examines both revisions in the workshop-hours lineage and identifies which one supplies current evidence for 2026-09-08."
+        },
+        "caveat": {
+          "applicable": true,
+          "pass_label": "predecessor_not_used_as_current",
+          "criterion": "Pass only if the expired predecessor is treated as historical context and never used to claim current Tuesday access."
+        },
+        "freshness": {
+          "applicable": true,
+          "pass_label": "approved_correction_controls",
+          "criterion": "Pass only if the approved correction effective 2026-09-01 controls the answer for 2026-09-08; do not average or reconcile it with the stale predecessor."
+        },
+        "uncertainty": {
+          "applicable": true,
+          "pass_label": "other_days_not_inferred",
+          "criterion": "Pass only if the answer limits its conclusion to Tuesday access and does not infer availability or closure on other weekdays."
+        },
+        "final_answer": {
+          "applicable": true,
+          "pass_label": "tuesday_access_declined_from_current_revision",
+          "criterion": "Pass only if the final Chinese answer says Lizhou cannot use the workshop on Tuesday 2026-09-08 and cites the current approved correction as the basis."
+        }
+      }
+    },
+    {
+      "case_id": "SYN-BEHAVIOR-READONLY-026",
+      "condition": "read_only_advice",
+      "language": "en",
+      "question_variant": "Which of the two ceramics studios should Tamsin try first, given the retained constraints?",
+      "seed_profile": {
+        "mode": "synthetic_adapter",
+        "memories": [
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-READONLY-032",
+            "lineage_ref": "readonly-constraint",
+            "revision_role": "current",
+            "statement": "Tamsin needs a ceramics studio reachable without a car and prefers a reversible trial before a membership.",
+            "source_text": "Tamsin needs transit access and wants one trial session before considering membership.",
+            "evidence_excerpt": "one trial session before considering membership",
+            "tags": [
+              "standing",
+              "synthetic"
+            ],
+            "valid_from": null,
+            "valid_to": null,
+            "guard_of": null
+          },
+          {
+            "fixture_id": "SYN-BEHAVIOR-MEM-READONLY-OPTIONS-033",
+            "lineage_ref": "readonly-options",
+            "revision_role": "current",
+            "statement": "Studio North offers a transit-accessible trial session; Studio Field lists membership only, and its current price is absent from Memory.",
+            "source_text": "Studio North has a trial session and transit stop. Studio Field lists membership only. No current price was retained.",
+            "evidence_excerpt": "No current price was retained",
+            "tags": [
+              "synthetic"
+            ],
+            "valid_from": null,
+            "valid_to": null,
+            "guard_of": null
+          }
+        ]
+      },
+      "rubric": {
+        "retrieval": {
+          "applicable": true,
+          "pass_label": "constraints_and_options_applied",
+          "criterion": "Pass only if the answer applies Tamsin's transit and reversible-trial constraints together with both studios' retained option evidence."
+        },
+        "caveat": {
+          "applicable": true,
+          "pass_label": "missing_price_named",
+          "criterion": "Pass only if the missing current price is stated as an evidence gap; do not imply that either studio is cheaper."
+        },
+        "freshness": {
+          "applicable": false,
+          "pass_label": "not_applicable",
+          "criterion": "No retained date range or superseding revision decides this case; mark this dimension not applicable and do not invent current pricing evidence."
+        },
+        "uncertainty": {
+          "applicable": true,
+          "pass_label": "price_comparison_deferred",
+          "criterion": "Pass only if price comparison is deferred because no current price is retained; do not turn absence of evidence into a price conclusion."
+        },
+        "final_answer": {
+          "applicable": true,
+          "pass_label": "transit_trial_recommended_read_only",
+          "criterion": "Pass only if the final advice recommends trying Studio North first because it has transit access and a trial session, without creating or changing memory."
+        }
+      }
+    }
+  ]
+}

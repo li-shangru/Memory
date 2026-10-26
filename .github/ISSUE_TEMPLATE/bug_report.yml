@@ -1,0 +1,37 @@
+name: Bug report
+description: Report a reproducible problem using synthetic content.
+title: "Bug: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use invented notes and redact screenshots. Never attach a Store, keys,
+        credentials, authentication links, personal exports, or client transcripts.
+        For vulnerabilities, follow the repository security policy instead.
+  - type: input
+    id: version
+    attributes:
+      label: Memory version
+      description: Output of memory --version.
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: macOS version and processor architecture
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Synthetic reproduction
+      description: Smallest steps and invented input that reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and observed behavior
+      description: Include bounded error codes; omit private paths and raw transcripts.
+    validations:
+      required: true

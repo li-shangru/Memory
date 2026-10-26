@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% from "_parts.html" import sensitivity_dot, short_id, tech_details %}
+{% block title %}Source inspection · Memory{% endblock %}
+{% block content %}
+{% set q = "?h=" ~ audit_handle if audit_handle else "" %}
+<h1>Source inspection</h1>
+{% if audit_handle %}<p><a href="/audit{{ q }}">Back to the bound Store audit</a></p>{% endif %}
+<p class="source-name wrap-anywhere">{{ detail.summary.original_name }}</p>
+<p class="meta-row">
+  {{ sensitivity_dot(detail.summary.effective_sensitivity.value) }}
+  <span>{{ detail.summary.media_type }}</span>
+  <span>{{ detail.summary.byte_length | filesize }}</span>
+  <span>Captured {{ detail.summary.captured_at | memory_time }}</span>
+</p>
+
+<section aria-labelledby="source-content-heading">
+  <h2 id="source-content-heading">Complete retained source</h2>
+  {% if chunk.text is not none %}
+    <pre class="source-content">{{ chunk.text }}</pre>
+  {% else %}
+    <p>Original bytes remain available as inert hex/ASCII.</p>
+    <pre class="source-content" data-original-hex="{{ original_hex }}">{{ binary_rendered }}</pre>
+  {% endif %}
+  {% if next_content_href %}
+    <a data-next-content href="{{ next_content_href }}">Next source chunk</a>
+  {% endif %}
+  {% if previewable %}
+    <p><a href="/sources/{{ detail.summary.source_id }}/preview">Open inert PNG preview</a></p>
+  {% endif %}
+</section>
+
+<section aria-labelledby="source-metadata-heading">
+  <h2 id="source-metadata-heading">Capture metadata</h2>
+  <dl class="tech-rows">
+    <div><dt>Capture origin</dt><dd>{{ detail.summary.origin.value }}</dd></div>
+    <div><dt>Authorship</dt><dd>{{ detail.summary.authorship.value }}</dd></div>
+    <div><dt>Declared sensitivity</dt><dd>{{ sensitivity_dot(detail.summary.declared_sensitivity.value, labelled=false) }}</dd></div>
+    <div><dt>Effective sensitivity</dt><dd>{{ sensitivity_dot(detail.summary.effective_sensitivity.value, labelled=false) }}</dd></div>
+    <div><dt>Media type</dt><dd>{{ detail.summary.media_type }}</dd></div>
+    <div><dt>Captured at</dt><dd>{{ detail.summary.captured_at | memory_time }}</dd></div>
+    <div><dt>Indexed for search</dt><dd>{{ "yes" if detail.summary.indexed_for_search else "no" }}</dd></div>
+  </dl>
+  {% if audit_handle %}<p><a href="/audit/batches/{{ detail.summary.batch_id }}{{ q }}">Open capture batch</a></p>{% else %}<p><a href="/inbox/batches/{{ detail.summary.batch_id }}">Open capture batch</a></p>{% endif %}
+</section>
+
+<section aria-labelledby="capture-siblings-heading">
+  <h2 id="capture-siblings-heading">Captures sharing this blob</h2>
+  <ul class="card-list">
+  {% for source in siblings.items %}
+    <li class="card" data-sibling-id="{{ source.source_id }}">
+      <a class="source-name" href="/sources/{{ source.source_id }}{{ q }}">{{ source.original_name }}</a>
+      <p class="card-meta">
+        {{ sensitivity_dot(source.effective_sensitivity.value) }}
+        {{ short_id(source.source_id) }}
+      </p>
+    </li>
+  {% endfor %}
+  </ul>
+  {% if next_siblings_href %}<a data-next-siblings href="{{ next_siblings_href }}">Next captures</a>{% endif %}
+</section>
+
+<section aria-labelledby="evidence-backlinks-heading">
+  <h2 id="evidence-backlinks-heading">Evidence backlinks</h2>
+  <ul class="card-list">
+  {% for link in evidence.items %}
+    <li class="card" data-evidence-id="{{ link.memory_revision_id }}">
+      <p>Cited by memory revision {{ short_id(link.memory_revision_id, "/memories/" ~ link.memory_revision_id ~ q) }}</p>
+      {% if link.locator.excerpt %}<blockquote class="evidence-quote">{{ link.locator.excerpt }}</blockquote>{% endif %}
+    </li>
+  {% else %}
+    <li class="card">No canonical memory currently cites this capture.</li>
+  {% endfor %}
+  </ul>
+  {% if next_evidence_href %}<a data-next-evidence href="{{ next_evidence_href }}">Next evidence backlinks</a>{% endif %}
+</section>
+
+{{ tech_details((
+  ("Capture identity", detail.summary.source_id),
+  ("Blob identity", detail.summary.blob_id),
+  ("Blob digest", detail.summary.blob_digest),
+  ("Byte length", detail.summary.byte_length ~ " bytes"),
+)) }}
+{% endblock %}

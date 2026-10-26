@@ -1,0 +1,82 @@
+{# Shared owner-UI presentation macros. Import, never extend: this file is a
+   macro library, not a page, so it declares no heading and no block. #}
+
+{% macro sensitivity_dot(level, labelled=true) -%}
+<span class="sensitivity">
+  <span class="sensitivity-dot" data-level="{{ level }}"></span>
+  {%- if labelled %}<span class="visually-hidden">Effective sensitivity: </span>{% endif -%}
+  <span class="sensitivity-label">{{ level }}</span>
+</span>
+{%- endmacro %}
+
+{% macro kind_chip(kind) -%}
+<span class="kind-chip" data-kind="{{ kind }}">{{ kind }}</span>
+{%- endmacro %}
+
+{% macro short_id(value, href=none) -%}
+{%- set shortened = value[:12] ~ "…" if value | length > 12 else value -%}
+{%- if href -%}
+<a class="mono" href="{{ href }}" title="{{ value }}">{{ shortened }}</a>
+{%- else -%}
+<span class="mono" title="{{ value }}">{{ shortened }}</span>
+{%- endif -%}
+{%- endmacro %}
+
+{% macro copy_button(value, label) -%}
+<button type="button" class="copy-button" data-copy-value="{{ value }}" aria-label="Copy {{ label }}">Copy</button>
+{%- endmacro %}
+
+{# The link repeats its own row label in its accessible name: read out of
+   context, a bare identifier says nothing about what it identifies. #}
+{% macro tech_row(label, value, href=none, copy=true) -%}
+<div>
+  <dt>{{ label }}</dt>
+  <dd>
+    {%- if href %}<a class="mono" href="{{ href }}" aria-label="{{ label }} {{ value }}">{{ value }}</a>{% else %}<span class="mono">{{ value }}</span>{% endif %}
+    {%- if copy %} {{ copy_button(value, label) }}{% endif %}
+  </dd>
+</div>
+{%- endmacro %}
+
+{# One reviewable guard link, read as a sentence: the guard claim, then the
+   claim it governs. The two sensitivity dots meet either side of the arrow, so
+   a guard more sensitive than what it governs shows up as a colour step in one
+   glance and needs no separate warning. #}
+{% macro guard_link_row(link, compact=false, review_base="", audit_handle=none) -%}
+{% if compact %}
+  {% set guard_preview = roster_statement_preview(link.guard_statement) %}
+  {% set governed_preview = roster_statement_preview(link.governed_statement) %}
+  {% set guard_href = review_guard_endpoint_href(review_base, link.guard_kind, link.guard_ref, link.guard_memory_id, audit_handle) %}
+  {% set governed_href = review_guard_endpoint_href(review_base, link.governed_kind, link.governed_ref, link.governed_memory_id, audit_handle) %}
+{% endif %}
+<li class="guard-link" data-guard-link="{{ link.ordinal }}" data-link-status="{{ link.status }}">
+  <p class="guard-link-pair">
+    <span class="guard-link-side guard-link-guard">
+      <span class="guard-link-statement">{% if compact and guard_href %}<a href="{{ guard_href }}">{% endif %}{{ guard_preview[0] if compact else link.guard_statement }}{% if compact and guard_href %}</a>{% endif %}{% if compact and guard_preview[1] %}<span class="visually-hidden">; statement preview ends here{% if guard_href %}; follow the link for the complete statement and evidence{% endif %}</span>{% endif %}</span>
+      {{ sensitivity_dot(link.guard_sensitivity.value, labelled=false) }}
+    </span>
+    <span class="guard-link-arrow" aria-hidden="true">→</span>
+    <span class="visually-hidden">governs</span>
+    <span class="guard-link-side guard-link-governed">
+      {{ sensitivity_dot(link.governed_sensitivity.value, labelled=false) }}
+      <span class="guard-link-statement">{% if compact and governed_href %}<a href="{{ governed_href }}">{% endif %}{{ governed_preview[0] if compact else link.governed_statement }}{% if compact and governed_href %}</a>{% endif %}{% if compact and governed_preview[1] %}<span class="visually-hidden">; statement preview ends here{% if governed_href %}; follow the link for the complete statement and evidence{% endif %}</span>{% endif %}</span>
+    </span>
+  </p>
+  <p class="card-meta"><span class="state-tag">{{ link.status }}</span></p>
+  {%- if caller is defined %}{{ caller() }}{% endif %}
+</li>
+{%- endmacro %}
+
+{# ``rows`` accepts ``(label, value)`` or ``(label, value, href)`` tuples; a
+   ``{% call %}`` block may supply further rows that need template logic. #}
+{% macro tech_details(rows=()) -%}
+<details class="technical-details">
+  <summary>Technical details</summary>
+  <dl class="tech-rows">
+    {%- for row in rows %}
+    {{ tech_row(row[0], row[1], row[2] if row | length > 2 else none) }}
+    {%- endfor %}
+    {%- if caller is defined %}{{ caller() }}{% endif %}
+  </dl>
+</details>
+{%- endmacro %}

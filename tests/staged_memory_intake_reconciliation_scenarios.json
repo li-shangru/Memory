@@ -1,0 +1,150 @@
+{
+  "schema": "staged-memory-intake.reconciliation-scenarios.v1",
+  "scenarios": [
+    {
+      "id": "synthetic_unlabelled_english_closure",
+      "language": "en",
+      "request": "Prepare an ordinary synthetic staged update saying: 'I decided not to rent the synthetic workshop; that completes its decision review.' The approved current loop is a workshop rental decision review. The matching loop appears on page two, and its decisive qualification appears late in a retained source. Describe retrieval and routing before writing any Prepared file, keeping all source and memory content private.",
+      "expected_route": "whole_loop_closure",
+      "must": [
+        "status_first",
+        "exhaustive_open_loop_walk",
+        "current_head_and_complete_evidence",
+        "semantic_target_matching",
+        "direct_source_backed_correction",
+        "preserve_history_and_unaffected_fields",
+        "exact_owner_review",
+        "agent_transports_staged_original",
+        "reuse_exact_prior_capture",
+        "preserve_staged_original_after_verification"
+      ],
+      "must_not": [
+        "prepare_as_new_item",
+        "private_content_in_chat",
+        "first_page_only",
+        "closure_heading_required",
+        "automatic_apply",
+        "ask_owner_to_copy_staged_to_inbox",
+        "recapture_on_lost_result",
+        "ordinary_helper_correction_receipt"
+      ]
+    },
+    {
+      "id": "synthetic_unlabelled_chinese_closure",
+      "language": "zh",
+      "request": "处理一则普通的虚构暂存更新：'我已决定不租这个虚构工作室，这项决策复查已结束。' 当前已批准的开放事项是英文记录的工作室租用决策复查，词面搜索结果为空，但完整开放事项分页包含它。说明写入任何 Prepared 文件前的检索和路由；不要在聊天中复制暂存内容或已保留内容。",
+      "expected_route": "whole_loop_closure",
+      "must": [
+        "status_first",
+        "exhaustive_open_loop_walk",
+        "current_head_and_complete_evidence",
+        "cross_language_and_full_source_fallback",
+        "direct_source_backed_correction",
+        "preserve_history_and_unaffected_fields",
+        "exact_owner_review",
+        "agent_transports_staged_original",
+        "reuse_exact_prior_capture",
+        "preserve_staged_original_after_verification"
+      ],
+      "must_not": [
+        "prepare_as_new_item",
+        "private_content_in_chat",
+        "lexical_absence_is_no_target",
+        "closure_heading_required",
+        "automatic_apply",
+        "ask_owner_to_copy_staged_to_inbox",
+        "recapture_on_lost_result",
+        "ordinary_helper_correction_receipt"
+      ]
+    },
+    {
+      "id": "synthetic_planned_stop_grouped_english",
+      "language": "en",
+      "request": "Prepare an ordinary synthetic update saying: 'I decided to stop the synthetic catalog export, but have not stopped it yet; the backup review remains open.' An approved grouped loop contains the export decision, the export shutdown action, and the independent backup review. Describe routing before any Prepared write and the scope of its correction without echoing either private record.",
+      "expected_route": "partial_correction",
+      "must": [
+        "status_first",
+        "exhaustive_open_loop_walk",
+        "current_head_and_complete_evidence",
+        "decision_is_not_completed_action",
+        "preserve_other_followups_and_dates",
+        "retain_loop_open",
+        "direct_source_backed_correction",
+        "exact_owner_review",
+        "agent_transports_staged_original",
+        "reuse_exact_prior_capture",
+        "preserve_staged_original_after_verification"
+      ],
+      "must_not": [
+        "prepare_as_new_item",
+        "private_content_in_chat",
+        "infer_shutdown_completed",
+        "close_whole_group",
+        "discard_other_fields",
+        "automatic_apply",
+        "ask_owner_to_copy_staged_to_inbox",
+        "recapture_on_lost_result",
+        "ordinary_helper_correction_receipt"
+      ]
+    },
+    {
+      "id": "synthetic_planned_stop_grouped_chinese",
+      "language": "zh",
+      "request": "处理一则普通的虚构更新：'我决定停用这个虚构目录导出，但还没有停用；备份复查仍未完成。' 已批准的组合开放事项包含导出决策、实际停用操作及独立的备份复查。说明写入任何 Prepared 文件前的路由及更正范围；聊天只展示不含内容的元数据。",
+      "expected_route": "partial_correction",
+      "must": [
+        "status_first",
+        "exhaustive_open_loop_walk",
+        "current_head_and_complete_evidence",
+        "decision_is_not_completed_action",
+        "preserve_other_followups_and_dates",
+        "retain_loop_open",
+        "direct_source_backed_correction",
+        "exact_owner_review",
+        "agent_transports_staged_original",
+        "reuse_exact_prior_capture",
+        "preserve_staged_original_after_verification"
+      ],
+      "must_not": [
+        "prepare_as_new_item",
+        "private_content_in_chat",
+        "infer_shutdown_completed",
+        "close_whole_group",
+        "discard_other_fields",
+        "automatic_apply",
+        "ask_owner_to_copy_staged_to_inbox",
+        "recapture_on_lost_result",
+        "ordinary_helper_correction_receipt"
+      ]
+    },
+    {
+      "id": "synthetic_rehorizon_existing_loop",
+      "language": "en",
+      "request": "Prepare an ordinary synthetic staged update that explicitly moves the entire synthetic exhibit review to 2026-11-20. Its currently approved loop is undated and restricted, with a guard and prior correction history. Describe retrieval and the direct correction route before any Prepared write; the current statement and every field other than the supported horizon remain unchanged and private.",
+      "expected_route": "re_horizon",
+      "must": [
+        "status_first",
+        "exhaustive_open_loop_walk",
+        "current_head_and_complete_evidence",
+        "include_undated_and_restricted",
+        "retain_loop_open",
+        "only_valid_to_changes",
+        "preserve_history_and_unaffected_fields",
+        "exact_owner_review",
+        "agent_transports_staged_original",
+        "reuse_exact_prior_capture",
+        "preserve_staged_original_after_verification"
+      ],
+      "must_not": [
+        "prepare_as_new_item",
+        "private_content_in_chat",
+        "statement_rewrite",
+        "filter_restricted_or_undated",
+        "automatic_apply",
+        "ask_owner_to_copy_staged_to_inbox",
+        "recapture_on_lost_result",
+        "ordinary_helper_correction_receipt"
+      ]
+    }
+  ]
+}

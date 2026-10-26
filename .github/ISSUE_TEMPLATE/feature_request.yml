@@ -1,0 +1,20 @@
+name: Feature proposal
+description: Describe a use case and the behavior it needs.
+title: "Proposal: "
+body:
+  - type: markdown
+    attributes:
+      value: Use a fictional example. Do not include personal notes or retained evidence.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed behavior and alternatives
+      description: Explain the desired outcome and any existing workaround.
+    validations:
+      required: true

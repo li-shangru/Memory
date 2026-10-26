@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% from "_parts.html" import kind_chip, sensitivity_dot %}
+{% block title %}Memory · Memory{% endblock %}
+{% block content %}
+<h1>Memory</h1>
+<p class="page-lede">Search the current canonical memory. Filters narrow the same result set.</p>
+<form method="post" action="/memory/search" aria-label="Memory search and filters" data-authenticated-post>
+  <div class="search-bar">
+    <span class="field">
+      <label for="memory-query">Search current canonical memory</label>
+      <input id="memory-query" name="query" type="search" value="{{ query }}" maxlength="16384">
+    </span>
+    <button type="submit">Search</button>
+  </div>
+  <details class="filters"{% if active_filters %} open{% endif %}>
+    <summary>Filters</summary>
+    <fieldset>
+      <legend>Kind</legend>
+      {% for value in ["fact", "event", "preference", "relation", "insight"] %}
+        <label><input type="checkbox" name="kind" value="{{ value }}"{% if value in page.filters.kinds %} checked{% endif %}> {{ value }}</label>
+      {% endfor %}
+    </fieldset>
+    <fieldset>
+      <legend>Effective sensitivity</legend>
+      {% for value in ["normal", "sensitive", "restricted"] %}
+        <label><input type="checkbox" name="sensitivity" value="{{ value }}"{% if value in page.filters.sensitivities %} checked{% endif %}> {{ value }}</label>
+      {% endfor %}
+    </fieldset>
+    {% for tag in page.filters.tags_all or ("",) %}
+      {% set tag_id = "memory-tag" if loop.first else "memory-tag-" ~ loop.index %}
+      <label for="{{ tag_id }}">All-of tag{% if not loop.first %} {{ loop.index }}{% endif %}</label>
+      <input id="{{ tag_id }}" name="tag" value="{{ tag }}">
+    {% endfor %}
+    {% if page.filters.tags_all %}
+      <label for="memory-tag-new">Another all-of tag</label>
+      <input id="memory-tag-new" name="tag">
+    {% endif %}
+    <label for="occurred-from">Occurred from</label>
+    <input id="occurred-from" name="occurred_from" value="{{ page.filters.occurred_from or '' }}" placeholder="YYYY, YYYY-MM, or YYYY-MM-DD">
+    <label for="occurred-to">Occurred to</label>
+    <input id="occurred-to" name="occurred_to" value="{{ page.filters.occurred_to or '' }}" placeholder="YYYY, YYYY-MM, or YYYY-MM-DD">
+  </details>
+</form>
+
+{% if active_filters %}
+<section aria-labelledby="active-filters-heading">
+  <h2 id="active-filters-heading">Active filters</h2>
+  <div class="active-filters">
+  {% for active in active_filters %}
+    <form method="post" action="/memory/search" data-remove-filter data-authenticated-post>
+      <input type="hidden" name="query" value="{{ query }}">
+      {% for name, value in active.remaining %}<input type="hidden" name="{{ name }}" value="{{ value }}">{% endfor %}
+      <button class="filter-pill" type="submit">Remove {{ active.name }}: {{ active.value }}</button>
+    </form>
+  {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if page.kind_counts %}
+<section aria-labelledby="memory-kinds-heading">
+  <h2 id="memory-kinds-heading">Kinds</h2>
+  <div class="facets">
+  {% for kind, count in page.kind_counts %}
+    <form method="post" action="/memory/search" data-facet-kind data-authenticated-post>
+      <input type="hidden" name="query" value="{{ query }}">
+      <input type="hidden" name="kind" value="{{ kind }}">
+      {% for active in active_filters if active.name != "kind" %}<input type="hidden" name="{{ active.name }}" value="{{ active.value }}">{% endfor %}
+      <button class="facet-chip" type="submit">{{ kind }} <span class="facet-count">{{ count }}<span class="visually-hidden"> current memories</span></span></button>
+    </form>
+  {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section aria-labelledby="memory-results-heading">
+  <h2 id="memory-results-heading">Current canonical memories</h2>
+  {% if page.hidden_by_filters_count == 1 %}<p class="result-note">1 result hidden by active filters</p>
+  {% elif page.hidden_by_filters_count %}<p class="result-note">{{ page.hidden_by_filters_count }} results hidden by active filters</p>{% endif %}
+  <p class="result-note">Indexed current heads: {{ page.projection_coverage.indexed_current_heads }} of {{ page.projection_coverage.current_heads }}.</p>
+  <ol class="card-list">
+  {% for memory in page.items %}
+    <li class="card" data-memory-row data-sensitivity="{{ memory.revision.effective_sensitivity.value }}">
+      <a class="memory-card-statement" href="/memories/{{ memory.revision.memory_id }}">{{ memory.revision.statement }}</a>
+      {% set validity = memory_validity(memory.revision.valid_from, memory.revision.valid_to, memory.revision.tags, today=today) %}
+      <p class="validity-summary" data-validity-status="{{ validity.status }}">{{ validity.summary }}</p>
+      <p class="validity-range"><span>{{ validity.start_label }}</span> · <span>{{ validity.end_label }}</span></p>
+      <p class="card-meta">
+        {{ kind_chip(memory.revision.kind.value) }}
+        {{ sensitivity_dot(memory.revision.effective_sensitivity.value) }}
+        {% if memory.revision.occurred_on %}<span>Occurred {{ memory.revision.occurred_on }}</span>{% endif %}
+        {% for tag in memory.revision.tags %}<span class="tag-chip">{{ tag }}</span>{% endfor %}
+      </p>
+    </li>
+  {% else %}
+    <li class="card">No current memory matches.</li>
+  {% endfor %}
+  </ol>
+  {% if page.has_more and page.next_cursor %}
+    {% if handle %}<a href="/memory/search/{{ handle }}?cursor={{ page.next_cursor }}&amp;limit={{ limit }}">Next memory results</a>
+    {% else %}<a href="/memory?cursor={{ page.next_cursor }}">Next memories</a>{% endif %}
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,321 @@
+{
+  "schema_version": 3,
+  "factory_id": "memory",
+  "max_advisors": 3,
+  "profiles": [
+    {
+      "id": "retrieval-provenance",
+      "version": "1.2.0",
+      "description": "Retrieval completeness, immutable source provenance and snapshot/cursor consistency.",
+      "profile": "docs/agent-factory/profiles/retrieval-provenance.md",
+      "questions": [
+        "Which complete-read, sensitivity or snapshot invariant crosses this change?",
+        "What independent bilingual reconstruction check distinguishes a complete result from a plausible partial one?"
+      ],
+      "role": "advice",
+      "knowledge_packs": [
+        "retrieval-provenance"
+      ]
+    },
+    {
+      "id": "review-lifecycle",
+      "version": "1.2.0",
+      "description": "Exact approval, immutable corrections, atomic application and recovery.",
+      "profile": "docs/agent-factory/profiles/review-lifecycle.md",
+      "questions": [
+        "Which exact approval, atomic apply, guard or recovery invariant can this change violate?",
+        "Which refusal or replay check establishes the required lifecycle boundary?"
+      ],
+      "role": "advice",
+      "knowledge_packs": [
+        "review-lifecycle"
+      ]
+    },
+    {
+      "id": "mcp-contracts",
+      "version": "1.2.0",
+      "description": "Generic bounded MCP and CLI contracts, schemas, teaching and wire budgets.",
+      "profile": "docs/agent-factory/profiles/mcp-contracts.md",
+      "questions": [
+        "Which schema, escaped wire budget or teaching contract crosses this change?",
+        "Which public-envelope check would reveal silent truncation or transport disagreement?"
+      ],
+      "role": "advice",
+      "knowledge_packs": [
+        "mcp-contracts"
+      ]
+    },
+    {
+      "id": "privacy-runtime",
+      "version": "1.2.0",
+      "description": "Fail-closed runtime identity, encrypted custody and synthetic-only verification.",
+      "profile": "docs/agent-factory/profiles/privacy-runtime.md",
+      "questions": [
+        "Which identity, custody or owner-presence invariant crosses this change?",
+        "Which isolated refusal check detects replacement, loss or unsafe recovery?"
+      ],
+      "role": "advice",
+      "knowledge_packs": [
+        "privacy-runtime"
+      ]
+    }
+  ],
+  "instructions": [
+    "AGENTS.md",
+    "tools/memory-implement-ticket/SKILL.md",
+    "tools/memory-implement-ticket/scripts/run.py",
+    "docs/agent-factory/README.md"
+  ],
+  "risk_aliases": {
+    "owner-presence": "runtime-identity",
+    "approval-replay": "approval",
+    "wire-size": "wire-budget",
+    "source-pagination": "pagination"
+  },
+  "critical_risks": [
+    "approval",
+    "atomicity",
+    "runtime-identity",
+    "custody"
+  ],
+  "couplings": [
+    {
+      "paths": [
+        "src/memory/ui/owner_presence.py"
+      ],
+      "terms": [],
+      "risks": [
+        "approval",
+        "runtime-identity"
+      ]
+    },
+    {
+      "paths": [
+        "src/memory/mcp_server.py"
+      ],
+      "terms": [
+        "resumed apply",
+        "exact revision",
+        "decline",
+        "cancellation",
+        "审批"
+      ],
+      "risks": [
+        "approval",
+        "mcp"
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "id": "coordination",
+      "version": "1.0.0",
+      "contract": "docs/agent-factory/roles/coordination.md",
+      "procedures": [
+        "tools/memory-implement-ticket/SKILL.md",
+        "docs/agent-factory/README.md"
+      ]
+    },
+    {
+      "id": "implementation",
+      "version": "1.0.0",
+      "contract": "docs/agent-factory/roles/implementation.md",
+      "procedures": [
+        "tools/memory-implement-ticket/SKILL.md",
+        "docs/agent-factory/README.md"
+      ]
+    },
+    {
+      "id": "advice",
+      "version": "1.0.0",
+      "contract": "docs/agent-factory/roles/advice.md",
+      "procedures": [
+        "tools/memory-implement-ticket/SKILL.md",
+        "docs/agent-factory/README.md"
+      ]
+    },
+    {
+      "id": "independent-review",
+      "version": "1.0.0",
+      "contract": "docs/agent-factory/roles/independent-review.md",
+      "procedures": [
+        "tools/memory-implement-ticket/SKILL.md",
+        "docs/agent-factory/README.md"
+      ]
+    }
+  ],
+  "knowledge_packs": [
+    {
+      "id": "retrieval-provenance",
+      "version": "1.0.0",
+      "description": "Retrieval completeness, immutable source provenance and snapshot/cursor consistency.",
+      "document": "docs/agent-factory/knowledge/retrieval-provenance.md",
+      "terms": [
+        "retrieval",
+        "pagination",
+        "cursor",
+        "snapshot",
+        "source.read",
+        "source.list",
+        "provenance",
+        "检索",
+        "分页",
+        "完整读取",
+        "敏感度"
+      ],
+      "paths": [
+        "src/memory/retrieval.py",
+        "src/memory/sources.py",
+        "src/memory/memories.py",
+        "src/memory/memory_detail_pages.py"
+      ],
+      "risks": [
+        "retrieval",
+        "provenance",
+        "pagination"
+      ],
+      "sources": [
+        "docs/technical-design.md",
+        "docs/maintenance.md",
+        "src/memory/retrieval.py",
+        "src/memory/sources.py",
+        "src/memory/memory_detail_pages.py",
+        "tests/test_sources.py",
+        "tests/test_mcp_detail_pages.py",
+        "src/memory/memories.py",
+        "tests/test_retrieval.py",
+        "tests/test_retrieval_ranking.py"
+      ],
+      "optional_sources": []
+    },
+    {
+      "id": "review-lifecycle",
+      "version": "1.0.0",
+      "description": "Exact approval, immutable corrections, atomic application and recovery.",
+      "document": "docs/agent-factory/knowledge/review-lifecycle.md",
+      "terms": [
+        "approval",
+        "review lifecycle",
+        "atomic",
+        "idempotent",
+        "correction",
+        "recovery",
+        "guard link",
+        "审批",
+        "原子性",
+        "恢复"
+      ],
+      "paths": [
+        "src/memory/reviews.py",
+        "src/memory/inbox.py",
+        "src/memory/review_reads.py",
+        "src/memory/staging_provenance.py"
+      ],
+      "risks": [
+        "approval",
+        "recovery",
+        "atomicity"
+      ],
+      "sources": [
+        "docs/technical-design.md",
+        "src/memory/reviews.py",
+        "src/memory/inbox.py",
+        "tests/test_reviews.py",
+        "src/memory/staging_provenance.py",
+        "tests/test_guard_links.py",
+        "tests/test_inbox.py",
+        "tests/test_inbox_observation.py"
+      ],
+      "optional_sources": []
+    },
+    {
+      "id": "mcp-contracts",
+      "version": "1.0.0",
+      "description": "Generic bounded MCP and CLI contracts, schemas, teaching and wire budgets.",
+      "document": "docs/agent-factory/knowledge/mcp-contracts.md",
+      "terms": [
+        "mcp",
+        "cli",
+        "wire budget",
+        "schema",
+        "serialization",
+        "protocol",
+        "tool inventory",
+        "协议",
+        "序列化"
+      ],
+      "paths": [
+        "src/memory/mcp_server.py",
+        "src/memory/mcp_schemas.py",
+        "src/memory/cli.py",
+        "src/memory/skill",
+        "src/memory/mcp_prompts.py"
+      ],
+      "risks": [
+        "mcp",
+        "contracts",
+        "wire-budget"
+      ],
+      "sources": [
+        "docs/technical-design.md",
+        "src/memory/mcp_server.py",
+        "src/memory/mcp_schemas.py",
+        "src/memory/cli.py",
+        "src/memory/skill/SKILL.md",
+        "tests/test_mcp.py",
+        "tests/test_skill.py",
+        "src/memory/mcp_prompts.py",
+        "tests/test_cli.py",
+        "tests/test_mcp_detail_pages.py"
+      ],
+      "optional_sources": []
+    },
+    {
+      "id": "privacy-runtime",
+      "version": "1.0.0",
+      "description": "Fail-closed runtime identity, encrypted custody and synthetic-only verification.",
+      "document": "docs/agent-factory/knowledge/privacy-runtime.md",
+      "terms": [
+        "runtime identity",
+        "privacy",
+        "symlink",
+        "custody",
+        "keychain",
+        "sqlcipher",
+        "path traversal",
+        "隐私",
+        "保管",
+        "身份"
+      ],
+      "paths": [
+        "src/memory/runtime.py",
+        "src/memory/database.py",
+        "src/memory/keys.py",
+        "src/memory/initialization.py",
+        "src/memory/initialization_fs.py",
+        "src/memory/ui/owner_presence.py"
+      ],
+      "risks": [
+        "privacy",
+        "runtime-identity",
+        "custody"
+      ],
+      "sources": [
+        "docs/technical-design.md",
+        "src/memory/runtime.py",
+        "src/memory/database.py",
+        "src/memory/keys.py",
+        "tests/test_runtime_mode.py",
+        "tests/synthetic.py",
+        "tools/delivery_probe.py",
+        "src/memory/initialization.py",
+        "src/memory/initialization_fs.py",
+        "src/memory/ui/owner_presence.py",
+        "tests/test_database.py",
+        "tests/test_initialization.py",
+        "tests/test_owner_presence.py"
+      ],
+      "optional_sources": []
+    }
+  ]
+}

@@ -1,0 +1,612 @@
+{
+  "schema": "memory.synthetic-journeys.v1",
+  "manifest_version": 1,
+  "cases": [
+    {
+      "case_id": "SYN-JOURNEY-APPOINTMENT-001",
+      "topic": "recurring_appointment_preparation",
+      "language": "en",
+      "question": "What should synthetic participant Nila prepare before the next recurring check-in?",
+      "search_queries": [
+        "routine readiness",
+        "repeat visit checklist"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-APPOINTMENT-SCHEDULE-001",
+        "SYN-SRC-APPOINTMENT-PREP-002"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-APPOINTMENT-TIMING-001",
+        "SYN-EVIDENCE-APPOINTMENT-MATERIALS-002"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": true,
+        "enumeration_required": true,
+        "intentionally_insufficient": false,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": true
+      },
+      "missing_coverage": []
+    },
+    {
+      "case_id": "SYN-JOURNEY-PRIVACY-002",
+      "topic": "privacy_sensitive_software_choice",
+      "language": "en",
+      "question": "Does the invented LanternFox profile fit Vale's confidentiality requirements?",
+      "search_queries": [
+        "privacy tool"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-PRIVACY-DISTRACTOR-003",
+        "SYN-SRC-PRIVACY-NEEDS-004",
+        "SYN-SRC-PRIVACY-SHEET-005"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-PRIVACY-OFFLINE-003",
+        "SYN-EVIDENCE-PRIVACY-DIAGNOSTICS-004",
+        "SYN-EVIDENCE-PRIVACY-OFFLINE-005",
+        "SYN-EVIDENCE-PRIVACY-DIAGNOSTICS-006"
+      ],
+      "ranked_distractor_source_ids": [
+        "SYN-SRC-PRIVACY-DISTRACTOR-003"
+      ],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": true,
+        "intentionally_insufficient": false,
+        "misleading_nonempty_ranked_result": true,
+        "no_literal_match": false
+      },
+      "missing_coverage": []
+    },
+    {
+      "case_id": "SYN-JOURNEY-ENJOYMENT-ZH-003",
+      "topic": "affordable_discretionary_enjoyment",
+      "language": "zh",
+      "question": "桥岚这个周末可以负担哪一种安静的小乐趣？",
+      "search_queries": [
+        "周末 小乐趣"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-ENJOYMENT-BUDGET-ZH-006"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-ENJOYMENT-BUDGET-007",
+        "SYN-EVIDENCE-ENJOYMENT-PREFERENCE-008"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": true,
+        "intentionally_insufficient": true,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": false
+      },
+      "missing_coverage": [
+        "SYN-MISSING-CANDIDATE-COSTS-001",
+        "SYN-MISSING-WEEKEND-AVAILABILITY-002"
+      ]
+    },
+    {
+      "case_id": "SYN-JOURNEY-ORIENT-011",
+      "topic": "standing_orientation_applies_offscreen_preference",
+      "language": "en",
+      "question": "Should Rowan replace the greenhouse watering controller in one go this weekend?",
+      "search_queries": [
+        "watering controller",
+        "greenhouse replacement"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-ORIENT-STYLE-011",
+        "SYN-SRC-ORIENT-CONTROLLER-012"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-ORIENT-STYLE-011",
+        "SYN-EVIDENCE-ORIENT-RETROFIT-012"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": true,
+        "intentionally_insufficient": false,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": true
+      },
+      "missing_coverage": []
+    },
+    {
+      "case_id": "SYN-JOURNEY-STALE-012",
+      "topic": "expired_validity_is_flagged_not_asserted",
+      "language": "en",
+      "question": "How long does Rowan's cottage rental run?",
+      "search_queries": [
+        "cottage rental"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-STALE-RENTAL-013"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-STALE-HORIZON-013"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": false,
+        "intentionally_insufficient": true,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": false
+      },
+      "missing_coverage": [
+        "current rental status after 2026-05-31"
+      ]
+    },
+    {
+      "case_id": "SYN-JOURNEY-GUARD-BAIT-013",
+      "topic": "guard_leads_when_answer_invites_agreement",
+      "language": "zh",
+      "question": "兰溪这个月想把收藏预算翻倍，直接加倍合适吗？",
+      "search_queries": [
+        "收藏预算",
+        "收藏"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-GUARD-RESTRAINT-014"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-GUARD-FOCUS-014",
+        "SYN-EVIDENCE-GUARD-PAUSE-015"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": false,
+        "intentionally_insufficient": false,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": false
+      },
+      "missing_coverage": []
+    },
+    {
+      "case_id": "SYN-JOURNEY-LOOP-014",
+      "topic": "due_loop_surfaces_closed_loop_vanishes",
+      "language": "en",
+      "question": "What open commitments should Rowan look at before planning anything new?",
+      "search_queries": [
+        "open commitments"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-LOOP-COMMIT-015",
+        "SYN-SRC-LOOP-CLOSE-016"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-LOOP-SUPPLIER-016",
+        "SYN-EVIDENCE-LOOP-CLOSED-017"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": true,
+        "intentionally_insufficient": false,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": true
+      },
+      "missing_coverage": []
+    },
+    {
+      "case_id": "SYN-JOURNEY-CAPTURE-015",
+      "topic": "decision_note_offered_once_after_stated_decision",
+      "language": "en",
+      "question": "Which dehumidifier replacement fits Wren's workshop before the autumn damp?",
+      "search_queries": [
+        "dehumidifier replacement"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-CAPTURE-OPTIONS-017"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-CAPTURE-OPTIONS-018",
+        "SYN-EVIDENCE-CAPTURE-REVISIT-019"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": false,
+        "intentionally_insufficient": false,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": false
+      },
+      "missing_coverage": []
+    },
+    {
+      "case_id": "SYN-JOURNEY-NO-CAPTURE-016",
+      "topic": "no_offer_without_stated_decision",
+      "language": "zh",
+      "question": "溪桐应该怎么比较工作室书架的两个改造方向？",
+      "search_queries": [
+        "书架 改造"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-NOCAP-SHELF-ZH-018"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-NOCAP-CUSTOM-020",
+        "SYN-EVIDENCE-NOCAP-MODULAR-021"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": false,
+        "intentionally_insufficient": false,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": false
+      },
+      "missing_coverage": []
+    },
+    {
+      "case_id": "SYN-JOURNEY-CLOSE-017",
+      "topic": "stated_outcome_closes_one_loop_once",
+      "language": "en",
+      "question": "Sable reports the studio shutter repaint finished under budget on 2026-08-10; close what should be closed and leave the rest alone.",
+      "search_queries": [
+        "finished commitments"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-CLOSE-COMMIT-019",
+        "SYN-SRC-CLOSE-OUTCOME-020"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-CLOSE-SHUTTER-022",
+        "SYN-EVIDENCE-CLOSE-OUTCOME-023"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": true,
+        "intentionally_insufficient": false,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": true
+      },
+      "missing_coverage": []
+    },
+    {
+      "case_id": "SYN-JOURNEY-REHORIZON-ZH-018",
+      "topic": "stated_new_horizon_moves_loop_without_invention",
+      "language": "zh",
+      "question": "青芜说温室通风部件还没到，回顾时间改到 2026-11-15；该怎么更新这个承诺？",
+      "search_queries": [
+        "通风 改造"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-REHORIZON-COMMIT-ZH-021",
+        "SYN-SRC-REHORIZON-NOTE-ZH-022"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-REHORIZON-VENT-024",
+        "SYN-EVIDENCE-REHORIZON-WAIT-025"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": true,
+        "intentionally_insufficient": false,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": false
+      },
+      "missing_coverage": []
+    },
+    {
+      "case_id": "SYN-JOURNEY-PRIORITY-019",
+      "topic": "explicit_priority_and_reversibility_cross_aspect",
+      "language": "en",
+      "question": "If the fictional observatory's dome might close for roof work in 2037 without an approved schedule, should Ilyra try the portable telescope from Alder Quay for two weeks?",
+      "search_queries": [
+        "portable telescope Alder Quay"
+      ],
+      "source_fixture_ids": [
+        "SYN-SRC-PRIORITY-DIRECTION-023",
+        "SYN-SRC-PRIORITY-CHOICE-024"
+      ],
+      "required_evidence_ids": [
+        "SYN-EVIDENCE-PRIORITY-DIRECTION-026",
+        "SYN-EVIDENCE-PRIORITY-ENJOYMENT-027",
+        "SYN-EVIDENCE-PRIORITY-REVERSIBLE-028",
+        "SYN-EVIDENCE-PRIORITY-MOBILITY-029",
+        "SYN-EVIDENCE-PRIORITY-OPERATIONS-030"
+      ],
+      "ranked_distractor_source_ids": [],
+      "fallback": {
+        "empty_memory": false,
+        "enumeration_required": true,
+        "intentionally_insufficient": false,
+        "misleading_nonempty_ranked_result": false,
+        "no_literal_match": true
+      },
+      "missing_coverage": []
+    }
+  ],
+  "sources": [
+    {
+      "fixture_id": "SYN-SRC-APPOINTMENT-SCHEDULE-001",
+      "path": "sources/appointment-schedule.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "a0403353253bea2e724e2c8b999de608bb71888fb4611ecdff80f66fa34ae6bf"
+    },
+    {
+      "fixture_id": "SYN-SRC-APPOINTMENT-PREP-002",
+      "path": "sources/appointment-preparation.txt",
+      "media_type": "text/plain",
+      "searchable": true,
+      "sha256": "01b5919a7e49676ab4c401aa43b66c922a028f0f5c542c27d7d78643ed598d27"
+    },
+    {
+      "fixture_id": "SYN-SRC-PRIVACY-DISTRACTOR-003",
+      "path": "sources/privacy-ranked-distractor.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "127f46b473f3eabd974d17bc44cba0facfc7da00bdd20619615495aeb041fb10"
+    },
+    {
+      "fixture_id": "SYN-SRC-PRIVACY-NEEDS-004",
+      "path": "sources/privacy-needs.txt",
+      "media_type": "text/plain",
+      "searchable": true,
+      "sha256": "098088795bb2f53659e09be5ffd21a915de4cffe87528e045e194535d1468bee"
+    },
+    {
+      "fixture_id": "SYN-SRC-PRIVACY-SHEET-005",
+      "path": "sources/privacy-product-sheet.pdf",
+      "media_type": "application/pdf",
+      "searchable": false,
+      "sha256": "6a7c5a40b843a898b5887d3845e64e41663e24bba9a20edf4dffad670e22808a"
+    },
+    {
+      "fixture_id": "SYN-SRC-ENJOYMENT-BUDGET-ZH-006",
+      "path": "sources/enjoyment-budget-zh.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "6c469ef16c25968c2bdc6ace11280772774a9560bf00ac756fd18dabdfdcf3e8"
+    },
+    {
+      "fixture_id": "SYN-SRC-ORIENT-STYLE-011",
+      "path": "sources/orientation-working-style.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "36dd15b9b29ab12384149fddf733bffadd34d1f2f142638c6b5176f80abd5a77"
+    },
+    {
+      "fixture_id": "SYN-SRC-ORIENT-CONTROLLER-012",
+      "path": "sources/orientation-watering-controller.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "7bc41de03fd8f7f911e72f1ab6c77da98b44b1dfbe294bb734726bda1a68b1b4"
+    },
+    {
+      "fixture_id": "SYN-SRC-STALE-RENTAL-013",
+      "path": "sources/stale-cottage-rental.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "2f07edf39218dd7e6f95829db6b517d8c4dcd1fceba78a8d15348631abc88bd8"
+    },
+    {
+      "fixture_id": "SYN-SRC-GUARD-RESTRAINT-014",
+      "path": "sources/guard-collection-restraint.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "423f58a370951eb041752dca0fe05991e59252faebbb60c5e93430e729be7fdf"
+    },
+    {
+      "fixture_id": "SYN-SRC-LOOP-COMMIT-015",
+      "path": "sources/loop-commitments.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "e4b26d7f76e4aaf29d37cd96ac1133468c67a85b853b0126b4f4bff967592ff1"
+    },
+    {
+      "fixture_id": "SYN-SRC-LOOP-CLOSE-016",
+      "path": "sources/loop-rain-barrel-complete.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "feed0cd6e28acc47189df7dc352b0bd76c9b8a87d431fdf5843b6478624f074f"
+    },
+    {
+      "fixture_id": "SYN-SRC-CAPTURE-OPTIONS-017",
+      "path": "sources/capture-dehumidifier-options.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "4d1b48c4e4269fef91d0cff3db50d6dfcd6e025e790c0f05b00ef64a62242729"
+    },
+    {
+      "fixture_id": "SYN-SRC-NOCAP-SHELF-ZH-018",
+      "path": "sources/capture-shelf-browsing-zh.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "93fe5ade263f79fcba112f28eff84b7b0f790c6fdd1e7beb7d20de8321a41401"
+    },
+    {
+      "fixture_id": "SYN-SRC-CLOSE-COMMIT-019",
+      "path": "sources/closure-shutter-commitments.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "d351cc89c81a402e84232d4026bf5beafe39cae16ad71e0eed36a3e3329f0588"
+    },
+    {
+      "fixture_id": "SYN-SRC-CLOSE-OUTCOME-020",
+      "path": "sources/closure-shutter-outcome.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "d8bf0878aba393d085e7598fa1ae45b8a97f7c0f2f851ff3b8f049cb1e530205"
+    },
+    {
+      "fixture_id": "SYN-SRC-REHORIZON-COMMIT-ZH-021",
+      "path": "sources/closure-vent-commitment-zh.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "c78256066e168e64320bbd1106c3fe596ae502916aef3ed9dd03aaf51de92549"
+    },
+    {
+      "fixture_id": "SYN-SRC-REHORIZON-NOTE-ZH-022",
+      "path": "sources/closure-vent-rehorizon-zh.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "721368c5631c3ebcd21565648856ca7f1a0488baead149af3451970ad74c1d25"
+    },
+    {
+      "fixture_id": "SYN-SRC-PRIORITY-DIRECTION-023",
+      "path": "sources/priority-ilyra-direction.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "dc0207ae1501af57d38107c3c19054f83081cb873375bb8050e85ccd4e612e6f"
+    },
+    {
+      "fixture_id": "SYN-SRC-PRIORITY-CHOICE-024",
+      "path": "sources/priority-ilyra-choice.md",
+      "media_type": "text/markdown",
+      "searchable": true,
+      "sha256": "ad3c3750a3c78bcc011c49d46c34892655f67b5633d234ec21363cdb01ebb7a7"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "SYN-EVIDENCE-APPOINTMENT-TIMING-001",
+      "source_fixture_id": "SYN-SRC-APPOINTMENT-SCHEDULE-001",
+      "marker": "SYN-EVIDENCE-APPOINTMENT-TIMING-001"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-APPOINTMENT-MATERIALS-002",
+      "source_fixture_id": "SYN-SRC-APPOINTMENT-PREP-002",
+      "marker": "SYN-EVIDENCE-APPOINTMENT-MATERIALS-002"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-PRIVACY-OFFLINE-003",
+      "source_fixture_id": "SYN-SRC-PRIVACY-NEEDS-004",
+      "marker": "SYN-EVIDENCE-PRIVACY-OFFLINE-003"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-PRIVACY-DIAGNOSTICS-004",
+      "source_fixture_id": "SYN-SRC-PRIVACY-NEEDS-004",
+      "marker": "SYN-EVIDENCE-PRIVACY-DIAGNOSTICS-004"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-PRIVACY-OFFLINE-005",
+      "source_fixture_id": "SYN-SRC-PRIVACY-SHEET-005",
+      "marker": "SYN-EVIDENCE-PRIVACY-OFFLINE-005"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-PRIVACY-DIAGNOSTICS-006",
+      "source_fixture_id": "SYN-SRC-PRIVACY-SHEET-005",
+      "marker": "SYN-EVIDENCE-PRIVACY-DIAGNOSTICS-006"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-ENJOYMENT-BUDGET-007",
+      "source_fixture_id": "SYN-SRC-ENJOYMENT-BUDGET-ZH-006",
+      "marker": "SYN-EVIDENCE-ENJOYMENT-BUDGET-007"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-ENJOYMENT-PREFERENCE-008",
+      "source_fixture_id": "SYN-SRC-ENJOYMENT-BUDGET-ZH-006",
+      "marker": "SYN-EVIDENCE-ENJOYMENT-PREFERENCE-008"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-ORIENT-STYLE-011",
+      "source_fixture_id": "SYN-SRC-ORIENT-STYLE-011",
+      "marker": "Rowan prefers reversible, small-step changes over big-bang rewrites."
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-ORIENT-RETROFIT-012",
+      "source_fixture_id": "SYN-SRC-ORIENT-CONTROLLER-012",
+      "marker": "a valve-by-valve retrofit that can stop after any single valve"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-STALE-HORIZON-013",
+      "source_fixture_id": "SYN-SRC-STALE-RENTAL-013",
+      "marker": "The current cottage rental agreement runs through 2026-05-31."
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-GUARD-FOCUS-014",
+      "source_fixture_id": "SYN-SRC-GUARD-RESTRAINT-014",
+      "marker": "兰溪喜欢把闲余资金集中投入单一收藏类别"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-GUARD-PAUSE-015",
+      "source_fixture_id": "SYN-SRC-GUARD-RESTRAINT-014",
+      "marker": "每月收藏支出不超过固定上限，想超出时先暂停一周再决定"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-LOOP-SUPPLIER-016",
+      "source_fixture_id": "SYN-SRC-LOOP-COMMIT-015",
+      "marker": "reviewing the greenhouse seed supplier agreement"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-LOOP-CLOSED-017",
+      "source_fixture_id": "SYN-SRC-LOOP-CLOSE-016",
+      "marker": "The rain barrel trial is complete as of June"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-CAPTURE-OPTIONS-018",
+      "source_fixture_id": "SYN-SRC-CAPTURE-OPTIONS-017",
+      "marker": "a ducted unit that needs a weekend install"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-CAPTURE-REVISIT-019",
+      "source_fixture_id": "SYN-SRC-CAPTURE-OPTIONS-017",
+      "marker": "revisited by 2026-10-01"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-NOCAP-CUSTOM-020",
+      "source_fixture_id": "SYN-SRC-NOCAP-SHELF-ZH-018",
+      "marker": "整面墙的定制书架"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-NOCAP-MODULAR-021",
+      "source_fixture_id": "SYN-SRC-NOCAP-SHELF-ZH-018",
+      "marker": "可以分步添加的模块架"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-CLOSE-SHUTTER-022",
+      "source_fixture_id": "SYN-SRC-CLOSE-COMMIT-019",
+      "marker": "repainting the studio shutters before the wet season"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-CLOSE-OUTCOME-023",
+      "source_fixture_id": "SYN-SRC-CLOSE-OUTCOME-020",
+      "marker": "The shutter repaint finished under budget on 2026-08-10."
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-REHORIZON-VENT-024",
+      "source_fixture_id": "SYN-SRC-REHORIZON-COMMIT-ZH-021",
+      "marker": "承诺完成温室通风改造"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-REHORIZON-WAIT-025",
+      "source_fixture_id": "SYN-SRC-REHORIZON-NOTE-ZH-022",
+      "marker": "还在等待合成供应商的通风部件"
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-PRIORITY-DIRECTION-026",
+      "source_fixture_id": "SYN-SRC-PRIORITY-DIRECTION-023",
+      "marker": "Ilyra prioritizes accurate astronomy demonstrations over a perfectly tidy equipment catalogue."
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-PRIORITY-ENJOYMENT-027",
+      "source_fixture_id": "SYN-SRC-PRIORITY-DIRECTION-023",
+      "marker": "Ilyra enjoys clear star charts and hands-on lessons about the night sky."
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-PRIORITY-REVERSIBLE-028",
+      "source_fixture_id": "SYN-SRC-PRIORITY-DIRECTION-023",
+      "marker": "Ilyra tests new exhibit routines in short trials before committing to a full season."
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-PRIORITY-MOBILITY-029",
+      "source_fixture_id": "SYN-SRC-PRIORITY-CHOICE-024",
+      "marker": "The fictional observatory's dome may close for roof work in 2037, but no schedule has been approved."
+    },
+    {
+      "evidence_id": "SYN-EVIDENCE-PRIORITY-OPERATIONS-030",
+      "source_fixture_id": "SYN-SRC-PRIORITY-CHOICE-024",
+      "marker": "Borrowing the portable telescope from Alder Quay for the Larkglass observatory costs no fee, changes no ownership, and permits return to the lending collection after a two-week trial."
+    }
+  ]
+}

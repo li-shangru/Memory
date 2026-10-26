@@ -1,0 +1,102 @@
+{# One SVG for every lens. Geometry rides as presentation attributes, which the
+   CSP treats as markup rather than style; every colour comes from a class
+   resolved in app.css, so the palette stays two flat auditable lists.
+
+   The graph is a picture, not the text equivalent of one. Each lens links to
+   its own list view rather than pretending several hundred tab stops is a
+   reasonable way to read this. #}
+{% from "_parts.html" import kind_chip, sensitivity_dot %}
+
+{# The key. A graph has no room for five hundred labels, so the one thing
+   colour encodes is explained here in words, and every node repeats its own
+   kind and sensitivity as text inside its <title>. Colour never carries state
+   alone, and it carries only one state: kind is a filter, not a hue. #}
+{% macro legend(kinds=true) -%}
+<div class="graph-legend">
+  <p class="label">Effective sensitivity</p>
+  <p class="graph-legend-row">{% for level in ["normal", "sensitive", "restricted"] %}{{ sensitivity_dot(level, labelled=false) }}{% endfor %}</p>
+  {%- if kinds %}
+  <p class="graph-legend-kinds">Kind is named on hover and selectable in Filters: {% for kind in ["fact", "event", "preference", "relation", "insight"] %}{{ kind_chip(kind) }}{% endfor %}</p>
+  {%- endif %}
+</div>
+{%- endmacro %}
+
+{% macro scene(scene, description, ceiling) -%}
+{%- if not scene.within_ceiling %}
+<p class="graph-refusal">This read measured {{ scene.measured_node_count }} nodes and {{ scene.measured_edge_count }} links, exceeding the graph drawing budget (at most {{ ceiling }} nodes, with combined link, rendering and layout limits). The Store holds {{ scene.total_node_count }} entity nodes. Nothing was truncated. {% if scene.lens == "neighbourhood" %}Read the statement, evidence and paginated guard lists below.{% else %}Narrow the filters or browse memory as a list.{% endif %}</p>
+{%- elif not scene.nodes %}
+<p class="graph-empty">Nothing to draw yet.</p>
+{%- else %}
+<figure class="graph-figure">
+  {#- The intrinsic width and height are load-bearing, not decoration: with CSS
+      `height: auto` and no intrinsic size, the element computes to zero height
+      and the whole graph renders invisibly. #}
+  <svg class="graph-scene" viewBox="0 0 {{ scene.width }} {{ scene.height }}" width="{{ scene.width }}" height="{{ scene.height }}" data-lens="{{ scene.lens }}" role="img" aria-label="{{ description }}: {{ scene.nodes | length }} nodes and {{ scene.edges | length }} links">
+    <defs>
+      {%- if scene.edges | selectattr("kind", "equalto", "guard") | first %}
+      <marker id="graph-arrow" class="graph-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z"/></marker>
+      <marker id="graph-arrow-inverted" class="graph-arrow graph-arrow--inverted" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z"/></marker>
+      {%- endif %}
+    </defs>
+    {%- if scene.sectors %}
+    <defs>
+      {%- for sector in scene.sectors %}
+      <path id="{{ sector.path_id }}" d="{{ sector.path }}"/>
+      {%- endfor %}
+    </defs>
+    {%- endif %}
+    <g class="graph-edges">
+      {%- for edge in scene.edges %}
+      <path class="graph-edge graph-edge--{{ edge.kind }}{% if edge.inverted %} graph-edge--inverted{% endif %}{% if edge.revoked %} graph-edge--revoked{% endif %}" data-from="{{ edge.from_key }}" data-to="{{ edge.to_key }}" d="{{ edge.path }}"{% if edge.revoked %} data-revoked="true"{% endif %}{% if edge.kind == "guard" %} marker-end="url(#graph-arrow{% if edge.inverted %}-inverted{% endif %})"{% endif %}>{% if edge.revoked %}<title>Revoked guard link, kept for the audit record</title>{% endif %}</path>
+      {%- endfor %}
+    </g>
+    <g class="graph-nodes">
+      {%- for node in scene.nodes %}
+      {%- if node.detail_path %}
+      <a class="graph-node graph-node--{{ node.layer }}{% if node.kind %} graph-node--{{ node.kind }}{% endif %}" href="{{ node.detail_path }}" data-key="{{ node.key }}" data-sensitivity="{{ node.sensitivity }}"{% if node.role %} data-role="{{ node.role }}"{% endif %}>
+        <title>{{ node.label }} — {% if node.kind %}{{ node.kind }}, {% endif %}Effective sensitivity: {{ node.sensitivity }}</title>
+        {%- if node.layer == "memory" %}
+        <circle cx="{{ node.x }}" cy="{{ node.y }}" r="{{ node.radius }}"/>
+        {%- else %}
+        <rect x="{{ node.x - node.radius }}" y="{{ node.y - node.radius * 0.72 }}" width="{{ node.radius * 2 }}" height="{{ node.radius * 1.44 }}" rx="2"/>
+        {%- endif %}
+      </a>
+      {%- else %}
+      {#- An area is one of the owner's own tags, not a stored entity, so its
+          marker opens nothing. The place to read every memory in an area is
+          the filter, which is exact. #}
+      <g class="graph-node graph-node--{{ node.layer }}" data-key="{{ node.key }}" data-sensitivity="{{ node.sensitivity }}">
+        <title>Area: {{ node.label }}</title>
+      </g>
+      {%- endif %}
+      {%- endfor %}
+    </g>
+    {#- Only sources carry a canvas label, and the reason is space rather than
+        taste. Their filenames are short and they sit on a wide ring with room
+        between them. Batches sit on a tight inner ring where fifteen dates
+        collide into a smear, and a memory's label is a whole sentence; both
+        keep their name in the hover panel, where it can be read whole. #}
+    <g class="graph-labels" aria-hidden="true">
+      {%- for node in scene.nodes if node.layer == "source" %}
+      <text class="graph-label-text" x="{{ node.x }}" y="{{ node.y + node.radius + 9 }}">{{ node.label }}</text>
+      {%- endfor %}
+      {#- Guards get a name, their claims do not. The governance lens is
+          organised around the guards the way the other lens is organised around
+          sources, and there are a couple of dozen rather than several hundred,
+          so there is room. A claim's statement stays in the hover panel. #}
+      {%- for node in scene.nodes if node.role == "guard" %}
+      <text class="graph-label-text graph-label-text--guard" x="{{ node.x }}" y="{{ node.y - node.radius - 6 }}">{{ node.label[:44] }}{% if node.label | length > 44 %}…{% endif %}</text>
+      {%- endfor %}
+      {#- Area names ride their own arc rather than a point, so neighbouring
+          areas never compete for the same spot. Always visible: there are a
+          handful, one word each, and they are what tells the owner what the
+          shape of the picture means. #}
+      {%- for sector in scene.sectors %}
+      <text class="graph-area-text"><textPath href="#{{ sector.path_id }}" startOffset="50%">{{ sector.name }}</textPath></text>
+      {%- endfor %}
+    </g>
+  </svg>
+</figure>
+<p class="graph-legend-note">Hover a node for its statement. Select one to open it. Drag to move a node or the view, scroll to zoom — {% if scene.lens == "governance" %}each guard is named, and its arrows point at the claims it governs{% else %}source names appear{% endif %} as you zoom in.</p>
+{%- endif %}
+{%- endmacro %}

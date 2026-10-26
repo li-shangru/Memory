@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% from "_parts.html" import sensitivity_dot, short_id %}
+{% block title %}Guard-link candidates · Memory{% endblock %}
+{% block content %}
+<h1>Guard-link candidates</h1>
+<p class="page-lede">Pairs that look like a caveat and the claim it qualifies. Nothing here is a guard link yet: this page proposes and links, it never writes.</p>
+<nav class="lens-switch" aria-label="Graph lens">
+  <a href="/graph">Provenance</a>
+  <a href="/graph/governance">Governance</a>
+  <a href="/graph/governance/candidates" aria-current="page">Candidates</a>
+</nav>
+
+{% if not panel.available %}
+<aside class="reindex-banner" aria-label="Guard candidates unavailable" data-candidates-unavailable>
+  <strong>Guard tables are one release behind</strong>
+  <span>This Store's guard tables are created and extended on the next write. Run <span class="mono">memory reindex</span>, then reload this page.</span>
+</aside>
+{% else %}
+
+<section aria-labelledby="candidate-summary-heading">
+  <h2 id="candidate-summary-heading">What this report found</h2>
+  <p class="result-note" data-candidate-summary>
+    {% if panel.reported_candidate_count == 0 %}No pair qualified.{% else %}{{ panel.reported_candidate_count }} {{ "pair" if panel.reported_candidate_count == 1 else "pairs" }} qualified.{% endif %}
+    {% if panel.truncated_candidate_count %}<span class="state-tag" data-candidates-truncated>{{ panel.truncated_candidate_count }} more not shown</span>{% endif %}
+  </p>
+  {% if panel.truncated_candidate_count %}
+  <p class="notice" data-truncation-notice>{{ panel.truncated_candidate_count }} further qualifying {{ "pair was" if panel.truncated_candidate_count == 1 else "pairs were" }} left out. One change set carries at most {{ candidate_ceiling }} links, so this repair needs more than one pass: apply these, then reload.</p>
+  {% endif %}
+  <p class="subdued">A pair qualifies on two necessary gates — guard vocabulary in the first claim's own wording, and an evidence source shared with the second. Sharing an original batch can strengthen a pair that already qualifies; it never qualifies one by itself. Rejecting a pair is not remembered: every candidate you decline reappears on the next run.</p>
+</section>
+
+<section aria-labelledby="candidate-list-heading">
+  <h2 id="candidate-list-heading">Proposed pairs</h2>
+  {% if panel.repair_target %}
+  <p class="section-lede">Each pair opens the guard-link form on the review named below, with both lineages filled in. Nothing is written until you create the next immutable revision there.</p>
+  {% if panel.repair_target %}
+  <p class="section-lede" data-repair-target>Links land in the review for batch {{ short_id(panel.repair_target.batch_id) }}{% if panel.repair_target.open_draft_count > 1 %}, the most recently opened of {{ panel.repair_target.open_draft_count }} drafts. Check it is the one you mean to edit{% endif %}.</p>
+  {% endif %}
+  {% else %}
+  <p class="notice" data-no-repair-target>No Memory Review is open, so there is nothing to add a link to yet. Put a one-line note in the Inbox to give the repair a batch and an audit trail, scan it, and come back.</p>
+  {% endif %}
+  <ol class="card-list">
+  {% for candidate in panel.candidates %}
+    <li class="card" data-guard-candidate="{{ loop.index }}" data-guard-lineage="{{ candidate.guard_lineage_id }}" data-governed-lineage="{{ candidate.governed_lineage_id }}">
+      <p class="guard-link-pair">
+        <span class="guard-link-side guard-link-guard">
+          <span class="guard-link-statement">{{ candidate.guard_statement }}</span>
+        </span>
+        <span class="guard-link-arrow" aria-hidden="true">→</span>
+        <span class="visually-hidden">would govern</span>
+        <span class="guard-link-side guard-link-governed">
+          <span class="guard-link-statement">{{ candidate.governed_statement }}</span>
+        </span>
+      </p>
+      <p class="card-meta">
+        {% for rationale in candidate.rationales %}<span class="tag-chip">{{ rationale.replace("_", " ") }}</span>{% endfor %}
+      </p>
+      <p class="card-meta">
+        <span>Guard {{ short_id(candidate.guard_lineage_id, "/memories/" ~ candidate.guard_revision_id) }}</span>
+        <span>Governed {{ short_id(candidate.governed_lineage_id, "/memories/" ~ candidate.governed_revision_id) }}</span>
+        {% if candidate.guard_elided or candidate.governed_elided %}<span class="subdued">Statements are shortened here; open either memory for the whole claim.</span>{% endif %}
+      </p>
+      {% if panel.repair_target %}
+      <p><a data-add-this-link href="/reviews/{{ panel.repair_target.change_set_id }}/revisions/{{ panel.repair_target.revision_id }}/edits/add_guard_link?guard_lineage_id={{ candidate.guard_lineage_id | urlencode }}&amp;governed_lineage_id={{ candidate.governed_lineage_id | urlencode }}">Propose this link in that review</a></p>
+      {% endif %}
+    </li>
+  {% else %}
+    <li class="card">No pair qualified. Every guard the heuristics can see is already linked.</li>
+  {% endfor %}
+  </ol>
+</section>
+
+<section aria-labelledby="standing-violation-heading">
+  <h2 id="standing-violation-heading">Standing guard violations</h2>
+  <p class="section-lede">A guard never outranks the claim it governs. A violation already on record is reported here and never silently repaired. Three things clear one: a correction that lowers the guard's sensitivity, a correction that raises the claim's, or revoking the link outright if the guard does not belong on that claim at all.</p>
+  {% if panel.truncated_violation_count %}
+  <p class="section-lede" data-violation-truncation>Showing the first {{ panel.standing_violations | length }}; {{ panel.truncated_violation_count }} more are on record. Clear some and reopen this page to see the rest.</p>
+  {% endif %}
+  <ul class="card-list">
+  {% for violation in panel.standing_violations %}
+    <li class="card" data-standing-violation="{{ loop.index }}">
+      <p class="guard-link-pair">
+        <span class="guard-link-side guard-link-guard">
+          {{ short_id(violation.guard_lineage_id) }}
+          {{ sensitivity_dot(violation.guard_sensitivity.value, labelled=false) }}
+        </span>
+        <span class="guard-link-arrow" aria-hidden="true">→</span>
+        <span class="visually-hidden">governs</span>
+        <span class="guard-link-side guard-link-governed">
+          {{ sensitivity_dot(violation.governed_sensitivity.value, labelled=false) }}
+          {{ short_id(violation.governed_lineage_id) }}
+        </span>
+      </p>
+    </li>
+  {% else %}
+    <li class="card">No standing guard violation is on record.</li>
+  {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}

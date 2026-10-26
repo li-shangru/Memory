@@ -1,0 +1,4 @@
+interface:
+  display_name: "Staged Memory Intake"
+  short_description: "Prepare 02_Staged notes for Memory"
+  default_prompt: "Use $staged-memory-intake to prepare every 02_Staged Markdown note for private 03_Prepared review, show a content-free manifest, continue after exact owner approval, and complete macOS-backed Memory approval with verified cleanup."

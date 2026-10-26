@@ -1,0 +1,141 @@
+{
+  "format": "memory.synthetic-retrieval-benchmark.v1",
+  "authored_on": "2026-09-05",
+  "templates": {
+    "en": {
+      "query": "glimmer pathway",
+      "no_hit_query": "violet observatory",
+      "heading": "Synthetic archive",
+      "statement": "Synthetic record",
+      "filler": "The fabricated archive describes paper ribbons, blue tiles, and quiet shelves. "
+    },
+    "zh": {
+      "query": "晨光通道",
+      "no_hit_query": "紫色天文台",
+      "heading": "合成档案",
+      "statement": "合成记录",
+      "filler": "虚构档案记载纸带、蓝色瓷砖与安静的书架。"
+    }
+  },
+  "timing": [
+    {"label": "SYN-SMOKE-EN", "profiles": ["smoke"], "language": "en", "source_count": 2, "bytes_per_source": 16384, "memory_count": 4, "statement_bytes": 128},
+    {"label": "SYN-SMOKE-ZH", "profiles": ["smoke"], "language": "zh", "source_count": 2, "bytes_per_source": 16384, "memory_count": 4, "statement_bytes": 128},
+    {"label": "SYN-SOURCE-64K-EN", "profiles": ["matrix"], "language": "en", "source_count": 2, "bytes_per_source": 32768, "memory_count": 0, "statement_bytes": 128},
+    {"label": "SYN-SOURCE-1M-LONG-EN", "profiles": ["baseline", "matrix"], "language": "en", "source_count": 2, "bytes_per_source": 524288, "memory_count": 0, "statement_bytes": 128},
+    {"label": "SYN-SOURCE-1M-SHORT-EN", "profiles": ["matrix"], "language": "en", "source_count": 32, "bytes_per_source": 32768, "memory_count": 0, "statement_bytes": 128},
+    {"label": "SYN-SOURCE-4M-EN", "profiles": ["matrix"], "language": "en", "source_count": 8, "bytes_per_source": 524288, "memory_count": 0, "statement_bytes": 128},
+    {"label": "SYN-SOURCE-1M-LONG-ZH", "profiles": ["matrix"], "language": "zh", "source_count": 2, "bytes_per_source": 524288, "memory_count": 0, "statement_bytes": 128},
+    {"label": "SYN-MEMORY-0000-EN", "profiles": ["matrix"], "language": "en", "source_count": 10, "bytes_per_source": 262144, "memory_count": 0, "statement_bytes": 128},
+    {"label": "SYN-MEMORY-0600-SHORT-EN", "profiles": ["matrix"], "language": "en", "source_count": 10, "bytes_per_source": 262144, "memory_count": 600, "statement_bytes": 128},
+    {"label": "SYN-MEMORY-2400-SHORT-EN", "profiles": ["matrix"], "language": "en", "source_count": 10, "bytes_per_source": 262144, "memory_count": 2400, "statement_bytes": 128},
+    {"label": "SYN-MEMORY-0600-LONG-EN", "profiles": ["matrix"], "language": "en", "source_count": 10, "bytes_per_source": 262144, "memory_count": 600, "statement_bytes": 1024},
+    {"label": "SYN-MEMORY-2400-LONG-EN", "profiles": ["matrix"], "language": "en", "source_count": 10, "bytes_per_source": 262144, "memory_count": 2400, "statement_bytes": 1024},
+    {"label": "SYN-MEMORY-0600-SHORT-ZH", "profiles": ["matrix"], "language": "zh", "source_count": 10, "bytes_per_source": 262144, "memory_count": 600, "statement_bytes": 128}
+  ],
+  "quality": [
+    {
+      "label": "SYN-REACH-REPETITION-EN",
+      "language": "en",
+      "conditions": ["repeated_distractor", "late_caveat"],
+      "query": "copper kite",
+      "sources": [
+        {"label": "proposal", "prefix": "The copper kite is proposed for the fabricated exhibit.\n", "filler": "This invented catalog describes folded paper and numbered drawers.\n", "target_bytes": 32768, "tail": "The exhibit authorization permits an indoor display only; the courtyard is excluded.\n"},
+        {"label": "distractor", "prefix": "Synthetic printing exercise, with no exhibit authorization.\n", "repeat": "copper kite ", "repeat_count": 128}
+      ],
+      "memories": [
+        {"label": "proposal", "source": "proposal", "statement": "The copper kite is proposed for the fabricated exhibit.", "excerpt": "The copper kite is proposed for the fabricated exhibit.", "tags": ["synthetic", "loop:open"]}
+      ],
+      "requirements": [
+        {"source": "proposal", "excerpt": "The copper kite is proposed for the fabricated exhibit."},
+        {"source": "proposal", "excerpt": "The exhibit authorization permits an indoor display only; the courtyard is excluded."}
+      ]
+    },
+    {
+      "label": "SYN-REACH-REPETITION-ZH",
+      "language": "zh",
+      "conditions": ["repeated_distractor", "late_caveat"],
+      "query": "云灯展台",
+      "sources": [
+        {"label": "proposal", "prefix": "云灯展台被列为虚构展览的候选装置。\n", "filler": "这份合成目录描述纸张折痕和带编号的抽屉。\n", "target_bytes": 32768, "tail": "本次许可仅限室内摆放，不包含院内展示。\n"},
+        {"label": "distractor", "prefix": "合成排版练习，不提供任何展览许可。\n", "repeat": "云灯展台 ", "repeat_count": 128}
+      ],
+      "memories": [
+        {"label": "proposal", "source": "proposal", "statement": "云灯展台被列为虚构展览的候选装置。", "excerpt": "云灯展台被列为虚构展览的候选装置。", "tags": ["synthetic", "loop:open"]}
+      ],
+      "requirements": [
+        {"source": "proposal", "excerpt": "云灯展台被列为虚构展览的候选装置。"},
+        {"source": "proposal", "excerpt": "本次许可仅限室内摆放，不包含院内展示。"}
+      ]
+    },
+    {
+      "label": "SYN-REACH-PARAPHRASE-EN",
+      "language": "en",
+      "conditions": ["paraphrase"],
+      "query": "underwater sound",
+      "sources": [
+        {"label": "constraint", "prefix": "Submerged acoustics require a calibrated hydrophone in this fabricated laboratory.\n"},
+        {"label": "unrelated", "prefix": "The invented cabinet inventory contains three ceramic cups.\n"}
+      ],
+      "memories": [
+        {"label": "constraint", "source": "constraint", "statement": "Submerged acoustics require a calibrated hydrophone in this fabricated laboratory.", "excerpt": "Submerged acoustics require a calibrated hydrophone in this fabricated laboratory.", "tags": ["synthetic", "standing"]}
+      ],
+      "requirements": [
+        {"source": "constraint", "excerpt": "Submerged acoustics require a calibrated hydrophone in this fabricated laboratory."}
+      ]
+    },
+    {
+      "label": "SYN-REACH-PARAPHRASE-ZH",
+      "language": "zh",
+      "conditions": ["paraphrase"],
+      "query": "避开人群",
+      "sources": [
+        {"label": "constraint", "prefix": "合成受访者偏好清静场所，并将嘈杂拥挤视为不适条件。\n"},
+        {"label": "unrelated", "prefix": "虚构柜子清单记有三个陶杯。\n"}
+      ],
+      "memories": [
+        {"label": "constraint", "source": "constraint", "statement": "合成受访者偏好清静场所，并将嘈杂拥挤视为不适条件。", "excerpt": "合成受访者偏好清静场所，并将嘈杂拥挤视为不适条件。", "tags": ["synthetic", "standing"]}
+      ],
+      "requirements": [
+        {"source": "constraint", "excerpt": "合成受访者偏好清静场所，并将嘈杂拥挤视为不适条件。"}
+      ]
+    },
+    {
+      "label": "SYN-REACH-GUARD-ZH",
+      "language": "zh",
+      "conditions": ["guard_attachment"],
+      "query": "琥珀风筝",
+      "sources": [
+        {"label": "claim", "prefix": "琥珀风筝方案已通过虚构展览的初步评审。\n"},
+        {"label": "guard", "prefix": "这项许可只涵盖静态陈列，悬挂演示仍须另行核准。\n"}
+      ],
+      "memories": [
+        {"label": "claim", "source": "claim", "statement": "琥珀风筝方案已通过虚构展览的初步评审。", "excerpt": "琥珀风筝方案已通过虚构展览的初步评审。", "tags": ["synthetic", "loop:open"]},
+        {"label": "guard", "source": "guard", "statement": "这项许可只涵盖静态陈列，悬挂演示仍须另行核准。", "excerpt": "这项许可只涵盖静态陈列，悬挂演示仍须另行核准。", "tags": ["synthetic", "standing"]}
+      ],
+      "guards": [{"guard": "guard", "governed": "claim"}],
+      "required_guards": ["guard"],
+      "requirements": [
+        {"source": "claim", "excerpt": "琥珀风筝方案已通过虚构展览的初步评审。"},
+        {"source": "guard", "excerpt": "这项许可只涵盖静态陈列，悬挂演示仍须另行核准。"}
+      ]
+    },
+    {
+      "label": "SYN-REACH-CORRECTION-EN",
+      "language": "en",
+      "conditions": ["supersession"],
+      "query": "silver beacon",
+      "sources": [
+        {"label": "old", "phase": 0, "prefix": "Silver beacon operation was authorized in the fictional room.\n"},
+        {"label": "current", "phase": 1, "prefix": "Silver beacon operation is suspended until the imaginary enclosure is repaired.\n"}
+      ],
+      "memories": [
+        {"label": "old", "phase": 0, "source": "old", "statement": "Silver beacon operation was authorized in the fictional room.", "excerpt": "Silver beacon operation was authorized in the fictional room.", "tags": ["synthetic", "loop:open"]},
+        {"label": "current", "phase": 1, "source": "current", "statement": "Silver beacon operation is suspended until the imaginary enclosure is repaired.", "excerpt": "Silver beacon operation is suspended until the imaginary enclosure is repaired.", "tags": ["synthetic", "loop:open"], "corrects": "old"}
+      ],
+      "required_current_memories": ["current"],
+      "requirements": [
+        {"source": "current", "excerpt": "Silver beacon operation is suspended until the imaginary enclosure is repaired."}
+      ]
+    }
+  ]
+}

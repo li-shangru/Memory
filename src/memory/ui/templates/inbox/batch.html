@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% from "_parts.html" import sensitivity_dot, tech_details %}
+{% block title %}Inbox batch · Memory{% endblock %}
+{% block content %}
+<h1>Inbox batch</h1>
+<p class="meta-row">
+  <span>Sealed {{ detail.summary.sealed_at | memory_time }}</span>
+  <span>{{ detail.summary.source_count }} {{ "capture" if detail.summary.source_count == 1 else "captures" }}</span>
+  {% if detail.summary.has_more %}<span class="state-tag">more entries deferred</span>{% endif %}
+</p>
+
+<section aria-labelledby="batch-sources-heading">
+  <h2 id="batch-sources-heading">Captured sources</h2>
+  <ol class="card-list">
+  {% for source in detail.sources %}
+    <li class="card" data-batch-source>
+      <a class="source-name" href="/sources/{{ source.source_id }}">{{ source.original_name }}</a>
+      <p class="card-meta">
+        {{ sensitivity_dot(source.effective_sensitivity.value) }}
+        <span>{{ source.media_type }}</span>
+        <span>{{ source.byte_length | filesize }}</span>
+        <span>Origin {{ source.origin.value }}</span>
+      </p>
+    </li>
+  {% endfor %}
+  </ol>
+</section>
+
+{% if detail.issues %}
+<section aria-labelledby="batch-issues-heading">
+  <h2 id="batch-issues-heading">Capture issues</h2>
+  <ul class="card-list">{% for issue in detail.issues %}<li class="card"><strong>{{ issue.code }}</strong><span class="card-meta"><span>{{ issue.occurrence_count }} recorded {{ "occurrence" if issue.occurrence_count == 1 else "occurrences" }}</span></span></li>{% endfor %}</ul>
+</section>
+{% endif %}
+
+{% call tech_details((("Batch identity", detail.summary.batch_id),)) %}
+  {% for source in detail.sources %}
+  <div><dt>Capture {{ loop.index }}</dt><dd><span class="mono">{{ source.source_id }}</span> · <span class="mono">{{ source.blob_digest }}</span></dd></div>
+  {% endfor %}
+{% endcall %}
+{% endblock %}

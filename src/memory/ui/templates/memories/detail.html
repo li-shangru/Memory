@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% from "_parts.html" import kind_chip, sensitivity_dot, short_id, tech_details, tech_row %}
+{% from "graph/_scene.html" import scene as graph_scene, legend as graph_legend %}
+{% block title %}Memory revision · Memory{% endblock %}
+{% block head_scripts %}{% if neighbourhood and neighbourhood.nodes %}<script src="/static/graph.js" defer></script>{% endif %}{% endblock %}
+{% block content %}
+{% set q = "?h=" ~ audit_handle if audit_handle else "" %}
+{% if audit_handle %}<p><a href="/audit{{ q }}">Back to the bound Store audit</a></p>{% endif %}
+{% if correction_mode %}<h1>Owner correction</h1>{% else %}<h1>Memory revision</h1>{% endif %}
+{% if detail.summary.is_current %}<p><span class="revision-state">Current revision</span></p>
+{% else %}<p><span class="revision-state">Historical revision</span></p>{% endif %}
+<p class="memory-statement">{{ detail.summary.revision.statement }}</p>
+{% set validity = memory_validity(detail.summary.revision.valid_from, detail.summary.revision.valid_to, detail.summary.revision.tags, today=today) %}
+<section class="validity-panel" aria-labelledby="validity-heading" data-validity-status="{{ validity.status }}">
+  <h2 id="validity-heading">Applicability</h2>
+  <p class="validity-summary">{{ validity.summary }}</p>
+  <p class="validity-range"><span>{{ validity.start_label }}</span> · <span>{{ validity.end_label }}</span></p>
+  <p class="subdued">Revision status and applicability are separate. This view does not change, suppress, or expire the memory.</p>
+</section>
+<p class="meta-row">
+  {{ kind_chip(detail.summary.revision.kind.value) }}
+  {{ sensitivity_dot(detail.summary.revision.effective_sensitivity.value) }}
+  {% if detail.summary.revision.occurred_on %}<span>Occurred {{ detail.summary.revision.occurred_on }}</span>{% endif %}
+  <span>Recorded {{ detail.summary.revision.recorded_at | memory_time }}</span>
+  {% for tag in detail.summary.revision.tags %}<span class="tag-chip">{{ tag }}</span>{% endfor %}
+</p>
+
+<section aria-labelledby="guards-heading">
+  <h2 id="guards-heading">Guards</h2>
+  <p class="section-lede">Owner-approved caveats that govern this memory.</p>
+  {% if detail.guards %}<p>Open a linked memory for its complete statement and evidence.</p>{% endif %}
+  <ul class="card-list">
+  {% for guard in detail.guards %}
+    <li class="guard-card" data-guard-id="{{ guard.memory_id }}">
+      {% set preview = roster_statement_preview(guard.statement) %}
+      <a class="guard-statement" href="/memories/{{ guard.memory_id }}{{ q }}">{{ preview[0] }}</a>{% if preview[1] %}<span class="visually-hidden">; statement preview ends here</span>{% endif %}
+      <p class="card-meta">
+        {{ kind_chip(guard.kind.value) }}
+        {{ sensitivity_dot(guard.effective_sensitivity.value) }}
+      </p>
+    </li>
+  {% else %}
+    <li class="card">No owner-approved guard governs this memory.</li>
+  {% endfor %}
+  </ul>
+  {% if next_guards_href %}<a data-next-guards href="{{ next_guards_href }}">Next guards</a>{% endif %}
+</section>
+
+{% if detail.governs %}
+<section aria-labelledby="governs-heading">
+  <h2 id="governs-heading">Governs</h2>
+  <p class="section-lede">Claims this memory qualifies as their guard.</p>
+  <p>Open a linked memory for its complete statement and evidence.</p>
+  <ul class="card-list">
+  {% for governed in detail.governs %}
+    <li class="guard-card" data-governs-id="{{ governed.memory_id }}">
+      {% set preview = roster_statement_preview(governed.statement) %}
+      <a class="guard-statement" href="/memories/{{ governed.memory_id }}{{ q }}">{{ preview[0] }}</a>{% if preview[1] %}<span class="visually-hidden">; statement preview ends here</span>{% endif %}
+      <p class="card-meta">
+        {{ kind_chip(governed.kind.value) }}
+        {{ sensitivity_dot(governed.effective_sensitivity.value) }}
+      </p>
+    </li>
+  {% endfor %}
+  </ul>
+  {% if next_governs_href %}<a data-next-governs href="{{ next_governs_href }}">Next governed memories</a>{% endif %}
+</section>
+{% endif %}
+
+{% if neighbourhood and (neighbourhood.nodes or not neighbourhood.within_ceiling) %}
+<section class="graph-neighbourhood" aria-labelledby="neighbourhood-heading">
+  <h2 id="neighbourhood-heading">Neighbourhood</h2>
+  <p class="section-lede">The current revision of this memory, the sources that evidence it, and its current guard relations, including links marked revoked.</p>
+  {{ graph_legend(kinds=false) }}
+  {{ graph_scene(neighbourhood, "Neighbourhood graph", ceiling) }}
+  <p class="graph-alternative"><a href="/graph">Open the whole graph</a></p>
+</section>
+{% endif %}
+
+{% if correction_mode == "create" %}
+<section aria-labelledby="correction-heading">
+  <h2 id="correction-heading">Create correction</h2>
+  <p>This captures a new owner-authored source. It does not change canonical Memory until a separate Memory Review is approved.</p>
+  <p>Current head: {{ short_id(detail.summary.current_head_id, "/memories/" ~ detail.summary.current_head_id) }}</p>
+  <form action="{{ correction_action }}" method="post" data-authenticated-post data-unsaved-warning aria-label="Owner correction">
+    <input type="hidden" name="selected_memory_id" value="{{ correction_binding.selected_memory_id }}">
+    <label for="owner-correction-text">Exact correction text</label>
+    <textarea id="owner-correction-text" name="owner_text" required maxlength="1048576"></textarea>
+    <button type="submit">Capture correction source</button>
+  </form>
+</section>
+{% elif correction_mode == "retry" %}
+<section class="notice" aria-labelledby="correction-retry-heading">
+  <h2 id="correction-retry-heading">Correction capture is waiting for the Store</h2>
+  <p>Your exact text remains only in this process under the existing correction intent.</p>
+  <pre class="owner-correction-retry">{{ correction_retry.owner_text }}</pre>
+  <form action="{{ correction_action }}" method="post" data-authenticated-post>
+    <input type="hidden" name="csrf" value="{{ csrf_token }}">
+    <button type="submit">Retry capture</button>
+  </form>
+</section>
+{% elif not audit_handle %}
+<section aria-labelledby="create-correction-heading">
+  <h2 id="create-correction-heading">Correction</h2>
+  <form action="/memories/{{ detail.summary.revision.memory_id }}/corrections" method="post" data-authenticated-post>
+    <input type="hidden" name="selected_memory_id" value="{{ detail.summary.revision.memory_id }}">
+    <button type="submit">Create correction</button>
+  </form>
+</section>
+{% endif %}
+
+<section aria-labelledby="lineage-heading">
+  <h2 id="lineage-heading">Complete lineage</h2>
+  <ol class="timeline">
+  {% for revision in revisions %}
+    <li data-lineage-id="{{ revision.revision.memory_id }}"{% if revision.is_current %} class="is-current"{% endif %}>
+      <a class="timeline-statement" href="/memories/{{ revision.revision.memory_id }}{{ q }}">{{ revision.revision.statement }}</a>
+      <span class="timeline-meta">
+        <span class="state-tag">{% if revision.is_current %}Current{% else %}Historical{% endif %}</span>
+        <span>Recorded {{ revision.revision.recorded_at | memory_time }}</span>
+      </span>
+    </li>
+  {% endfor %}
+  </ol>
+  {% if next_lineage_href %}<a data-next-lineage href="{{ next_lineage_href }}">Next lineage revisions</a>{% endif %}
+</section>
+
+<section aria-labelledby="evidence-heading">
+  <h2 id="evidence-heading">Exact source evidence</h2>
+  <ul class="card-list">
+  {% for locator in detail.evidence %}
+    <li class="evidence-card">
+      {% if locator.excerpt %}<blockquote class="evidence-quote">{{ locator.excerpt }}</blockquote>{% endif %}
+      <p><a href="/sources/{{ locator.source_id }}{{ q }}">Open complete retained source</a></p>
+      <p class="card-meta">
+        <span>Evidence mode: {{ locator.mode }}</span>
+        {% if locator.char_start is not none %}<span>Character range: {{ locator.char_start }}–{{ locator.char_end }}</span>{% endif %}
+        {% if locator.source_level %}<span>Complete-source evidence</span>{% endif %}
+      </p>
+    </li>
+  {% else %}
+    <li class="card">No evidence locator is recorded.</li>
+  {% endfor %}
+  </ul>
+</section>
+
+{% call tech_details() %}
+  {{ tech_row("Memory revision", detail.summary.revision.memory_id) }}
+  {{ tech_row("Lineage", detail.summary.revision.lineage_id) }}
+  {{ tech_row("Stored sensitivity", detail.summary.revision.stored_sensitivity.value, copy=false) }}
+  {{ tech_row("Valid from", detail.summary.revision.valid_from or "Not recorded", copy=false) }}
+  {% if validity.is_open_loop %}{{ tech_row("Revisit horizon", detail.summary.revision.valid_to or "No revisit date recorded", copy=false) }}
+  {% else %}{{ tech_row("Valid to", detail.summary.revision.valid_to or "No end date recorded", copy=false) }}{% endif %}
+  {% for locator in detail.evidence %}
+  {{ tech_row("Evidence blob digest", locator.blob_digest) }}
+  {% endfor %}
+  {% if detail.summary.predecessor_id %}
+  {{ tech_row("Predecessor", detail.summary.predecessor_id, "/memories/" ~ detail.summary.predecessor_id ~ q) }}
+  {% endif %}
+  {# Named for the lineage, not the phrase the correction page shows visibly:
+     one page must never offer the owner two identical "current head" labels. #}
+  {{ tech_row("Lineage head", detail.summary.current_head_id, "/memories/" ~ detail.summary.current_head_id ~ q) }}
+  {{ tech_row("Application", detail.summary.application_id, "/audit/applications/" ~ detail.summary.application_id ~ q) }}
+  {{ tech_row("Approval", detail.approval_id, "/audit/approvals/" ~ detail.approval_id ~ q) }}
+  {{ tech_row("Change-set revision", detail.change_set_revision_id, "/reviews/" ~ detail.change_set_id ~ "/revisions/" ~ detail.change_set_revision_id ~ q) }}
+{% endcall %}
+{% endblock %}
