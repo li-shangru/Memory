@@ -16,14 +16,13 @@ import asyncio
 import importlib
 import io
 import os
-import signal
 import socket
 import threading
 import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import Any, cast
+from typing import cast
 
 import httpx2
 import pytest
@@ -45,6 +44,14 @@ from inspection_support import (
     _source_summary,
     _UnusedFinder,
     _wait_for_pid,
+)
+from media_worker_support import (
+    _worker_block,
+    _worker_crash,
+    _worker_exact_ipc,
+    _worker_over_ipc,
+    _worker_record_pid_and_block,
+    _worker_success,
 )
 from PIL import Image
 from pypdf import PdfWriter
@@ -1798,36 +1805,6 @@ def test_pdf_page_limit_accepts_exact_and_rejects_plus_one() -> None:
 
     assert exact.page_number == pdf.MAX_PDF_PAGES
     assert getattr(over.value, "code", None) == "pdf_page_limit"
-
-
-def _worker_success(_source: bytes, output: Any) -> None:
-    output.send_bytes(f"{os.getpid()}:synthetic-success".encode("ascii"))
-
-
-def _worker_crash(_source: bytes, _output: Any) -> None:
-    os._exit(23)
-
-
-def _worker_block(_source: bytes, _output: Any) -> None:
-    signal.signal(signal.SIGTERM, signal.SIG_IGN)
-    while True:
-        time.sleep(0.05)
-
-
-def _worker_record_pid_and_block(_source: bytes, _output: Any) -> None:
-    path = os.environ["PMS_SYNTHETIC_MEDIA_PID_PATH"]
-    Path(path).write_text(str(os.getpid()))
-    signal.signal(signal.SIGTERM, signal.SIG_IGN)
-    while True:
-        time.sleep(0.02)
-
-
-def _worker_exact_ipc(_source: bytes, output: Any) -> None:
-    output.send_bytes(b"x" * 1_024)
-
-
-def _worker_over_ipc(_source: bytes, output: Any) -> None:
-    output.send_bytes(b"x" * 1_025)
 
 
 def _assert_reaped(pid: int) -> None:

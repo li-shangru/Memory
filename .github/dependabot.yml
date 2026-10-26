@@ -5,6 +5,15 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # Update the lock without rewriting already-compatible reviewed floors.
+    versioning-strategy: increase-if-necessary
+    ignore:
+      # These local wheels require the recipes and qualification in third_party/.
+      - dependency-name: memory-sqlcipher3
+      - dependency-name: playwright
+      # The bundled Playwright metadata currently requires pyee>=14,<15.
+      - dependency-name: pyee
+        update-types: ["version-update:semver-major"]
     groups:
       python-security:
         applies-to: security-updates

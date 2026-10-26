@@ -51,6 +51,21 @@ the independent-review requirement below still applies to agent-assisted work.
 Dependabot checks Python dependencies and pinned Actions weekly. Major upgrades
 remain separate from the grouped compatible updates.
 
+Python updates use `increase-if-necessary`: compatible releases update `uv.lock`
+without raising an already-compatible manifest floor. When a new minimum is
+needed, qualify it and update the dependency allowlist in `tests/test_project.py`
+with the manifest. Keep the allowlist and wheel attestation checks intact.
+
+The local `memory-sqlcipher3` and `playwright` wheels are excluded from automatic
+updates. Their version and security fixes require the maintained
+[SQLCipher](../third_party/memory-sqlcipher3/README.md) or
+[Playwright](../third_party/playwright/README.md) build recipe, artifact hashes,
+coupled metadata, and source qualification. Keep dependency alerts enabled and
+review upstream advisories for these packages. Only pyee major updates are
+excluded because the bundled Playwright currently requires `pyee>=14,<15`;
+minor and patch updates remain eligible. Revisit that exclusion when qualifying
+a Playwright companion that supports a new pyee major.
+
 Keep one change focused on one problem. Add a failing synthetic regression for
 a behavioral fix, implement it, then run the relevant checks and both source
 gates. Documentation-only changes need link and command review, not tests that
