@@ -107,9 +107,31 @@ reviewed transition: `memory-sqlcipher3` may move from
 `0.6.2+sqlcipher4.17.0` to `0.6.2+sqlcipher4.17.0.memory1`, or remain at the latter.
 Missing or other companion baselines refuse. This downstream revision adds the
 connection-held file identity needed by Store authority checks; upstream engine
-versions remain unchanged. All other dependency versions and recorded bytes must
-remain identical. The installed companion package inventory, native extension and
-metadata must match the frozen companion wheel exactly.
+versions remain unchanged.
+
+The public v1.13.0 release also has one explicitly reviewed transition from the
+older private installation. `tools/public-dependency-transition.json` binds it to
+the original public release commit and twelve exact before/after versions, wheel
+URLs, filenames and SHA-256 hashes. It does not authorize an arbitrary lockfile
+refresh or downgrade. The installer pins those exact local artifacts for both
+rehearsals and installation. They live in an immutable sibling cache beside the
+release directory; the original release manifest, wheel and tag stay unchanged.
+
+The transition upgrades httpx2/httpcore2 2.12.0 to 2.16.0, mcp/mcp-types 2.1.1 to
+2.3.0, opentelemetry-api 1.44.0 to 1.45.1, pillow 12.3.0 to 13.0.0, pydantic
+2.13.5 to 2.14.1, pydantic_core 2.46.5 to 2.50.1, pypdfium2 5.13.0 to 5.14.0,
+PyJWT 2.13.0 to 2.15.1, starlette 1.6.0 to 1.9.0 and uvicorn 0.52.4 to 0.54.0.
+Unknown baseline versions refuse. Repeating delivery on the target versions is
+idempotent and must preserve their recorded bytes too.
+
+Installed members of all twelve target distributions must match the approved
+wheel bytes, including native libraries and distribution metadata. Generated
+console scripts must match their approved entry points and interpreter; unknown
+wheel layouts or extra/missing members refuse. Every other dependency version and
+recorded byte remains unchanged. The receipt lists each transition and preserved
+count separately. Other dependency changes need their own reviewed policy update;
+an unrelated update cannot silently perform one.
+
 
 The probe requires hashes and sizes for all relevant raw RECORD entries and
 checks their installed bytes,
