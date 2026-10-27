@@ -301,6 +301,7 @@ def test_active_tree_contains_only_the_provider_free_store_distribution() -> Non
         "test_precommit.py",
         "test_prepush.py",
         "test_project.py",
+        "test_public_dependency_transition.py",
         "test_public_distribution.py",
         "test_retrieval.py",
         "test_retrieval_benchmark_tool.py",

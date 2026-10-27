@@ -772,3 +772,28 @@ def test_frozen_companion_manifest_cannot_replace_reviewed_digest(
     )
     with pytest.raises(d.DeliveryError, match="release_artifact_drift"):
         d.verify_release(tmp_path, version)
+
+
+def test_public_release_requires_its_exact_reviewed_dependency_upgrades() -> None:
+    baseline = {
+        "memory-sqlcipher3": d.COMPANION_VERSION,
+        "httpx2": "2.12.0",
+        "httpcore2": "2.12.0",
+        "mcp": "2.1.1",
+        "mcp-types": "2.1.1",
+        "opentelemetry-api": "1.44.0",
+        "pillow": "12.3.0",
+        "pydantic": "2.13.5",
+        "pydantic_core": "2.46.5",
+        "pypdfium2": "5.13.0",
+        "PyJWT": "2.13.0",
+        "starlette": "1.6.0",
+        "uvicorn": "0.52.4",
+        "synthetic-unchanged": "7.1",
+    }
+    expected = d.expected_dependency_versions(baseline, public_release=True)
+    assert expected["httpx2"] == expected["httpcore2"] == "2.16.0"
+    assert expected["mcp"] == expected["mcp-types"] == "2.3.0"
+    assert expected["pydantic_core"] == "2.50.1"
+    assert expected["synthetic-unchanged"] == "7.1"
+    assert baseline["httpx2"] == "2.12.0"

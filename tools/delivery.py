@@ -25,6 +25,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import cast
 
+import dependency_transition as transition
 import staged_memory_intake_sync as bundle
 
 REPO = Path(__file__).resolve().parents[1]
@@ -245,16 +246,32 @@ def read_profile(path: Path) -> Profile:
     return profile
 
 
-def verify_launcher(executable: Path, python: Path) -> None:
+def verify_launcher(
+    executable: Path, python: Path, entry_point: str = "memory.cli:main"
+) -> None:
     require(
         executable.is_file() and os.access(executable, os.X_OK), "executable_missing"
     )
+    module, separator, function = entry_point.partition(":")
+    require(
+        separator == ":"
+        and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.]*", module) is not None
+        and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.]*", function) is not None,
+        "unsupported_launcher",
+    )
     text = executable.read_text()
     require(text.splitlines()[0] == f"#!{python}", "executable_interpreter_drift")
-    templates = (
+    templates: tuple[str, ...] = (
         "import sys\nfrom memory.cli import main\nif __name__ == '__main__':\n    sys.exit(main())\n",
         "import sys\nfrom memory.cli import main\nif __name__ == '__main__':\n    if sys.argv[0].endswith('-script.pyw'):\n        sys.argv[0] = sys.argv[0][:-11]\n    elif sys.argv[0].endswith('.exe'):\n        sys.argv[0] = sys.argv[0][:-4]\n    sys.exit(main())\n",
         "import re\nimport sys\nfrom memory.cli import main\nif __name__ == '__main__':\n    sys.argv[0] = re.sub(r'(-script\\.pyw|\\.exe)?$', '', sys.argv[0])\n    sys.exit(main())\n",
+    )
+    templates = tuple(
+        template.replace(
+            "from memory.cli import main",
+            f"from {module} import {function.split('.')[0]}",
+        ).replace("main()", f"{function}()")
+        for template in templates
     )
     try:
         require(
@@ -439,14 +456,17 @@ def verify_snapshot(
     require(value.get("files") == source_files, "package_bytes_drift")
 
 
-def expected_dependency_versions(before: dict[str, str]) -> dict[str, str]:
-    """The native identity repair is the only reviewed dependency transition."""
+def expected_dependency_versions(
+    before: dict[str, str], *, public_release: bool = False
+) -> dict[str, str]:
+    """Preserve the baseline except exact, artifact-bound reviewed transitions."""
     require(
         before.get("memory-sqlcipher3")
         in {PREVIOUS_COMPANION_VERSION, COMPANION_VERSION},
         "dependency_transition_unapproved",
     )
-    return {**before, "memory-sqlcipher3": COMPANION_VERSION}
+    expected = transition.expected_versions(before) if public_release else dict(before)
+    return {**expected, "memory-sqlcipher3": COMPANION_VERSION}
 
 
 def dependency_file_maps(value: object) -> dict[str, dict[str, str]]:
@@ -468,14 +488,28 @@ def dependency_file_maps(value: object) -> dict[str, dict[str, str]]:
     return result
 
 
-def verify_preserved_dependency_bytes(before: object, after: object) -> None:
+def verify_preserved_dependency_bytes(
+    before: object,
+    after: object,
+    *,
+    version_changes: dict[str, tuple[str, str]] | None = None,
+) -> None:
+    changes = version_changes or {}
+    approved = transition.policy()[2]
+    require(
+        all(
+            name in approved and pair == (approved[name].before, approved[name].after)
+            for name, pair in changes.items()
+        ),
+        "dependency_transition_unapproved",
+    )
     original, installed = dependency_file_maps(before), dependency_file_maps(after)
     require(set(original) == set(installed), "dependency_bytes_changed")
     require(
         all(
             installed[name] == files
             for name, files in original.items()
-            if name != "memory-sqlcipher3"
+            if name != "memory-sqlcipher3" and name not in changes
         ),
         "dependency_bytes_changed",
     )
@@ -835,6 +869,8 @@ def qualify_install(
         == set(string_map(snapshot.get("dependencies"), "dependency_snapshot_failed")),
         "dependency_snapshot_failed",
     )
+    if transition.applies(manifest):
+        transition.verify_installed(snapshot, root, verify_launcher)
     run_command(
         "dependency_check",
         ["uv", "pip", "check", "--python", str(profile.python)],
@@ -991,10 +1027,19 @@ def deliver(profile: Profile, version: str, logs: Path) -> dict[str, object]:
     )
     baseline_files = dependency_file_maps(baseline.get("dependency_files"))
     require(set(baseline_files) == set(before), "dependency_snapshot_failed")
-    expected = expected_dependency_versions(before)
+    public_release = version == "1.13.0" and transition.applies(
+        json_object(root / "release.json", "release_missing")
+    )
+    expected = expected_dependency_versions(before, public_release=public_release)
+    artifacts = transition.prepare_artifacts(root) if public_release else {}
     constraints = logs / "runtime-constraints.txt"
     constraints.write_text(
-        "".join(f"{name}=={pin}\n" for name, pin in sorted(expected.items()))
+        "".join(
+            f"{name} @ {artifacts[name].as_uri()}\n"
+            if name in artifacts
+            else f"{name}=={pin}\n"
+            for name, pin in sorted(expected.items())
+        )
     )
     constraints.chmod(0o600)
     environment = safe_environment()
@@ -1021,7 +1066,13 @@ def deliver(profile: Profile, version: str, logs: Path) -> dict[str, object]:
         "dependency_versions_changed",
     )
     verify_preserved_dependency_bytes(
-        baseline.get("dependency_files"), installed.get("dependency_files")
+        baseline.get("dependency_files"),
+        installed.get("dependency_files"),
+        version_changes={
+            name: (before[name], pin)
+            for name, pin in expected.items()
+            if before[name] != pin and name != "memory-sqlcipher3"
+        },
     )
     verify_skills(profile, logs, install=True)
     report = check_delivery(profile, version, logs)
@@ -1049,6 +1100,12 @@ def deliver(profile: Profile, version: str, logs: Path) -> dict[str, object]:
     }
     report["dependency_transitions"] = transitions
     report["dependency_versions_preserved"] = len(before) - len(transitions)
+    if public_release:
+        report["public_dependency_policy_sha256"] = sha256(transition.POLICY)
+        report["public_dependency_artifacts"] = {
+            name: {"filename": path.name, "sha256": sha256(path)}
+            for name, path in artifacts.items()
+        }
     return report
 
 
@@ -1144,7 +1201,11 @@ def main(arguments: list[str] | None = None) -> int:
                 report["local_tag"] = tag
         report["status"] = "passed"
     except Exception as error:
-        code = error.code if isinstance(error, DeliveryError) else type(error).__name__
+        code = (
+            error.code
+            if isinstance(error, (DeliveryError, transition.TransitionError))
+            else type(error).__name__
+        )
         report["error"] = code
         report["action"] = HELP.get(
             code.split(":")[0],
