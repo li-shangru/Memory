@@ -30,7 +30,7 @@ dependencies = [
 memory = "memory.cli:main"
 
 [build-system]
-requires = ["hatchling>=1.32.4"]
+requires = ["hatchling>=1.33.0"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
