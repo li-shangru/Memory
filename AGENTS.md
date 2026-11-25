@@ -5,6 +5,22 @@ Memory is a local encrypted evidence store, with current source version v1.13.0.
 recorded separately. Agents retrieve retained evidence and reason; canonical
 memory changes only through an exact owner-approved Memory Review.
 
+## Documents
+
+- **Repository guide** — `AGENTS.md`
+- [Specification](docs/spec.md)
+- [Status](docs/status.md)
+- [Decisions](docs/decisions/README.md)
+- [Repository knowledge](docs/knowledge.md)
+
+Run `./tools/fast-check.sh` for quick tests, Ruff, and strict mypy. Run
+`./tools/check.sh --source-only` for the full synthetic source suite, including
+Chromium browser journeys. `./tools/check.sh` also verifies the configured local
+installation. See [Contributing](docs/contributing.md) for setup.
+
+Record Memory-specific lessons in [repository knowledge](docs/knowledge.md).
+Record lessons used by two or more projects in the maintainer’s Atelier shared knowledge.
+
 ## Authority and scope
 
 Repository authority is this guide, then [technical design](docs/technical-design.md),
