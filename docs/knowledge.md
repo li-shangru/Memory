@@ -6,7 +6,7 @@ checks the configured installation. See [maintenance](maintenance.md) for
 synthetic test guidance and [local delivery](local-delivery.md#what-the-evidence-means)
 for evidence from fresh clients and exact artifacts.
 
-The [developer factory knowledge folder](agent-factory/knowledge/) covers
+The developer factory knowledge covers
 [privacy and runtime identity](agent-factory/knowledge/privacy-runtime.md),
 [retrieval provenance](agent-factory/knowledge/retrieval-provenance.md),
 [review and approval](agent-factory/knowledge/review-lifecycle.md), and
